@@ -1,18 +1,22 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <!-- <input type="text" v-model="name" /> -->
+    <HelloWorld msg="报表" />
+    <!-- <el-button type="primary" icon="el-icon-search">搜索</el-button> -->
+    <!-- <router-link to="/about">About</router-link> -->
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
-
-export default {
-  name: 'Home',
-  components: {
-    HelloWorld
+  import HelloWorld from '@/components/HelloWorld.vue'
+  export default {
+    data() {
+      return {
+        name: '名称'
+      }
+    },
+    components: {
+      HelloWorld
+    }
   }
-}
 </script>
