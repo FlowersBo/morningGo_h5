@@ -1,0 +1,128 @@
+{
+  "id": "2957029",
+  "name": "morningGo",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "h5运维段",
+  "glyphs": [
+    {
+      "icon_id": "553324",
+      "name": "验证 验证码",
+      "font_class": "yanzhengyanzhengma",
+      "unicode": "e624",
+      "unicode_decimal": 58916
+    },
+    {
+      "icon_id": "1381",
+      "name": "通知",
+      "font_class": "tongzhi",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "624555",
+      "name": "购物车添加",
+      "font_class": "gouwuchetianjia",
+      "unicode": "e640",
+      "unicode_decimal": 58944
+    },
+    {
+      "icon_id": "765354",
+      "name": "购物车",
+      "font_class": "shouye",
+      "unicode": "e61b",
+      "unicode_decimal": 58907
+    },
+    {
+      "icon_id": "2076314",
+      "name": " 预约订单",
+      "font_class": "yuyuedingdan",
+      "unicode": "e8a2",
+      "unicode_decimal": 59554
+    },
+    {
+      "icon_id": "2328342",
+      "name": "信号",
+      "font_class": "xinhao",
+      "unicode": "e620",
+      "unicode_decimal": 58912
+    },
+    {
+      "icon_id": "3209279",
+      "name": "密码",
+      "font_class": "mima",
+      "unicode": "e78e",
+      "unicode_decimal": 59278
+    },
+    {
+      "icon_id": "8213337",
+      "name": "库存盘点",
+      "font_class": "kucunpandian",
+      "unicode": "e673",
+      "unicode_decimal": 58995
+    },
+    {
+      "icon_id": "11372716",
+      "name": "我的",
+      "font_class": "wode",
+      "unicode": "e8bb",
+      "unicode_decimal": 59579
+    },
+    {
+      "icon_id": "12557532",
+      "name": "手机号",
+      "font_class": "shoujihao",
+      "unicode": "e625",
+      "unicode_decimal": 58917
+    },
+    {
+      "icon_id": "13251673",
+      "name": "维修级别-01",
+      "font_class": "weixiujibie-",
+      "unicode": "e642",
+      "unicode_decimal": 58946
+    },
+    {
+      "icon_id": "15726887",
+      "name": "设备管理",
+      "font_class": "shebeiguanli",
+      "unicode": "e630",
+      "unicode_decimal": 58928
+    },
+    {
+      "icon_id": "16534077",
+      "name": "开启屏幕",
+      "font_class": "kaiqipingmu",
+      "unicode": "e604",
+      "unicode_decimal": 58884
+    },
+    {
+      "icon_id": "16534085",
+      "name": "关闭屏幕",
+      "font_class": "guanbipingmu",
+      "unicode": "e605",
+      "unicode_decimal": 58885
+    },
+    {
+      "icon_id": "17654821",
+      "name": "录像",
+      "font_class": "luxiang",
+      "unicode": "e636",
+      "unicode_decimal": 58934
+    },
+    {
+      "icon_id": "18164960",
+      "name": "报警,警报,报警灯,危险",
+      "font_class": "alarm",
+      "unicode": "e871",
+      "unicode_decimal": 59505
+    },
+    {
+      "icon_id": "21453418",
+      "name": "缺省-暂无数据",
+      "font_class": "quesheng-zanwushuju",
+      "unicode": "e606",
+      "unicode_decimal": 58886
+    }
+  ]
+}
