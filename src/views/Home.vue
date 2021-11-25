@@ -12,10 +12,10 @@
   import Footer from '@/components/footer.vue';
    // 引入封装好的接口
    import {
-    Login
+    getRequest
   } from "@/api/http.js";
   import {
-    getRequest
+    Login
   } from "@/api/api.js";
 
   export default {

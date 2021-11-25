@@ -29,12 +29,12 @@
 
 <script>
   // 引入封装好的接口
-  import {
-    Login
-  } from "@/api/http.js";
-  import {
-    getRequest
-  } from "@/api/api.js";
+  // import {
+  //   getRequest
+  // } from "@/api/http.js";
+  // import {
+  //   Login
+  // } from "@/api/api.js";
 
   import HeaderTitle from '../components/HeaderTitle.vue';
   export default {
@@ -61,23 +61,33 @@
     watch: {},
     //方法集合
     methods: { // 调用时使用
-      switchoverCodeFn(){
+      switchoverCodeFn() {
         this.isShow = !this.isShow;
       },
       gotoHome() {
         console.log(this.phoneNumber);
-        this.$router.push({ name: 'Home', params: {phoneNumber: this.phoneNumber}})
+        // this.$router.push({
+        //   name: 'Home',
+        //   params: {
+        //     phoneNumber: this.phoneNumber
+        //   }
+        // })
         //  this.$router.push({path: '/Home'});
       },
       Uploads() {
         let data = {
-          code: '021pjwll2CXJa84ZSvol28wr0k4pjwlN',
-          state: 123
+          // code: '021pjwll2CXJa84ZSvol28wr0k4pjwlN',
+          // state: 123
         }
-        console.log(Login);
-        getRequest(Login, data).then(res => {
+        // console.log(Login);
+        this.$api.RefreshToken().then((res) => {
           console.log(res)
+        }).catch((err) => {
+          console.log(err)
         })
+        // getRequest(Login, data).then(res => {
+        //   console.log(res)
+        // })
       }
     },
     //生命周期 - 创建完成（可以访问当前this实例）
