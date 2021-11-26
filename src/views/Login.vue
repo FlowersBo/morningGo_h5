@@ -23,6 +23,7 @@
       <button class="btn" @click="gotoHome">登录</button>
       <div class="codeLogin" @click="switchoverCodeFn">验证码登录</div>
     </div>
+    <van-loading v-show="isLoding" type="spinner" vertical size="24px">加载中...</van-loading>
   </div>
 </template>
 
@@ -37,6 +38,7 @@
   // } from "@/api/api.js";
 
   import HeaderTitle from '../components/HeaderTitle.vue';
+  let qs = require('querystring')
   export default {
     name: "login",
     components: {
@@ -52,7 +54,8 @@
         textDec: "忘记密码",
         phoneNumber: '',
         inputPassword: '',
-        isShow: true
+        isShow: true,
+        isLoding: true
       };
     },
     //计算属性 类似于data概念
@@ -61,6 +64,38 @@
     watch: {},
     //方法集合
     methods: { // 调用时使用
+      // sdk方法
+      async getWxJssdkConf() {
+        console.log(window.location.href.split("#")[0])
+        const res = await this.$api.getSdkConfig({
+          url: window.location.href.split("#")[0],
+        });
+        if (res.success) {
+          this.wxsdk.config({
+            debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+            appId: res.data.appId, // 必填，公众号的唯一标识
+            timestamp: String(res.data.timestamp), // 必填，生成签名的时间戳
+            nonceStr: String(res.data.nonceStr), // 必填，生成签名的随机串
+            signature: res.data.signature, // 必填，签名，见附录1
+            jsApiList: [
+              "getNetworkType",
+              "getLocation",
+            ], // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+          });
+          this.wxsdk.ready(() => {
+            this.wxsdk.checkJsApi({
+              jsApiList: ["getNetworkType", "getLocation"], // 需要检测的JS接口列表，所有JS接口列表见附录2,
+              success: function (res) {
+                console.log("checkJsApi", res);
+              },
+            });
+          });
+          this.wxsdk.error((res) => {
+            console.log("wx.error", res);
+          });
+        }
+      },
+
       switchoverCodeFn() {
         this.isShow = !this.isShow;
       },
@@ -75,24 +110,35 @@
         //  this.$router.push({path: '/Home'});
       },
       Uploads() {
+        if (window.location.href.indexOf("state") !== -1) {
+        this.code = qs.parse(
+          window.location.href.split("#")[0].split("?")[1]
+        ).code;
+        } 
+        console.log(this.code);
+
         let data = {
-          // code: '021pjwll2CXJa84ZSvol28wr0k4pjwlN',
-          // state: 123
+          code: '021pjwll2CXJa84ZSvol28wr0k4pjwlN',
+          state: 123
         }
-        // console.log(Login);
-        this.$api.RefreshToken().then((res) => {
-          console.log(res)
+        this.$api.RefreshToken().then(res => {
+          console.log('返回', res)
         }).catch((err) => {
           console.log(err)
         })
-        // getRequest(Login, data).then(res => {
-        //   console.log(res)
-        // })
-      }
+
+        //   this.$api.Login(data).then(res => {
+        //     console.log('返回',res)
+        //   }).catch((err) => {
+        //     console.log(err)
+        //   })
+        // }
+      },
     },
     //生命周期 - 创建完成（可以访问当前this实例）
     created() {
       this.Uploads();
+      // this.getWxJssdkConf();
     },
     //生命周期 - 挂载完成（可以访问DOM元素）
     mounted() {

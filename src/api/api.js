@@ -10,5 +10,5 @@ export default {
  },
  RefreshToken(data, token){
   return http.post("/userinfo/refresh_token",data, token)
- }
+ },
 }

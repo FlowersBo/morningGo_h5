@@ -2,8 +2,7 @@ import axios from 'axios'
 import router from '../router/index' 
 let qs = require('querystring')
 import helper from './helper'
-let root = 'https://w3.morninggo.cn';
-
+let root = '/api';
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 //  REQUEST 请求异常拦截
 axios.interceptors.request.use(config => {
@@ -64,6 +63,7 @@ axios.interceptors.response.use(result => {
 		err.message = '连接服务器失败!'
 	}
 	return Promise.resolve(err);
+	// return Promise.reject(err);
 })
 
 function apiAxios(method, url, params, token) {

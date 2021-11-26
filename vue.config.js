@@ -50,8 +50,8 @@ module.exports = {
         target: 'https://w3.morninggo.cn',
         /* 允许跨域 */
         changeOrigin: true,
-        ws: true,
-        secure: false,
+        ws: true, //如果要代理 websockets，配置这个参数
+        secure: true, //如果要代理 websockets，配置这个参数
         pathRewrite: {
           '^/api': '' //注意名字
         },
