@@ -75,16 +75,17 @@
     font-size: 16px;
     color: #fff;
     font-weight: 700;
-    margin-left: -5%;
     margin-right: -20%;
   }
 
   .header_arrow {
-    box-sizing: border-box;
-    padding-left: 4px;
+    position: absolute;
+    left: 4px;
+    width: 50px;
   }
 
   .header_arrow img {
+    width: 34px;
     vertical-align: middle;
   }
 

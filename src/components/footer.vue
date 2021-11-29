@@ -4,7 +4,7 @@
       <van-tabbar-item badge="2" url="/Home" class="tabbar">
         <van-icon class="iconfont" class-prefix='icon' slot="icon" slot-scope="props"
           :name="props.active ? 'alarm':'alarm'"></van-icon>
-        <span>报警</span>
+        <span>告警</span>
       </van-tabbar-item>
       <van-tabbar-item badge="2" url="/Repertory" class="tabbar">
         <van-icon class="iconfont" class-prefix='icon' slot="icon" slot-scope="props"

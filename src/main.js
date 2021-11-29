@@ -1,13 +1,14 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
-import store from './store'
+import store from './store/index'
 import 'vant/lib/index.css';
 import Vant from 'vant';
-// import axios from 'axios';
-// import VueAxios from 'vue-axios';
 import './asstes/font/iconfont.css'
-// Vue.use(VueAxios, axios);
+import axios from 'axios';
+Vue.prototype.$axios = axios
+// import VueAxios from 'vue-axios';
+// Vue.use(axios);
 Vue.use(Vant);
 import {
   Icon

@@ -23,7 +23,6 @@
       <button class="btn" @click="gotoHome">登录</button>
       <div class="codeLogin" @click="switchoverCodeFn">验证码登录</div>
     </div>
-    <van-loading v-show="isLoding" type="spinner" vertical size="24px">加载中...</van-loading>
   </div>
 </template>
 
@@ -39,6 +38,9 @@
 
   import HeaderTitle from '../components/HeaderTitle.vue';
   let qs = require('querystring')
+  import {
+    mapMutations
+  } from "vuex"
   export default {
     name: "login",
     components: {
@@ -55,7 +57,6 @@
         phoneNumber: '',
         inputPassword: '',
         isShow: true,
-        isLoding: true
       };
     },
     //计算属性 类似于data概念
@@ -64,6 +65,7 @@
     watch: {},
     //方法集合
     methods: { // 调用时使用
+      ...mapMutations(['changeisLoading']),
       // sdk方法
       async getWxJssdkConf() {
         console.log(window.location.href.split("#")[0])
@@ -111,11 +113,11 @@
       },
       Uploads() {
         if (window.location.href.indexOf("state") !== -1) {
-        this.code = qs.parse(
-          window.location.href.split("#")[0].split("?")[1]
-        ).code;
-        } 
-        console.log(this.code);
+          this.code = qs.parse(
+            window.location.href.split("#")[0].split("?")[1]
+          ).code;
+        }
+        // console.log(this.code);
 
         let data = {
           code: '021pjwll2CXJa84ZSvol28wr0k4pjwlN',
@@ -124,8 +126,10 @@
         this.$api.RefreshToken().then(res => {
           console.log('返回', res)
         }).catch((err) => {
+          this.changeisLoading(true);
           console.log(err)
         })
+
 
         //   this.$api.Login(data).then(res => {
         //     console.log('返回',res)
@@ -134,12 +138,19 @@
         //   })
         // }
       },
+      async refreshToken() {
+        let sliders = await (this.$api.RefreshToken());
+        console.log(sliders)
+      }
     },
+
     //生命周期 - 创建完成（可以访问当前this实例）
     created() {
       this.Uploads();
       // this.getWxJssdkConf();
+      // this.refreshToken()
     },
+
     //生命周期 - 挂载完成（可以访问DOM元素）
     mounted() {
 

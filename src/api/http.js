@@ -1,4 +1,5 @@
 import axios from 'axios'
+import store from '../store/index'
 import router from '../router/index' 
 let qs = require('querystring')
 import helper from './helper'
@@ -6,6 +7,7 @@ let root = '/api';
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 //  REQUEST 请求异常拦截
 axios.interceptors.request.use(config => {
+	store.state.isLoading = true;
 	const token = localStorage.getItem('token'); //取
 	// localStorage.setItem('app-refresh-token',JSON.stringify(A)); //存
 
@@ -19,12 +21,16 @@ axios.interceptors.request.use(config => {
 	// 	message: '请求超时!'
 	// });
 	return Promise.resolve(err);
+	// return Promise.error(err);
 });
 
 //  RESPONSE 响应异常拦截
 axios.interceptors.response.use(result => {
 	const that = this;
 	console.log(result);
+	if(result.status === 200){
+		store.state.isLoading = false
+	}
 	if (result.data.code && result.data.code != 200) {
 		switch (result.data.code) {
 			case 401:
@@ -45,6 +51,7 @@ axios.interceptors.response.use(result => {
 	};
 	return result;
 }, err => {
+	store.state.isLoading = true
 	if (err && err.response) {
 		switch (err.response.status) {
 			case 401:
@@ -62,8 +69,8 @@ axios.interceptors.response.use(result => {
 	} else {
 		err.message = '连接服务器失败!'
 	}
-	return Promise.resolve(err);
-	// return Promise.reject(err);
+	// return Promise.resolve(err);
+	return Promise.reject(err);
 })
 
 function apiAxios(method, url, params, token) {
@@ -86,11 +93,11 @@ function apiAxios(method, url, params, token) {
 
 // 返回在vue模板中的调用接口
 export default {
-	get: function (url, params, token) {
-		return apiAxios('GET', url, params, token)
+	get: function (url, params) {
+		return apiAxios('GET', url, params)
 	},
-	post: function (url, params, token) {
-		return apiAxios('POST', url, params, token)
+	post: function (url, params) {
+		return apiAxios('POST', url, params)
 	},
 	put: function (url, params, token) {
 		return apiAxios('PUT', url, params, token)
