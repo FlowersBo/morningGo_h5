@@ -30,7 +30,7 @@
     watch: {},
     //方法集合
     methods: {
-     
+
     },
     //生命周期 - 创建完成（可以访问当前this实例）
     created() {},
@@ -43,8 +43,20 @@
     //生命周期-挂载之前
     beforeMount() {},
   }
+  // document.body.addEventListener('touchmove', function (e) {
+  //   e.preventDefault();
+  //   e.stopPropagation();
+  // }, {
+  //   passive: false
+  // })
 </script>
-<style>
+<style lang="less">
+  body {
+    width: 100%;
+    /* touch-action: none; */
+    /*将该属性写在根元素上即可之后就不会报错*/
+  }
+
   #app {
     font-family: Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;

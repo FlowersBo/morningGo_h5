@@ -112,31 +112,30 @@
         //  this.$router.push({path: '/Home'});
       },
       Uploads() {
-        if (window.location.href.indexOf("state") !== -1) {
-          this.code = qs.parse(
-            window.location.href.split("#")[0].split("?")[1]
-          ).code;
-        }
+        // if (window.location.href.indexOf("state") !== -1) {
+        //   this.code = qs.parse(
+        //     window.location.href.split("#")[0].split("?")[1]
+        //   ).code;
+        // }
         // console.log(this.code);
 
         let data = {
           code: '021pjwll2CXJa84ZSvol28wr0k4pjwlN',
           state: 123
         }
-        this.$api.RefreshToken().then(res => {
-          console.log('返回', res)
-        }).catch((err) => {
-          this.changeisLoading(true);
-          console.log(err)
-        })
-
-
-        //   this.$api.Login(data).then(res => {
+         //   this.$api.Login(data).then(res => {
         //     console.log('返回',res)
         //   }).catch((err) => {
         //     console.log(err)
         //   })
         // }
+        let postData = {refreshtoken:'refreshtoken'}
+        this.$api.RefreshToken(postData).then(res => {
+          console.log('返回', res)
+        }).catch((err) => {
+          this.changeisLoading(true);
+          console.log(err)
+        })
       },
       async refreshToken() {
         let sliders = await (this.$api.RefreshToken());

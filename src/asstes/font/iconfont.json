@@ -6,6 +6,34 @@
   "description": "h5运维段",
   "glyphs": [
     {
+      "icon_id": "1341",
+      "name": "高清摄像",
+      "font_class": "gaoqingshexiang",
+      "unicode": "e601",
+      "unicode_decimal": 58881
+    },
+    {
+      "icon_id": "6102966",
+      "name": "录像",
+      "font_class": "luxiang1",
+      "unicode": "e644",
+      "unicode_decimal": 58948
+    },
+    {
+      "icon_id": "6129338",
+      "name": "295维修",
+      "font_class": "weixiu",
+      "unicode": "e7f0",
+      "unicode_decimal": 59376
+    },
+    {
+      "icon_id": "1162336",
+      "name": "右箭头",
+      "font_class": "youjiantou",
+      "unicode": "e6e0",
+      "unicode_decimal": 59104
+    },
+    {
       "icon_id": "553324",
       "name": "验证 验证码",
       "font_class": "yanzhengyanzhengma",

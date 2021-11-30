@@ -14,6 +14,7 @@ const helper = {
     str.push(key + '=' + query[key])
    }
    let paramStr = str.join('&')
+   console.log(paramStr)
    return paramStr ? `${url}?${paramStr}` : url
   },
   

@@ -28,6 +28,12 @@ import api from './api/api.js'
 Vue.prototype.$http = http
 Vue.prototype.$api = api
 
+// 滑动
+import  VueTouch from 'vue-touch'
+Vue.use(VueTouch,{name:'v-touch'})
+VueTouch.config.swipe = {
+  threshold:50  //设置左右滑动的距离
+}
 
 // 引入js_sdk
 import wxsdk from 'weixin-js-sdk';
