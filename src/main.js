@@ -35,6 +35,11 @@ VueTouch.config.swipe = {
   threshold:50  //设置左右滑动的距离
 }
 
+//视频组件
+import VideoPlayer from 'vue-video-player'
+import 'video.js/dist/video-js.css'
+Vue.use(VideoPlayer)
+
 // 引入js_sdk
 import wxsdk from 'weixin-js-sdk';
 Vue.prototype.wxsdk = wxsdk
