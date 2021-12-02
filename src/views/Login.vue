@@ -13,7 +13,7 @@
         </div>
         <div class="inp" v-if='isShow'>
           <van-icon class="iconfont icon" class-prefix='icon' name='mima' />
-          <input type="password" placeholder="密码" placeholder-class="input-placeholder"></input>
+          <input type="password" v-model="inputPassword" placeholder="密码" placeholder-class="input-placeholder"></input>
         </div>
         <div class="inp" v-else>
           <van-icon class="iconfont icon" class-prefix='icon' name='yanzhengyanzhengma' />
@@ -21,26 +21,25 @@
         </div>
       </div>
       <button class="btn" @click="gotoHome">登录</button>
-      <div class="codeLogin" @click="switchoverCodeFn">验证码登录</div>
+      <div class="codeLogin" @click="switchoverCodeFn">{{isShow?'验证码登录':'密码登录'}}</div>
     </div>
   </div>
 </template>
 
 
 <script>
-  // 引入封装好的接口
-  // import {
-  //   getRequest
-  // } from "@/api/http.js";
-  // import {
-  //   Login
-  // } from "@/api/api.js";
-
   import HeaderTitle from '../components/HeaderTitle.vue';
-  let qs = require('querystring')
+  let qs = require('querystring');
   import {
     mapMutations
   } from "vuex"
+
+  import {
+    WeixinCode,
+    WeixinReturnBlock,
+    WeixinCloseWindow
+  } from '../utils/util.js'
+
   export default {
     name: "login",
     components: {
@@ -54,8 +53,9 @@
         imgUrl: '',
         titleDec: "登录",
         textDec: "忘记密码",
-        phoneNumber: '',
+        phoneNumber: '15001081717',
         inputPassword: '',
+        logintype: 1,
         isShow: true,
       };
     },
@@ -66,49 +66,65 @@
     //方法集合
     methods: { // 调用时使用
       ...mapMutations(['changeisLoading']),
-      // sdk方法
-      async getWxJssdkConf() {
-        console.log(window.location.href.split("#")[0])
-        const res = await this.$api.getSdkConfig({
-          url: window.location.href.split("#")[0],
-        });
-        if (res.success) {
-          this.wxsdk.config({
-            debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-            appId: res.data.appId, // 必填，公众号的唯一标识
-            timestamp: String(res.data.timestamp), // 必填，生成签名的时间戳
-            nonceStr: String(res.data.nonceStr), // 必填，生成签名的随机串
-            signature: res.data.signature, // 必填，签名，见附录1
-            jsApiList: [
-              "getNetworkType",
-              "getLocation",
-            ], // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
-          });
-          this.wxsdk.ready(() => {
-            this.wxsdk.checkJsApi({
-              jsApiList: ["getNetworkType", "getLocation"], // 需要检测的JS接口列表，所有JS接口列表见附录2,
-              success: function (res) {
-                console.log("checkJsApi", res);
-              },
-            });
-          });
-          this.wxsdk.error((res) => {
-            console.log("wx.error", res);
-          });
+
+      getIsWxClient() {
+        var ua = navigator.userAgent.toLowerCase();
+        if (ua.match(/MicroMessenger/i) == "micromessenger") {
+          return true;
         }
+        return false;
       },
 
+      getOpenId(code) {
+        let obj = {
+          code,
+          platformId: '808',
+          url: location.href.split('#')[0]
+        }
+        // api.getOpenId(obj).then((res) => { //调接口
+        //   if (res.code == 1) {
+        //     let data = res.data || {};
+        //     this.$router.push('/Login')
+        //   } else {
+        //     //获取异常，关闭当前窗口
+        //     console.log('获取异常')
+        //     // setTimeout(() => {
+        //     //   WeixinCloseWindow()
+        //     // }, 2000)
+        //   }
+        // })
+      },
+
+
+      // 切换验证码登录
       switchoverCodeFn() {
         this.isShow = !this.isShow;
       },
       gotoHome() {
-        console.log(this.phoneNumber);
-        // this.$router.push({
-        //   name: 'Home',
-        //   params: {
-        //     phoneNumber: this.phoneNumber
-        //   }
-        // })
+        console.log(this.phoneNumber,this.inputPassword,this.logintype);
+        let reqData = {
+          username: this.phoneNumber,
+          password: this.inputPassword,
+          type: this.logintype,
+          code: '061pihRo0rQm0k1LpWSo0AktRo0pihR5'
+        };
+        this.$api.Login(reqData).then(res => {
+          console.log('返回', res)
+          //   this.$router.push({
+          //   name: 'Home',
+          //   params: {
+          //     phoneNumber: this.phoneNumber
+          //   }
+          // })
+        }).catch((err) => {
+          this.changeisLoading(true);
+          console.log(err)
+        })
+
+
+
+
+
         //  this.$router.push({path: '/Home'});
       },
       Uploads() {
@@ -123,13 +139,15 @@
           code: '021pjwll2CXJa84ZSvol28wr0k4pjwlN',
           state: 123
         }
-         //   this.$api.Login(data).then(res => {
+        //   this.$api.Login(data).then(res => {
         //     console.log('返回',res)
         //   }).catch((err) => {
         //     console.log(err)
         //   })
         // }
-        let postData = {refreshtoken:'refreshtoken'}
+        let postData = {
+          refreshtoken: 'refreshtoken'
+        }
         this.$api.RefreshToken(postData).then(res => {
           console.log('返回', res)
         }).catch((err) => {
@@ -137,10 +155,10 @@
           console.log(err)
         })
       },
-      async refreshToken() {
-        let sliders = await (this.$api.RefreshToken());
-        console.log(sliders)
-      }
+      // async refreshToken() {
+      //   let sliders = await (this.$api.RefreshToken());
+      //   console.log(sliders)
+      // }
     },
 
     //生命周期 - 创建完成（可以访问当前this实例）
@@ -152,7 +170,22 @@
 
     //生命周期 - 挂载完成（可以访问DOM元素）
     mounted() {
+      // if (!this.getIsWxClient()) {
+      //   this.$router.push('/404')
+      //   return
+      // };
 
+      let code = this.$route.query.code;
+      if (!code) {
+        //没有code，去重定向
+        WeixinCode()
+        console.log('获取code', WeixinCode())
+      } else {
+        //添加返回拦截
+        WeixinReturnBlock.addEvent();
+        //根据code，获取信息
+        this.getOpenId(code)
+      }
     },
     //生命周期-创建之前
     beforeCreated() {},
@@ -165,7 +198,9 @@
     //生命周期-销毁之前
     beforeDestory() {},
     //生命周期-销毁完成
-    destoryed() {},
+    destoryed() {
+      WeixinReturnBlock.removeEvent();
+    },
     //如果页面有keep-alive缓存功能，这个函数会触发
     activated() {}
   }

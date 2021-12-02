@@ -1,6 +1,6 @@
 import axios from 'axios'
 import store from '../store/index'
-import router from '../router/index' 
+import router from '../router/index'
 let qs = require('querystring')
 import helper from './helper'
 let root = '/api';
@@ -27,28 +27,28 @@ axios.interceptors.request.use(config => {
 //  RESPONSE 响应异常拦截
 axios.interceptors.response.use(result => {
 	const that = this;
-	console.log(result);
-	if(result.status === 200){
+	// console.log('接口返回数据',result);
+	if (result.status === 200) {
 		store.state.isLoading = false
 	}
-	if (result.data.code && result.data.code != 200) {
-		switch (result.data.code) {
-			case 401:
-				break;
-			case 402:
-				break;
-			case 403: //请求禁止,跳转到登录页面
-			console.log('跳页面')
-			router.push({
-				name: 'Login'
-			})
-				break;
-			default:
-		}
-		// 非法进入时直接跳到登录页
-		window.kk = '/';
-		return;
-	};
+	// if (result.data.code && result.data.code != 200) {
+	// 	switch (result.data.code) {
+	// 		case 401:
+	// 			break;
+	// 		case 402:
+	// 			break;
+	// 		case 403: //请求禁止,跳转到登录页面
+	// 			console.log('跳页面')
+	// 			router.push({
+	// 				name: 'Login'
+	// 			})
+	// 			break;
+	// 		default:
+	// 	}
+	// 	// 非法进入时直接跳到登录页
+	// 	window.kk = '/';
+	// 	return;
+	// };
 	return result;
 }, err => {
 	store.state.isLoading = true
@@ -61,11 +61,18 @@ axios.interceptors.response.use(result => {
 				err.message = '请求参数错误!';
 				break;
 			case 403: //请求禁止,跳转到登录页面
+				console.log('跳页面')
+				router.push({
+					name: 'Login'
+				})
 				err.message = '请求停止!';
 				break;
 			default:
 				err.message = `登录凭证过期,请重新登录!`;
 		}
+			// 非法进入时直接跳到登录页
+			window.kk = '/';
+			return;
 	} else {
 		err.message = '连接服务器失败!'
 	}
@@ -85,7 +92,8 @@ function apiAxios(method, url, params, token) {
 		baseURL: root,
 		timeout: 10000,
 		headers: {
-			Authorization: `Bearer ${token}`
+			// Authorization: `Bearer ${token}`
+			"mg-access-token": localStorage.getItem('assessToken'),
 		}, //jwt
 		withCredentials: false
 	})
