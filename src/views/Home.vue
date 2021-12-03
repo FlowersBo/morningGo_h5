@@ -4,7 +4,7 @@
     <!-- <router-link to="/Mine">Mine</router-link> -->
     <HeaderTitle :imgSrc="imgUrl" :title="titleDec" :text="textDec"></HeaderTitle>
 
-    <!-- <van-tabs v-model="active" sticky offset-top="45" title-active-color="#F15A24" @click="onClickNav">
+    <van-tabs v-model="active" sticky offset-top="45" title-active-color="#F15A24" @click="onClickNav">
       <van-tab v-for="index in navTab" :key="index" :title="index" badge="1">
         <van-pull-refresh class="alarmWrap" v-model="refreshing" @refresh="onRefresh">
           <van-list v-model="loading" :error.sync="error" error-text="请求失败，点击重新加载" :finished="finished"
@@ -50,7 +50,7 @@
         </van-pull-refresh>
 
       </van-tab>
-    </van-tabs> -->
+    </van-tabs>
 
     <Footer :active="footerActive" />
   </div>
@@ -129,16 +129,16 @@
     watch: {},
     //方法集合
     methods: { // 调用时使用
-      Uploads() {
+      DevicelistFn() {
         let data = {
-          code: '021pjwll2CXJa84ZSvol28wr0k4pjwlN',
-          state: 123
+          pageindex: 1,
+          pagesize: 20
         }
-        // this.$api.Login(data).then(res => {
-        //   console.log('返回', res)
-        // }).catch((err) => {
-        //   console.log(err)
-        // })
+        this.$api.Devicelist(data).then(res => {
+          console.log('返回', res)
+        }).catch((err) => {
+          console.log(err)
+        })
       },
       onLoad() {
         console.log('调用')
@@ -197,7 +197,7 @@
     },
     //生命周期 - 创建完成（可以访问当前this实例）
     created() {
-      this.Uploads();
+      this.DevicelistFn();
     },
     //生命周期 - 挂载完成（可以访问DOM元素）
     mounted() {

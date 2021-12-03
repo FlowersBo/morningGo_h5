@@ -17,7 +17,9 @@
         </div>
         <div class="inp" v-else>
           <van-icon class="iconfont icon" class-prefix='icon' name='yanzhengyanzhengma' />
-          <input type="number" placeholder="验证码" placeholder-class="input-placeholder"></input>
+          <input type="number" v-model="verificationCode" placeholder="验证码"
+            placeholder-class="input-placeholder"></input>
+          <div class="verificationCode" @click="verificationCodeFn">{{verificationCodeText}}</div>
         </div>
       </div>
       <button class="btn" @click="gotoHome">登录</button>
@@ -55,6 +57,9 @@
         textDec: "忘记密码",
         phoneNumber: '15001081717',
         inputPassword: '',
+        verificationCode: '', //验证码
+        verificationCodeText: '获取验证码',
+        isRepeatClick: false,
         logintype: 1,
         isShow: true,
       };
@@ -76,13 +81,8 @@
       },
 
       getOpenId(code) {
-        let obj = {
-          code,
-          platformId: '808',
-          url: location.href.split('#')[0]
-        }
-        // api.getOpenId(obj).then((res) => { //调接口
-        //   if (res.code == 1) {
+        // api.RefreshToken().then((res) => {
+        //   if (res.data.code == 200) {
         //     let data = res.data || {};
         //     this.$router.push('/Login')
         //   } else {
@@ -101,15 +101,20 @@
         this.isShow = !this.isShow;
       },
       gotoHome() {
-        console.log(this.phoneNumber,this.inputPassword,this.logintype);
+        console.log(this.phoneNumber, this.inputPassword, this.logintype);
         let reqData = {
           username: this.phoneNumber,
           password: this.inputPassword,
           type: this.logintype,
-          code: '061pihRo0rQm0k1LpWSo0AktRo0pihR5'
+          code: '081VKuFa1dtDdC0o0vHa185w6y0VKuFR'
         };
         this.$api.Login(reqData).then(res => {
-          console.log('返回', res)
+          console.log('返回', res);
+          if(res.data.code==200){
+            let token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NDA3NTg3NTYwODIsInBheWxvYWQiOiJ7XCJ3b3Jrcm9sZVwiOlwiMVwiLFwib3BlbmlkXCI6XCJvWjROUDZjNnItV3FlWnhTYzNyU215ZjJuRHVBXCIsXCJuYW1lXCI6XCLniZvpob9cIixcImlkXCI6NDQsXCJncm91cG5hbWVcIjpcIua4qeamhuays-eDpOiCoOi_kOe7tFwiLFwidXNlcm5hbWVcIjpcIjE1MDAxMDgxNzE3XCJ9In0.tZwDTGeCy4oA-mFgiIpdI7JRS3in-hcarljZoIlUUUg'
+            localStorage.setItem('assessToken',JSON.stringify(res.data.data.token));
+            localStorage.setItem('phoneNumber',JSON.stringify(res.data.data.user.username));
+          }
           //   this.$router.push({
           //   name: 'Home',
           //   params: {
@@ -120,13 +125,48 @@
           this.changeisLoading(true);
           console.log(err)
         })
-
-
-
-
-
         //  this.$router.push({path: '/Home'});
       },
+
+      //获取验证码
+      verificationCodeFn() {
+        if (this.isRepeatClick) {
+          return;
+        }
+        if (this.phoneNumber.length < 11) {
+          this.$toast('手机号输入错误');
+          return;
+        } else if (!(/^1[3456789]\d{9}$/.test(this.phoneNumber))) {
+          this.$toast('手机号输入有误');
+          return;
+        }
+        let reqData = {
+          username: this.phoneNumber
+        };
+        this.verificationCodeText = 6;
+        this.$api.Getsmscode(reqData).then(res => {
+          console.log('返回', res)
+          this.codeFn();
+        }).catch((err) => {
+          console.log(err)
+        })
+      },
+
+      codeFn() {
+        this.isRepeatClick = true;
+        let timer = setTimeout(() => {
+          if (this.verificationCodeText === 0) {
+            this.verificationCodeText = '重新获取'
+            this.isRepeatClick = false;
+            clearTimeout(timer);
+            return
+          } else {
+            this.verificationCodeText--;
+            this.codeFn();
+          }
+        }, 1000)
+      },
+
       Uploads() {
         // if (window.location.href.indexOf("state") !== -1) {
         //   this.code = qs.parse(
@@ -134,21 +174,16 @@
         //   ).code;
         // }
         // console.log(this.code);
-
-        let data = {
-          code: '021pjwll2CXJa84ZSvol28wr0k4pjwlN',
-          state: 123
-        }
         //   this.$api.Login(data).then(res => {
         //     console.log('返回',res)
         //   }).catch((err) => {
         //     console.log(err)
         //   })
         // }
-        let postData = {
-          refreshtoken: 'refreshtoken'
-        }
-        this.$api.RefreshToken(postData).then(res => {
+        // let postData = {
+        //   refreshtoken: localStorage.getItem('assessToken')
+        // }
+        this.$api.RefreshToken().then(res => {
           console.log('返回', res)
         }).catch((err) => {
           this.changeisLoading(true);
@@ -164,6 +199,7 @@
     //生命周期 - 创建完成（可以访问当前this实例）
     created() {
       this.Uploads();
+      
       // this.getWxJssdkConf();
       // this.refreshToken()
     },
@@ -174,18 +210,20 @@
       //   this.$router.push('/404')
       //   return
       // };
-
-      let code = this.$route.query.code;
-      if (!code) {
-        //没有code，去重定向
-        WeixinCode()
-        console.log('获取code', WeixinCode())
-      } else {
-        //添加返回拦截
-        WeixinReturnBlock.addEvent();
-        //根据code，获取信息
-        this.getOpenId(code)
+      if(JSON.parse(localStorage.getItem('phoneNumber'))){
+        this.phoneNumber = JSON.parse(localStorage.getItem('phoneNumber'));
       }
+      // let code = this.$route.query.code;
+      // if (!code) {
+      //   //没有code，去重定向
+      //   WeixinCode()
+      //   console.log('获取code', WeixinCode())
+      // } else {
+      //   //添加返回拦截
+      //   WeixinReturnBlock.addEvent();
+      //   //根据code，获取信息
+      //   this.getOpenId(code)
+      // }
     },
     //生命周期-创建之前
     beforeCreated() {},
@@ -244,6 +282,12 @@
   input::-webkit-outer-spin-button,
   input::-webkit-inner-spin-button {
     -webkit-appearance: none;
+  }
+
+  .verificationCode {
+    width: 100px;
+    font-size: 12px;
+    color: #10aeff;
   }
 
   .icon {
