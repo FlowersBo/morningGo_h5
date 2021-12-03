@@ -99,8 +99,31 @@
       // 切换验证码登录
       switchoverCodeFn() {
         this.isShow = !this.isShow;
+        if (this.isShow) {
+          this.logintype = 1
+        } else {
+          this.logintype = 2
+        }
       },
       gotoHome() {
+        if (this.phoneNumber.length < 11) {
+          this.$toast('手机号输入错误');
+          return;
+        } else if (!(/^1[3456789]\d{9}$/.test(this.phoneNumber))) {
+          this.$toast('手机号输入有误');
+          return;
+        }
+        if (this.logintype === 1) {
+          if (this.password.length < 0) {
+            this.$toast('密码不能为空');
+            return;
+          }
+        } else {
+          if (this.verificationCode.length < 0) {
+            this.$toast('验证码不能为空');
+            return;
+          }
+        }
         console.log(this.phoneNumber, this.inputPassword, this.logintype);
         let reqData = {
           username: this.phoneNumber,
@@ -110,17 +133,18 @@
         };
         this.$api.Login(reqData).then(res => {
           console.log('返回', res);
-          if(res.data.code==200){
-            let token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NDA3NTg3NTYwODIsInBheWxvYWQiOiJ7XCJ3b3Jrcm9sZVwiOlwiMVwiLFwib3BlbmlkXCI6XCJvWjROUDZjNnItV3FlWnhTYzNyU215ZjJuRHVBXCIsXCJuYW1lXCI6XCLniZvpob9cIixcImlkXCI6NDQsXCJncm91cG5hbWVcIjpcIua4qeamhuays-eDpOiCoOi_kOe7tFwiLFwidXNlcm5hbWVcIjpcIjE1MDAxMDgxNzE3XCJ9In0.tZwDTGeCy4oA-mFgiIpdI7JRS3in-hcarljZoIlUUUg'
-            localStorage.setItem('assessToken',JSON.stringify(res.data.data.token));
-            localStorage.setItem('phoneNumber',JSON.stringify(res.data.data.user.username));
+          if (res.data.code == 200) {
+            let token =
+              'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NDA3NTg3NTYwODIsInBheWxvYWQiOiJ7XCJ3b3Jrcm9sZVwiOlwiMVwiLFwib3BlbmlkXCI6XCJvWjROUDZjNnItV3FlWnhTYzNyU215ZjJuRHVBXCIsXCJuYW1lXCI6XCLniZvpob9cIixcImlkXCI6NDQsXCJncm91cG5hbWVcIjpcIua4qeamhuays-eDpOiCoOi_kOe7tFwiLFwidXNlcm5hbWVcIjpcIjE1MDAxMDgxNzE3XCJ9In0.tZwDTGeCy4oA-mFgiIpdI7JRS3in-hcarljZoIlUUUg'
+            localStorage.setItem('assessToken', JSON.stringify(res.data.data.token));
+            localStorage.setItem('phoneNumber', JSON.stringify(res.data.data.user.username));
           }
-          //   this.$router.push({
-          //   name: 'Home',
-          //   params: {
-          //     phoneNumber: this.phoneNumber
-          //   }
-          // })
+            this.$router.push({
+            name: 'Home',
+            params: {
+              phoneNumber: this.phoneNumber
+            }
+          })
         }).catch((err) => {
           this.changeisLoading(true);
           console.log(err)
@@ -143,7 +167,7 @@
         let reqData = {
           username: this.phoneNumber
         };
-        this.verificationCodeText = 6;
+        this.verificationCodeText = 60;
         this.$api.Getsmscode(reqData).then(res => {
           console.log('返回', res)
           this.codeFn();
@@ -199,7 +223,7 @@
     //生命周期 - 创建完成（可以访问当前this实例）
     created() {
       this.Uploads();
-      
+
       // this.getWxJssdkConf();
       // this.refreshToken()
     },
@@ -210,7 +234,7 @@
       //   this.$router.push('/404')
       //   return
       // };
-      if(JSON.parse(localStorage.getItem('phoneNumber'))){
+      if (JSON.parse(localStorage.getItem('phoneNumber'))) {
         this.phoneNumber = JSON.parse(localStorage.getItem('phoneNumber'));
       }
       // let code = this.$route.query.code;

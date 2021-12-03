@@ -19,7 +19,8 @@
                     <van-icon v-else class="iconfont icon" color="#F15A24" class-prefix='icon' name='gouwuchetianjia' />
                   </div>
                   <div class="title-right">
-                    <van-icon class="iconfont icon" color="#C4D0FF" class-prefix='icon' name='gaoqingshexiang' @click="gotoVideo(item.id)"/>
+                    <van-icon class="iconfont icon" color="#C4D0FF" class-prefix='icon' name='gaoqingshexiang'
+                      @click="gotoVideo(item.id)" />
                     <div class="titleBtn" @click="removeFn(item.id)">消除</div>
                   </div>
                 </div>
@@ -73,6 +74,8 @@
   export default {
     data() {
       return {
+        pageindex: 1,
+        pagesize: 20,
         imgUrl: require('@/img/back.png'),
         titleDec: "告警",
         textDec: "",
@@ -131,8 +134,8 @@
     methods: { // 调用时使用
       DevicelistFn() {
         let data = {
-          pageindex: 1,
-          pagesize: 20
+          pageindex: this.pageindex,
+          pagesize: this.pagesize
         }
         this.$api.Devicelist(data).then(res => {
           console.log('返回', res)
