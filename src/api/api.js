@@ -10,8 +10,8 @@ export default {
   Getsmscode(data) {  //获取验证码
     return http.post("/userinfo/getsmscode", data)
   },
-  Devicelist(data) {  //获取验证码
-    return http.get("/deviceinfo/getdevicelist", data)
+  Devicelist(data) {  //报警列表
+    return http.get("/nav/alarmlist", data)
   },
 
 }

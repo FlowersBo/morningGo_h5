@@ -114,7 +114,7 @@
           return;
         }
         if (this.logintype === 1) {
-          if (this.password.length < 0) {
+          if (this.inputPassword.length < 0) {
             this.$toast('密码不能为空');
             return;
           }
@@ -129,17 +129,16 @@
           username: this.phoneNumber,
           password: this.inputPassword,
           type: this.logintype,
-          code: '081VKuFa1dtDdC0o0vHa185w6y0VKuFR'
+          code: '031D5e1000N0TM1jeR300SgS890D5e15'
         };
         this.$api.Login(reqData).then(res => {
           console.log('返回', res);
           if (res.data.code == 200) {
-            let token =
-              'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NDA3NTg3NTYwODIsInBheWxvYWQiOiJ7XCJ3b3Jrcm9sZVwiOlwiMVwiLFwib3BlbmlkXCI6XCJvWjROUDZjNnItV3FlWnhTYzNyU215ZjJuRHVBXCIsXCJuYW1lXCI6XCLniZvpob9cIixcImlkXCI6NDQsXCJncm91cG5hbWVcIjpcIua4qeamhuays-eDpOiCoOi_kOe7tFwiLFwidXNlcm5hbWVcIjpcIjE1MDAxMDgxNzE3XCJ9In0.tZwDTGeCy4oA-mFgiIpdI7JRS3in-hcarljZoIlUUUg'
             localStorage.setItem('assessToken', JSON.stringify(res.data.data.token));
             localStorage.setItem('phoneNumber', JSON.stringify(res.data.data.user.username));
           }
-            this.$router.push({
+          this.$router.push({
+            // path: '/Home'
             name: 'Home',
             params: {
               phoneNumber: this.phoneNumber
@@ -149,7 +148,6 @@
           this.changeisLoading(true);
           console.log(err)
         })
-        //  this.$router.push({path: '/Home'});
       },
 
       //获取验证码
@@ -223,7 +221,8 @@
     //生命周期 - 创建完成（可以访问当前this实例）
     created() {
       this.Uploads();
-
+      let assessToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NDEzNzMwOTY1MzcsInBheWxvYWQiOiJ7XCJ3b3Jrcm9sZVwiOlwiMVwiLFwib3BlbmlkXCI6XCJvWjROUDZXa0wtVmdrN2FLUWl6N1h3SUE4Q3kwXCIsXCJuYW1lXCI6XCLniZvpob9cIixcImlkXCI6NDQsXCJncm91cG5hbWVcIjpcIua4qeamhuays-eDpOiCoOi_kOe7tFwiLFwidXNlcm5hbWVcIjpcIjE1MDAxMDgxNzE3XCJ9In0.94CvN_9LGRHBiisJiKlFZ4A2-EE9uZqRhUy9zRjvyVQ";
+      localStorage.setItem('assessToken', JSON.stringify(assessToken));
       // this.getWxJssdkConf();
       // this.refreshToken()
     },

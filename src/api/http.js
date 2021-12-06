@@ -8,12 +8,12 @@ axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded
 //  REQUEST 请求异常拦截
 axios.interceptors.request.use(config => {
 	store.state.isLoading = true;
-	const token = localStorage.getItem('token'); //取
+	// const token = localStorage.getItem('token'); //取
 	// localStorage.setItem('app-refresh-token',JSON.stringify(A)); //存
 
 	// 将Token添加到请求头里面
 	// config.headers['app-refresh-token'] = 'A';
-	token && (config.headers.Token = token);
+	// token && (config.headers.Token = token);
 	return config;
 }, err => {
 	// 错误处理
@@ -93,7 +93,7 @@ function apiAxios(method, url, params, token) {
 		timeout: 10000,
 		headers: {
 			// Authorization: `Bearer ${token}`
-			"mg-access-token": localStorage.getItem('assessToken'),
+			"mg-access-token": JSON.parse(localStorage.getItem('assessToken')),
 		}, //jwt
 		withCredentials: false
 	})
