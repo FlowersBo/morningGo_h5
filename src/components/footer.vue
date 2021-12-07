@@ -1,22 +1,25 @@
 <template>
   <div class="tabbar">
-    <van-tabbar v-model="tabbarTempValue" active-color="#F15A24" inactive-color="hotpink" @change="onChange">
-      <van-tabbar-item badge="2" url="/Home" class="tabbar">
+    <van-tabbar v-model="tabbarTempValue" :placeholder="true" active-color="#F15A24" inactive-color="hotpink" @change="onChange">
+      
+      <van-tabbar-item :badge="badgeNumber" url="/Home" class="tabbar">
         <van-icon class="iconfont" class-prefix='icon' slot="icon" slot-scope="props"
           :name="props.active ? 'alarm':'alarm'"></van-icon>
         <span>告警</span>
       </van-tabbar-item>
-      <van-tabbar-item badge="2" url="/Repertory" class="tabbar">
+      
+      <van-tabbar-item badge="" url="/Repertory" class="tabbar">
         <van-icon class="iconfont" class-prefix='icon' slot="icon" slot-scope="props"
           :name="props.active ? 'kucunpandian':'kucunpandian'"></van-icon>
         <span>库存</span>
       </van-tabbar-item>
+
       <van-tabbar-item url="/Prebake" class="tabbar">
         <van-icon class="iconfont" class-prefix='icon' slot="icon" slot-scope="props"
           :name="props.active ? 'yuyuedingdan':'yuyuedingdan'"></van-icon>
         <span>预烤</span>
       </van-tabbar-item>
-      <van-tabbar-item badge="2" url="/Equipment" class="tabbar">
+      <van-tabbar-item badge="" url="/Equipment" class="tabbar">
         <van-icon class="iconfont" class-prefix='icon' slot="icon" slot-scope="props"
           :name="props.active ? 'shebeiguanli':'shebeiguanli'"></van-icon>
         <span>设备</span>
@@ -34,11 +37,13 @@
 <script>
   export default {
     props: {
-      active: Number
+      active: Number,
+      // badgeNumber: Number
     },
     data() {
       return {
-        tabbarTempValue: this.active
+        tabbarTempValue: this.active,
+        badgeNumber: '',
       }
     },
     methods: {
@@ -52,7 +57,10 @@
         ];
         this.$router.push(routerArray[index])
       }
-    }
+    },
+    mounted() {
+      this.badgeNumber = JSON.parse(sessionStorage.getItem('badgeNumber'));
+    },
   }
 </script>
 

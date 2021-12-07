@@ -41,8 +41,18 @@ const routes = [
   {
     path: '/Player',
     name: 'Player',
-    component: () => import('../views/Player.vue')
-  }
+    component: () => import('../views/home/Player.vue')
+  },
+  {
+    path: '/Alarm',
+    name: 'Alarm',
+    component: () => import('../views/home/Alarm.vue')
+  },
+  {
+    path: '/SetRepertory',
+    name: 'SetRepertory',
+    component: () => import('../views/repertory/SetRepertory.vue')
+  },
 ]
 
 const router = new VueRouter({

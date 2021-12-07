@@ -1,5 +1,6 @@
 <template>
   <div>
+    <HeaderTitle :imgSrc="imgUrl" :title="titleDec" :text="textDec"></HeaderTitle>
     <div class="test_two_box">
       <video-player id="myVideo" class="video-player vjs-custom-skin" ref="videoPlayer" :playsinline="true"
         :options="playerOptions">
@@ -9,9 +10,7 @@
 </template>
 
 <script>
-  import {
-    Login
-  } from "@/api/api.js";
+  import HeaderTitle from '/src/components/HeaderTitle.vue';
   export default {
     data() {
       return {
@@ -40,30 +39,62 @@
             remainingTimeDisplay: false,
             fullscreenToggle: true //全屏按钮
           }
-        }
+        },
+        imgUrl: require('@/img/back.png'),
+        titleDec: "告警视频",
+        textDec: "",
+        timer: null
       }
     },
     created() {
-      this.GetVideo(this.$route.query.id);
+      this.alarmId = this.$route.query.alarmId;
+      this.factoryno = this.$route.query.factoryno;
+      this.getVideo(this.$route.query.alarmId, this.$route.query.factoryno);
     },
-    mounted() {
-     
+    mounted() {},
+    components: {
+      HeaderTitle
     },
+    computed: {},
+    //监控data中数据变化
+    watch: {},
+    //方法集合
     methods: {
-      GetVideo(id) {
-        console.log(id)
-        this.playerOptions.sources[0].src = 'https://media.w3.org/2010/05/sintel/trailer.mp4'
-        // Login().then(res => {
+      getVideo(alarmId, factoryno) {
+        let data = {
+          alarmId,
+          factoryno
+        }
+        this.$api.Getvideo(data).then(res => {
+            if (res.data.code === 1001) {
+              this.timer = setTimeout(() => {
+                this.getVideo(this.alarmId, this.factoryno);
+              }, 3000);
+            } else if (res.data.code == 200) {
+              this.playerOptions.sources[0].src = 'https://media.w3.org/2010/05/sintel/trailer.mp4'
+            }
+          })
+          .catch(err => {
+            console.log(err)
+          })
         this.$nextTick(() => {
-          
+
         });
-        // })
       },
+    },
+    beforeDestroy() {
+      clearTimeout(this.timer);
+      this.timer = null;
     }
+
   };
 </script>
 <style>
-  .video-js .vjs-big-play-button{
+  .test_two_box {
+    margin-top: 45px;
+  }
+
+  .video-js .vjs-big-play-button {
     position: absolute;
     left: 50%;
     top: 50%;
