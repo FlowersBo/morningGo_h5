@@ -1,6 +1,37 @@
 <template>
-  <div class="setRepertory">
+  <div class="view">
     <HeaderTitle :imgSrc="imgUrl" :title="titleDec" :text="textDec"></HeaderTitle>
+    <div class="repertory">
+      <table>
+        <thead>
+          <tr>
+            <th>名称</th>
+            <th>当前库存</th>
+            <th>补货数</th>
+            <th>报警值</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(user,index) in users">
+            <td class="name">{{user.name}}</td>
+            <td>
+              <div class="library">{{user.count}}</div>
+            </td>
+            <td><input type="number" :value="user.number"></td>
+            <td><input type="number" :value="user.warn" /></td>
+            <td>
+              <button class="btn" @click="removeFn(index)">清零</button>
+              <button class="btn" @click="saveFn(index)">保存</button>
+            </td>
+            <!-- <td><button @click="insert">insert</button></td> -->
+          </tr>
+          <tr>
+          </tr>
+        </tbody>
+      </table>
+      <button class="clearAwayBtn" @click="removeReportFn">清除全部库存告警</button>
+    </div>
   </div>
 </template>
 
@@ -8,6 +39,9 @@
   //这里可以导入其它文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
   //例如：import 《组件名称》from ‘《组件路径》';
   import HeaderTitle from '../../components/HeaderTitle.vue';
+  import {
+    Dialog
+  } from 'vant';
   export default {
     //import引入的组件需要注入到对象中才能使用
     components: {
@@ -20,6 +54,31 @@
         imgUrl: require('@/img/back.png'),
         titleDec: "库存设置",
         textDec: "",
+        users: [{
+            'name': 'A区',
+            'count': '25',
+            'number': '0',
+            'warn': '20'
+          },
+          {
+            'name': 'B区',
+            'count': '23',
+            'number': '14',
+            'warn': '20'
+          },
+          {
+            'name': '签子',
+            'count': '22',
+            'number': '1',
+            'warn': '20'
+          },
+          {
+            'name': '废弃盒',
+            'count': '22',
+            'number': '33',
+            'warn': '20'
+          },
+        ]
       }
     },
     //计算属性 类似于data概念
@@ -29,14 +88,57 @@
     //方法集合
     methods: {
       setRepertoryFn(factoryno) {
-        this.$api.Getstock({factoryno}).then(res => {
-        }).catch(err => {
+        this.$api.Getstock({
+          factoryno
+        }).then(res => {}).catch(err => {
 
         })
+      },
+      removeFn(index) {
+        this.users.forEach((element, item) => {
+          if (index == item) {
+            Dialog.confirm({
+                title: '提示',
+                message: `${element.name}库存清零`,
+              })
+              .then(() => {
+                element.count = 0;
+              }).catch(() => {
+
+              });
+          }
+        });
+      },
+      saveFn(index) {
+        this.users.forEach((element, item) => {
+          if (index == item) {
+            Dialog.confirm({
+                title: '提示',
+                message: `${element.name}库存保存`,
+              })
+              .then(() => {
+                
+              }).catch(() => {
+
+              });
+          }
+        });
+      },
+      removeReportFn() {
+        Dialog.confirm({
+            title: '提示',
+            message: '确认要消除全部库存告警',
+          })
+          .then(() => {
+
+          }).catch(() => {
+
+          });
       }
     },
     //生命周期 - 创建完成（可以访问当前this实例）
     created() {
+      this.titleDec = `${this. titleDec} (${this.$route.query.pointname})`;
       this.setRepertoryFn(this.$route.query.factoryno);
     },
     //生命周期 - 挂载完成（可以访问DOM元素）
@@ -60,5 +162,76 @@
   }
 </script>
 <style scoped>
-  /* @import url(); 引入css类 */
+  @import url(../../styles/view.css);
+
+  /* 引入css类 */
+  .view {
+    width: 375px;
+  }
+
+  table {
+    width: 100%;
+  }
+
+  tr {
+    height: 50px;
+  }
+
+  th,
+  td {
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+    background-color: #f1f1f1;
+  }
+
+  .name {
+    font-weight: bold;
+  }
+
+  td input {
+    width: 44px;
+    height: 26px;
+    line-height: 26px;
+    border: none;
+    border-radius: 6px;
+    text-align: center;
+  }
+
+  .library {
+    display: inline-block;
+    width: 36px;
+    height: 26px;
+    line-height: 26px;
+    border-radius: 6px;
+    border: 1px solid #FF9900;
+    background-color: #fff;
+    color: #FF9900;
+  }
+
+  .btn {
+    width: 46px;
+    height: 26px;
+    border: none;
+    border-radius: 6px;
+    background: #FF9900;
+    color: #fff;
+    font-size: 10px;
+  }
+
+  .btn:first-child {
+    background: #F15A24;
+    margin-right: 4px;
+  }
+
+  .clearAwayBtn {
+    width: 300px;
+    height: 50px;
+    background: #FF9900;
+    border-radius: 12px;
+    border: none;
+    text-align: center;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+  }
 </style>

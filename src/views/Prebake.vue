@@ -1,7 +1,28 @@
 <template>
   <div id="prebake">
     <HeaderTitle :imgSrc="imgUrl" :title="titleDec" :text="textDec"></HeaderTitle>
-    <div>预烤</div>
+    <van-pull-refresh class="alarmWrap" v-model="refreshing" @refresh="onRefresh">
+      <van-list v-model="loading" :error.sync="error" error-text="请求失败，点击重新加载" :finished="finished"
+        finished-text="没有更多了" :immediate-check="false" @load="onLoad">
+        <van-cell v-for="item in repertoryList" :key="item.deviceid">
+          <div class="alarm" @click="gotoSetRepertory(item.factoryno,item.pointname)">
+            <div class="alarm-content">
+              <div class="content-item">
+                <div class="itemKey">设备编号：</div>
+                <div class="itemValue">{{item.deviceno}} (出厂编号)</div>
+              </div>
+              <div class="content-item">
+                <div class="itemKey">点位名称：</div>
+                <div class="itemValue">{{item.pointname}}</div>
+              </div>
+              <div class="content-item">
+                <div class="itemKey">当前库存：A区：{{item.aStore}} B区：{{item.bStore}} 签盒：{{item.pegwood}}</div>
+              </div>
+            </div>
+          </div>
+        </van-cell>
+      </van-list>
+    </van-pull-refresh>
     <Footer :active="active" />
   </div>
 </template>
@@ -14,7 +35,10 @@
   export default {
     name: "prebake",
     //import引入的组件需要注入到对象中才能使用
-    components: {HeaderTitle,Footer},
+    components: {
+      HeaderTitle,
+      Footer
+    },
     props: {},
     data() {
       //这里存放数据
@@ -22,18 +46,75 @@
         imgUrl: '',
         titleDec: "预烤",
         textDec: "",
-        active: 2
+        active: 2,
+        pageindex: 1,
+        pagesize: 50,
+        repertoryList: [],
+        // 刷新加载
+        loading: false,
+        finished: false, //是否已加载完成，加载完成后不再触发load事件
+        refreshing: false, //刷新成功为false
+        error: false //是否加载失败，加载失败后点击错误提示可以重新触发load事件
       }
     },
     //计算属性 类似于data概念
-    computed: {},
     //监控data中数据变化
     watch: {},
     //方法集合
-    methods: {},
+    methods: {
+      repertoryFn() {
+        this.$api.StoreList({
+            pageindex: this.pageindex,
+            pagesize: this.pagesize
+          }).then(res => {
+            console.log(res);
+            // this.finished = false;
+            this.refreshing = false;
+            this.total = res.data.data.total;
+            this.repertoryList.push(...res.data.data.data);
+          })
+          .catch(err => {
+            console.log(err)
+          })
+      },
+      onLoad() {
+        console.log('调用')
+        this.loading = true;
+        // 数据全部加载完成
+        if (this.repertoryList.length >= this.total) {
+          this.finished = true;
+          return true;
+          this.loading = false;
+        }
+        this.pageindex++;
+        this.repertoryFn();
+      },
+
+      onRefresh() {
+        console.log('刷新')
+        // 清空列表数据
+        this.pageindex = 1;
+        this.repertoryList = [];
+        this.refreshing = true;
+        this.repertoryFn();
+        // 重新加载数据
+        // 将 loading 设置为 true，表示处于加载状态
+        // this.loading = true;
+      },
+
+      gotoSetRepertory(factoryno,pointname) { //跳转设置
+        this.$router.push({
+          path: '/SetRepertory',
+          query: {
+            factoryno,
+            pointname
+          }
+        })
+      },
+    },
     //生命周期 - 创建完成（可以访问当前this实例）
     created() {
-
+      this.repertoryFn();
     },
     //生命周期 - 挂载完成（可以访问DOM元素）
     mounted() {
@@ -57,4 +138,38 @@
 </script>
 <style scoped>
   /* @import url(); 引入css类 */
+  #prebake {
+    width: 350px;
+    margin: 45px auto 0;
+    font-size: 14px;
+    color: #333;
+  }
+
+  .alarm {
+    width: 100%;
+    background-color: #eee;
+    margin-top: 10px;
+    border-radius: 10px;
+    box-sizing: border-box;
+    padding: 10px;
+  }
+
+  .van-cell {
+    width: 350px;
+    padding: 0;
+  }
+
+  .alarm-content {
+    width: 100%;
+  }
+
+  .content-item {
+    width: 100%;
+    display: flex;
+    margin: 8px 0;
+  }
+
+  .content-item:last-child {
+    color: #FF6600;
+  }
 </style>

@@ -44,10 +44,15 @@
         this.$router.back(-1);
       },
       // 跳转修改密码
-      gotoHome(){
+      gotoHome() {
         // this.$router.push({path: '/Home'});
         // 命名的路由
-        this.$router.push({ name: 'Home', params: { userId: 123 }})
+        this.$router.push({
+          name: 'Home',
+          params: {
+            userId: 123
+          }
+        })
       }
     },
   };
@@ -65,6 +70,7 @@
     align-items: center;
     z-index: 1000;
   }
+
   .header .header_title {
     flex: 1;
     height: 100%;
@@ -72,10 +78,19 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    font-size: 16px;
+    font-size: 14px;
     color: #fff;
     font-weight: 700;
     margin-right: -20%;
+  }
+
+  .header_title span {
+     width: 300px;
+    display: -webkit-box;/*作为弹性伸缩盒子模型显示*/
+    -webkit-line-clamp: 1; /*显示的行数；如果要设置2行加...则设置为2*/
+    overflow: hidden; /*超出的文本隐藏*/
+    text-overflow: ellipsis; /* 溢出用省略号*/
+    -webkit-box-orient: vertical;/*伸缩盒子的子元素排列：从上到下*/
   }
 
   .header_arrow {

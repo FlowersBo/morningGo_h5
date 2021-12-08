@@ -52,7 +52,7 @@
       </van-tab>
     </van-tabs>
 
-    <Footer :active="footerActive"/>
+    <Footer :active="footerActive" :badgeNumber="badgeNumber"/>
   </div>
 </template>
 
@@ -80,7 +80,7 @@
         titleDec: "告警",
         textDec: "",
         footerActive: 0,
-        // badgeNumber: null,
+        badgeNumber: null,
         active: 0,
         total: 0,
         navTab: [{
@@ -134,7 +134,7 @@
           }, {
             totalCount: res.data.data.twoCount
           }];
-          // this.badgeNumber = res.data.data.allCount;
+          this.badgeNumber = res.data.data.allCount;
           sessionStorage.setItem('badgeNumber',JSON.stringify(res.data.data.allCount));
           this.navTab = this.navTab.map((item, index) => {
             return {

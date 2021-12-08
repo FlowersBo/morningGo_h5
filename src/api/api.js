@@ -31,4 +31,7 @@ export default {
   Changestock(data) {  //库存设置
     return http.get("/deviceinfo/changestock", data)
   },
+  DeviceList(data) {  //设备列表
+    return http.get("/nav/deviceList", data)
+  },
 }

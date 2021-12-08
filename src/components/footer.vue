@@ -1,13 +1,14 @@
 <template>
   <div class="tabbar">
-    <van-tabbar v-model="tabbarTempValue" :placeholder="true" active-color="#F15A24" inactive-color="hotpink" @change="onChange">
-      
-      <van-tabbar-item :badge="badgeNumber" url="/Home" class="tabbar">
+    <van-tabbar v-model="tabbarTempValue" :placeholder="true" active-color="#F15A24" inactive-color="hotpink"
+      @change="onChange">
+
+      <van-tabbar-item :badge="badgeNumber?badgeNumber:assBadgeNumber" url="/Home" class="tabbar">
         <van-icon class="iconfont" class-prefix='icon' slot="icon" slot-scope="props"
           :name="props.active ? 'alarm':'alarm'"></van-icon>
         <span>告警</span>
       </van-tabbar-item>
-      
+
       <van-tabbar-item badge="" url="/Repertory" class="tabbar">
         <van-icon class="iconfont" class-prefix='icon' slot="icon" slot-scope="props"
           :name="props.active ? 'kucunpandian':'kucunpandian'"></van-icon>
@@ -29,7 +30,7 @@
           :name="props.active ? 'wode':'wode'"></van-icon>
         <span>我的</span>
       </van-tabbar-item>
-      
+
     </van-tabbar>
   </div>
 </template>
@@ -38,12 +39,12 @@
   export default {
     props: {
       active: Number,
-      // badgeNumber: Number
+      badgeNumber: Number
     },
     data() {
       return {
         tabbarTempValue: this.active,
-        badgeNumber: '',
+        assBadgeNumber: null
       }
     },
     methods: {
@@ -55,20 +56,38 @@
           "/Equipment",
           "/Mine"
         ];
-        this.$router.push(routerArray[index])
+        this.$router.push(routerArray[index]);
+      },
+      updateBadgeNumber() {
+        // setTimeout(() => {
+        this.assBadgeNumber = JSON.parse(sessionStorage.getItem('badgeNumber'))
+        // }, 500)
       }
     },
     mounted() {
-      this.badgeNumber = JSON.parse(sessionStorage.getItem('badgeNumber'));
+      this.$nextTick(() => {
+        this.updateBadgeNumber()
+      });
+    },
+    watch: {
+      badgeNumber(val, newval) {
+        console.log(val)
+        console.log(newval)
+      }
+    },
+    //生命周期-更新之后
+    updated() {
+
     },
   }
 </script>
 
 <style>
   .iconfont {
-   font-size: 22px;
+    font-size: 22px;
   }
-  .header_arrow{
+
+  .header_arrow {
     width: 40px;
     display: flex;
     justify-content: center;
