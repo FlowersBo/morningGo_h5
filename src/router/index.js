@@ -53,6 +53,11 @@ const routes = [
     name: 'SetRepertory',
     component: () => import('../views/repertory/SetRepertory.vue')
   },
+  {
+    path: '/SetPrebake',
+    name: 'SetPrebake',
+    component: () => import('../views/prebake/SetPrebake.vue')
+  },
 ]
 
 const router = new VueRouter({

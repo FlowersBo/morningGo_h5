@@ -31,6 +31,9 @@ export default {
   Changestock(data) {  //库存设置
     return http.get("/deviceinfo/changestock", data)
   },
+  Hotplate(data) {  //获取烤盘数据
+    return http.get("/deviceinfo/hotplate", data)
+  },
   DeviceList(data) {  //设备列表
     return http.get("/nav/deviceList", data)
   },

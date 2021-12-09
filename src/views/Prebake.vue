@@ -18,6 +18,15 @@
               <div class="content-item">
                 <div class="itemKey">当前库存：A区：{{item.aStore}} B区：{{item.bStore}} 签盒：{{item.pegwood}}</div>
               </div>
+              <div class="content-item">
+                <div class="itemKey">
+                  烤盘信息：
+                  <div>
+                    <span>A区：烤制中3 已完成5</span>
+                    <span>B区：烤制中3 已完成5</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </van-cell>
@@ -102,9 +111,9 @@
         // this.loading = true;
       },
 
-      gotoSetRepertory(factoryno,pointname) { //跳转设置
+      gotoSetRepertory(factoryno, pointname) { //跳转设置
         this.$router.push({
-          path: '/SetRepertory',
+          path: '/SetPrebake',
           query: {
             factoryno,
             pointname
@@ -168,8 +177,10 @@
     display: flex;
     margin: 8px 0;
   }
-
-  .content-item:last-child {
-    color: #FF6600;
+  .itemKey{
+    display: flex;
+  }
+  .content-item:last-child span {
+    display: block;
   }
 </style>

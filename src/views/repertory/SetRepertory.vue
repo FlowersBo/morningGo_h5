@@ -94,6 +94,14 @@
 
         })
       },
+      readRepertoryFn() { //读取烤盘数据
+        this.$api.Hotplate({
+          factoryno
+        }).then(res => {}).catch(err => {
+
+        })
+      },
+
       removeFn(index) {
         this.users.forEach((element, item) => {
           if (index == item) {
@@ -117,7 +125,7 @@
                 message: `${element.name}库存保存`,
               })
               .then(() => {
-                
+
               }).catch(() => {
 
               });
