@@ -234,6 +234,8 @@
   .clearAwayBtn {
     width: 300px;
     height: 50px;
+    margin-left: 37px;
+    margin-top: 50px;
     background: #FF9900;
     border-radius: 12px;
     border: none;
