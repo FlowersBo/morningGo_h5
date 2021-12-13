@@ -13,13 +13,13 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(user,index) in users">
-            <td class="name">{{user.name}}</td>
+          <tr v-for="(item,index) in plateData">
+            <td class="name">{{item.name}}</td>
             <td>
-              <div class="library">{{user.count}}</div>
+              <div class="library">{{item.count}}</div>
             </td>
-            <td><input type="number" :value="user.number"></td>
-            <td><input type="number" :value="user.warn" /></td>
+            <td><input type="number" :value="item.number"></td>
+            <td><input type="number" :value="item.warn" /></td>
             <td>
               <button class="btn" @click="removeFn(index)">清零</button>
               <button class="btn" @click="saveFn(index)">保存</button>
@@ -54,28 +54,28 @@
         imgUrl: require('@/img/back.png'),
         titleDec: "库存设置",
         textDec: "",
-        users: [{
+        plateData: [{
             'name': 'A区',
-            'count': '25',
+            'count': '',
             'number': '0',
             'warn': '20'
           },
           {
             'name': 'B区',
-            'count': '23',
-            'number': '14',
+            'count': '',
+            'number': '0',
             'warn': '20'
           },
           {
             'name': '签子',
-            'count': '22',
-            'number': '1',
+            'count': '',
+            'number': '0',
             'warn': '20'
           },
           {
             'name': '废弃盒',
-            'count': '22',
-            'number': '33',
+            'count': '',
+            'number': '0',
             'warn': '20'
           },
         ]
@@ -88,22 +88,32 @@
     //方法集合
     methods: {
       setRepertoryFn(factoryno) {
-        this.$api.Getstock({
+        this.$api.Changestock({
           factoryno
-        }).then(res => {}).catch(err => {
+        }).then(res => {
+
+        }).catch(err => {
 
         })
       },
-      readRepertoryFn() { //读取烤盘数据
-        this.$api.Hotplate({
+      readRepertoryFn(factoryno) { //读取烤盘数据
+        this.$api.Getstock({
           factoryno
-        }).then(res => {}).catch(err => {
-
+        }).then(res => {
+          console.log('烤盘数据',res);
+          if(res.data.code==200){
+           let stock = res.data.data.stock;
+           this.plateData[0].count = stock.astock;
+           this.plateData[1].count = stock.bstock;
+           this.plateData[2].count = stock.pegwood;
+           this.plateData[3].count = stock.discardedbox;
+          }
+        }).catch(err => {
         })
       },
 
       removeFn(index) {
-        this.users.forEach((element, item) => {
+        this.plateData.forEach((element, item) => {
           if (index == item) {
             Dialog.confirm({
                 title: '提示',
@@ -118,7 +128,7 @@
         });
       },
       saveFn(index) {
-        this.users.forEach((element, item) => {
+        this.plateData.forEach((element, item) => {
           if (index == item) {
             Dialog.confirm({
                 title: '提示',
@@ -147,7 +157,7 @@
     //生命周期 - 创建完成（可以访问当前this实例）
     created() {
       this.titleDec = `${this. titleDec} (${this.$route.query.pointname})`;
-      this.setRepertoryFn(this.$route.query.factoryno);
+      this.readRepertoryFn(this.$route.query.factoryno);
     },
     //生命周期 - 挂载完成（可以访问DOM元素）
     mounted() {

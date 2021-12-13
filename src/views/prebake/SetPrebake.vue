@@ -5,21 +5,21 @@
       <van-tab title="预烤设置">
         <div class="preheat">
           <div class="facility">
-            <div>设备编号：010001</div>
-            <div>点位名称：朝阳公园01</div>
+            <div>设备编号：{{deviceno}}</div>
+            <div>点位名称：{{pointname}}</div>
           </div>
           <div class="operation">
             <div class="operationTime">
               <div class="setTimer">
                 <div>运营开始时间：</div>
-                <div class="onSetTimer" @click="setStartTime('s')">{{startTime}}</div>
+                <div class="onSetTimer" @click="setStartTime('s')">{{tactics.startOpen}}</div>
               </div>
               <div class="setTimer">
                 <div>运营结束时间：</div>
-                <div class="onSetTimer" @click="setStartTime('e')">{{endTime}}</div>
+                <div class="onSetTimer" @click="setStartTime('e')">{{tactics.endOpen}}</div>
               </div>
             </div>
-            <button class="operationBtn">保存</button>
+            <button class="operationBtn" @click="onSetTimerChange">保存</button>
           </div>
           <table>
             <thead>
@@ -32,15 +32,17 @@
             </thead>
             <tbody>
               <tr v-for="(item,index) in bakeTime">
-                <td>{{item.timer}}</td>
+                <td>{{item.startTime}}-{{item.endTime}}</td>
                 <td>
-                  <van-stepper v-model="value" min="0" max="9" button-size="20" disable-input />
+                  <van-stepper :value="item.aNum" :name="index" min="0" max="9" button-size="20" disable-input
+                    @change="onStartChange" />
                 </td>
                 <td>
-                  <van-stepper v-model="value" min="0" max="9" button-size="20" disable-input />
+                  <van-stepper :value="item.bNum" :name="index" min="0" max="9" button-size="20" disable-input
+                    @change="onEndChange" />
                 </td>
                 <td>
-                  <button class="btn" @click="saveFn(index)">保存</button>
+                  <button class="btn" @click="bindSaveFn(index)">保存</button>
                 </td>
                 <!-- <td><button @click="insert">insert</button></td> -->
               </tr>
@@ -74,13 +76,10 @@
         titleDec: "预烤设置",
         textDec: "",
         active: 0,
+        tactics:'',
         currentTime: '07:00',
-        startTime: '',
-        endTime: '',
         show: false,
-        bakeTime: [{
-          timer: '12:00-24:00'
-        }]
+        bakeTime: []
       }
     },
     components: {
@@ -91,8 +90,11 @@
     watch: {},
     //方法集合
     methods: {
-      SetTimelistFn() {
-        this.$api.Devicelist().then(res => {
+      readimelistFn(factoryno) {
+        this.$api.SelectTactics({factoryno}).then(res => {
+          console.log('烤制策略',res);
+          this.tactics = res.data.data.tactics;
+          this.bakeTime = res.data.data.tactics.tactic;
 
         }).catch((err) => {
           console.log(err)
@@ -106,22 +108,53 @@
         this.show = true;
         this.timeStart = v;
       },
-      confirmTimeFn(val) {
+      confirmTimeFn(val) {//时间选择器确认按钮
         this.show = false;
         if (this.timeStart == 's') {
-          this.startTime = val;
+          this.tactics.startOpen = val;
         } else {
-          this.endTime = val;
+          this.tactics.endOpen = val;
         }
       },
-      cancelFn() {
+      cancelFn() {//时间选择器取消按钮
         this.show = false
-      }
+      },
 
+      onSetTimerChange(){//保存运营时间
+
+      },
+    
+      onStartChange(startV, name) {//A区数量
+        console.log('startV', startV)
+        this.bakeTime.forEach((element, item) => {
+          if (item == name.name) {
+            element.aNum = startV
+          }
+        });
+      },
+      onEndChange(endV, name) {//B区数量
+        console.log('endV', endV)
+        this.bakeTime.forEach((element, item) => {
+          if (item == name.name) {
+            element.bNum = endV
+          }
+        });
+        console.log(this.bakeTime);
+      },
+      
+      bindSaveFn(index) {
+        this.bakeTime.forEach((element, item) => {
+          if (index == item) {
+            console.log('当前', element);
+          }
+        });
+      }
     },
     //生命周期 - 创建完成（可以访问当前this实例）
     created() {
-      // this.SetTimelistFn();
+      this.pointname = this.$route.query.pointname;
+      this.deviceno = this.$route.query.deviceno;
+      this.readimelistFn(this.$route.query.factoryno);
     },
     //生命周期 - 挂载完成（可以访问DOM元素）
     mounted() {

@@ -25,12 +25,23 @@ export default {
   StoreList(data) {  //库存列表
     return http.get("/nav/storeList", data)
   },
-  Getstock(data) {  //库存设置展示
+  Getstock(data) {  //读取设备库存
     return http.get("/deviceinfo/getstock", data)
   },
-  Changestock(data) {  //库存设置
+  Changestock(data) {  //设备库存设置
     return http.get("/deviceinfo/changestock", data)
   },
+
+  SelectTactics(data) {  //获取烤制策略
+    return http.get("/deviceinfo/selectTactics", data)
+  },
+  SaveOneTactics(data) {  //保存烤制策略
+    return http.get("/deviceinfo/saveOneTactics", data)
+  },
+
+
+
+
   Hotplate(data) {  //获取烤盘数据
     return http.get("/deviceinfo/hotplate", data)
   },

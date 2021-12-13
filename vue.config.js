@@ -47,7 +47,8 @@ module.exports = {
     proxy: {
       '/api': {
         /* 目标代理服务器地址 */
-        target: 'http://w3.morninggo.cn',
+        // target: 'http://w3.morninggo.cn',
+        target: 'https://api.morninggo.cn',
         /* 允许跨域 */
         changeOrigin: true,
         ws: true, //如果要代理 websockets，配置这个参数
