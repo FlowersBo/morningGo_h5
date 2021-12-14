@@ -38,10 +38,6 @@ export default {
   SaveOneTactics(data) {  //保存烤制策略
     return http.get("/deviceinfo/saveOneTactics", data)
   },
-
-
-
-
   Hotplate(data) {  //获取烤盘数据
     return http.get("/deviceinfo/hotplate", data)
   },
