@@ -59,9 +59,11 @@
       <van-tab title="烤盘信息">
         <div class="ovenware">
           <van-grid :column-num="3">
-            <van-grid-item v-for="(item,index) in hotplate" :key="index">
-              <div class="ovenware-content">
-                这是烤盘信息{{item.startRoastTime}}
+            <van-grid-item v-for="(item,index) in hotplate" :key="index" :class="{'bgc':item.bgc}">
+              <div class="ovenware-content" :class="{'bgc':item.bgc}">
+                <div>{{item.address}}</div>
+                <div>{{item.temperIsReach}}<span v-if="item.temperIsReach!='空'" :class="{'roastStatus':item.roastStatus=='烤制完成'}">肠({{item.roastStatus}})</span> </div>
+                <div>{{item.showTime}}</div>
               </div>
             </van-grid-item>
           </van-grid>
@@ -120,9 +122,49 @@
           this.hotplate.forEach(element => {
             if (element.addressType == '1') {
               element.addressType = "加热区";
+              element.bgc = true;
             } else {
               element.addressType = "保温区";
+              element.bgc = false;
             }
+
+            let nowTime = new Date().getTime();
+            let d, h, m, s, m2, s2;
+            let showTime = "-";
+            let temperIsReach = "空";
+            if (element.haveSausage) {
+              let roastStatus = "";
+              //如果当前时间大于烤制结束时间
+              if (nowTime > element.endRoastTime) {
+                //烤制完成
+                let warmTime = new Date().getTime() - element.endRoastTime;
+                if (warmTime >= 0) {
+                  d = Math.floor(warmTime / 1000 / 60 / 60 / 24);
+                  h = Math.floor(warmTime / 1000 / 60 / 60 % 24);
+                  m2 = Math.floor(warmTime / 1000 / 60 % 60);
+                  s2 = Math.floor(warmTime / 1000 % 60);
+                }
+                roastStatus = "烤制完成";
+                element.showTime = h + "时" + m2 + "分" + s2 + "秒";
+
+              } else {
+                //烤制中
+                let roastTime = new Date().getTime() - element.startRoastTime;
+                if (roastTime >= 0) {
+
+                  m = Math.floor(roastTime / 1000 / 60 % 60);
+                  s = Math.floor(roastTime / 1000 % 60);
+                }
+                roastStatus = "烤制中";
+                element.showTime = m + "分" + s + "秒";
+              }
+              element.temperIsReach = element.stock;
+              element.roastStatus = roastStatus;
+            } else {
+              element.temperIsReach = temperIsReach;
+              element.showTime = '-'
+            }
+
           });
         }).catch((err) => {
           console.log(err)
@@ -154,7 +196,30 @@
       },
 
       onSetTimerChange() { //保存运营时间
+        Dialog.confirm({
+            title: '提示',
+            message: '确定保存营业时间',
+          })
+          .then(() => {
+            this.$api.SaveBusinessTime({
+              id: this.tactics.id,
+              deviceId: this.tactics.deviceId,
+              startTime: this.tactics.startOpen,
+              endTime: this.tactics.endOpen
+            }).then(res => {
+              console.log(res);
+              if (res.data.code == '200') {
+                this.$toast('保存成功');
+              } else {
+                this.$toast(res.data.message);
+              }
+            }).catch(() => {
+              this.$toast('保存失败');
+            })
 
+          }).catch(() => {
+
+          })
       },
 
       onStartChange(startV, name) { //A区数量
@@ -179,14 +244,31 @@
         this.bakeTime.forEach((element, item) => {
           if (index == item) {
             console.log('当前', element);
-            this.$api.SaveOneTactics({
-              factoryno
-            }).then(res => {}).catch(err => {
+            Dialog.confirm({
+                title: '提示',
+                message: '确定保存该策略',
+              })
+              .then(() => {
+                this.$api.SaveOneTactics({
+                  id: element.id,
+                  deviceId: element.deviceId,
+                  counta: element.aNum,
+                  countb: element.bNum
+                }).then(res => {
+                  if (res.data.code == '200') {
+                    this.$toast('保存成功');
+                  } else {
+                    this.$toast(res.data.message);
+                  }
+                }).catch(err => {
+                  this.$toast('保存失败');
+                })
+              }).catch(() => {
 
-            })
+              })
           }
         });
-      }
+      },
     },
     //生命周期 - 创建完成（可以访问当前this实例）
     created() {
@@ -328,10 +410,35 @@
     border-right: 1px solid #aaa;
     border-top: 1px solid #aaa;
   }
+
+  .ovenware-content {
+    width: 100%;
+    height: 100%;
+    padding: 16px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .ovenware-content div {
+    padding: 2px 0;
+  }
+
+  .bgc {
+    background: #FF9900;
+    color: #fff;
+  }
+  .roastStatus{
+    color: blueviolet;
+  }
 </style>
 <style lang="less">
   .van-stepper__input {
     background-color: #fff;
     border-radius: 4px;
+  }
+
+  .van-grid-item__content {
+    padding: 0;
   }
 </style>

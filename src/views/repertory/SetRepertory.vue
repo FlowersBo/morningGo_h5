@@ -18,8 +18,8 @@
             <td>
               <div class="library">{{item.count}}</div>
             </td>
-            <td><input type="number" :value="item.number"></td>
-            <td><input type="number" :value="item.warn" /></td>
+            <td><input type="number" v-model="item.number" v-on:input="numberInpChange(index)"></td>
+            <td><input type="number" v-model="item.warn" v-on:input="numberInpChange(index)" /></td>
             <td>
               <button class="btn" @click="removeFn(index)">清零</button>
               <button class="btn" @click="saveFn(index)">保存</button>
@@ -87,32 +87,22 @@
     watch: {},
     //方法集合
     methods: {
-      setRepertoryFn(factoryno) {
-        this.$api.Changestock({
-          factoryno
-        }).then(res => {
-
-        }).catch(err => {
-
-        })
-      },
       readRepertoryFn(factoryno) { //读取烤盘数据
         this.$api.Getstock({
           factoryno
         }).then(res => {
-          console.log('烤盘数据',res);
-          if(res.data.code==200){
-           let stock = res.data.data.stock;
-           this.plateData[0].count = stock.astock;
-           this.plateData[1].count = stock.bstock;
-           this.plateData[2].count = stock.pegwood;
-           this.plateData[3].count = stock.discardedbox;
+          console.log('烤盘数据', res);
+          if (res.data.code == 200) {
+            let stock = res.data.data.stock;
+            this.plateData[0].count = stock.astock;
+            this.plateData[1].count = stock.bstock;
+            this.plateData[2].count = stock.pegwood;
+            this.plateData[3].count = stock.discardedbox;
           }
-        }).catch(err => {
-        })
+        }).catch(err => {})
       },
 
-      removeFn(index) {
+      removeFn(index) { //库存清零
         this.plateData.forEach((element, item) => {
           if (index == item) {
             Dialog.confirm({
@@ -127,6 +117,22 @@
           }
         });
       },
+
+      numberInpChange(index) { //补货数
+        this.plateData.forEach((element, item) => {
+          if (element.number.length == 1 || element.warn.length == 1) {
+            element.number = element.number.replace(/[^1-9]/g, '0')
+            element.warn = element.warn.replace(/[^1-9]/g, '0')
+          } else {
+            element.number = element.number.replace(/\D/g, '')
+            element.warn = element.warn.replace(/\D/g, '')
+          }
+          if (index == item) {
+            console.log(element)
+          }
+        });
+      },
+
       saveFn(index) {
         this.plateData.forEach((element, item) => {
           if (index == item) {
@@ -135,7 +141,14 @@
                 message: `${element.name}库存保存`,
               })
               .then(() => {
+                console.log(element);
+                this.$api.Changestock({
+                  factoryno
+                }).then(res => {
 
+                }).catch(err => {
+
+                })
               }).catch(() => {
 
               });
@@ -148,7 +161,7 @@
             message: '确认要消除全部库存告警',
           })
           .then(() => {
-
+            this.readRepertoryFn(this.factoryno);
           }).catch(() => {
 
           });
@@ -157,6 +170,7 @@
     //生命周期 - 创建完成（可以访问当前this实例）
     created() {
       this.titleDec = `${this. titleDec} (${this.$route.query.pointname})`;
+      this.factoryno = this.$route.query.factoryno;
       this.readRepertoryFn(this.$route.query.factoryno);
     },
     //生命周期 - 挂载完成（可以访问DOM元素）

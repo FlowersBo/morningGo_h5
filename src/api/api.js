@@ -10,7 +10,7 @@ export default {
   Getsmscode(data) {  //获取验证码
     return http.post("/userinfo/getsmscode", data)
   },
-  Devicelist(data) {  //告警列表
+  Alarmlist(data) {  //告警列表
     return http.get("/nav/alarmlist", data)
   },
   CancelAlarm(data) {  //清除报警
@@ -29,14 +29,17 @@ export default {
     return http.get("/deviceinfo/getstock", data)
   },
   Changestock(data) {  //设备库存设置
-    return http.get("/deviceinfo/changestock", data)
+    return http.post("/deviceinfo/changestock", data)
   },
 
   SelectTactics(data) {  //获取烤制策略
     return http.get("/deviceinfo/selectTactics", data)
   },
   SaveOneTactics(data) {  //保存烤制策略
-    return http.get("/deviceinfo/saveOneTactics", data)
+    return http.post("/deviceinfo/saveOneTactics", data)
+  },
+  SaveBusinessTime(data) {  //保存烤制时间段
+    return http.post("/deviceinfo/saveBusinessTime", data)
   },
   Hotplate(data) {  //获取烤盘数据
     return http.get("/deviceinfo/hotplate", data)

@@ -113,7 +113,7 @@
           pageindex: this.pageindex,
           pagesize: this.pagesize
         }
-        this.$api.Devicelist(data).then(res => {
+        this.$api.Alarmlist(data).then(res => {
           console.log('返回', res);
           if (this.refreshing) {
             this.refreshing = false; //刷新成功

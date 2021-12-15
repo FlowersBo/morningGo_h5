@@ -71,7 +71,9 @@
                 this.getVideo(this.alarmId, this.factoryno);
               }, 3000);
             } else if (res.data.code == 200) {
-              this.playerOptions.sources[0].src = 'https://media.w3.org/2010/05/sintel/trailer.mp4'
+              console.log('视频',res)
+              this.playerOptions.sources[0].src = res.data.data.video;
+              // this.playerOptions.sources[0].src = 'https://media.w3.org/2010/05/sintel/trailer.mp4'
             }
           })
           .catch(err => {
