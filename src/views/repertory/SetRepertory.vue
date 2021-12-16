@@ -169,7 +169,7 @@
     },
     //生命周期 - 创建完成（可以访问当前this实例）
     created() {
-      this.titleDec = `${this. titleDec} (${this.$route.query.pointname})`;
+      this.titleDec = `${this.titleDec} (${this.$route.query.pointname})`;
       this.factoryno = this.$route.query.factoryno;
       this.readRepertoryFn(this.$route.query.factoryno);
     },

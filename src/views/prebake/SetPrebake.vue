@@ -61,8 +61,10 @@
           <van-grid :column-num="3">
             <van-grid-item v-for="(item,index) in hotplate" :key="index" :class="{'bgc':item.bgc}">
               <div class="ovenware-content" :class="{'bgc':item.bgc}">
-                <div>{{item.address}}</div>
-                <div>{{item.temperIsReach}}<span v-if="item.temperIsReach!='空'" :class="{'roastStatus':item.roastStatus=='烤制完成'}">肠({{item.roastStatus}})</span> </div>
+                <div>{{item.address}}({{item.addressType}})</div>
+                <div>{{item.temperIsReach}}<span v-if="item.temperIsReach!='空'">肠</span><span
+                    v-if="item.temperIsReach!='空'"
+                    :class="{'roastStatus':item.roastStatus=='烤制完成'}">({{item.roastStatus}})</span> </div>
                 <div>{{item.showTime}}</div>
               </div>
             </van-grid-item>
@@ -127,7 +129,6 @@
               element.addressType = "保温区";
               element.bgc = false;
             }
-
             let nowTime = new Date().getTime();
             let d, h, m, s, m2, s2;
             let showTime = "-";
@@ -151,7 +152,6 @@
                 //烤制中
                 let roastTime = new Date().getTime() - element.startRoastTime;
                 if (roastTime >= 0) {
-
                   m = Math.floor(roastTime / 1000 / 60 % 60);
                   s = Math.floor(roastTime / 1000 % 60);
                 }
@@ -428,7 +428,8 @@
     background: #FF9900;
     color: #fff;
   }
-  .roastStatus{
+
+  .roastStatus {
     color: blueviolet;
   }
 </style>

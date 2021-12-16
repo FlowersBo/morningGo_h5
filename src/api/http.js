@@ -4,10 +4,10 @@ import router from '../router/index'
 let qs = require('querystring')
 import helper from './helper'
 let root = '/api';
+import { Toast } from 'vant';
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 //  REQUEST 请求异常拦截
 axios.interceptors.request.use(config => {
-	store.state.isLoading = true;
 	// const token = localStorage.getItem('token'); //取
 	// localStorage.setItem('app-refresh-token',JSON.stringify(A)); //存
 
@@ -27,31 +27,13 @@ axios.interceptors.request.use(config => {
 //  RESPONSE 响应异常拦截
 axios.interceptors.response.use(result => {
 	const that = this;
-	// console.log('接口返回数据',result);
+	console.log("请求成功");
 	if (result.status === 200) {
 		store.state.isLoading = false
 	}
-	// if (result.data.code && result.data.code != 200) {
-	// 	switch (result.data.code) {
-	// 		case 401:
-	// 			break;
-	// 		case 402:
-	// 			break;
-	// 		case 403: //请求禁止,跳转到登录页面
-	// 			console.log('跳页面')
-	// 			router.push({
-	// 				name: 'Login'
-	// 			})
-	// 			break;
-	// 		default:
-	// 	}
-	// 	// 非法进入时直接跳到登录页
-	// 	window.kk = '/';
-	// 	return;
-	// };
 	return result;
 }, err => {
-	store.state.isLoading = true
+	console.log("请求异常");
 	if (err && err.response) {
 		switch (err.response.status) {
 			case 401:
@@ -69,6 +51,10 @@ axios.interceptors.response.use(result => {
 				break;
 			default:
 				err.message = `登录凭证过期,请重新登录!`;
+				setTimeout(function(){
+					store.state.isLoading = false;
+					Toast('请求失败');
+				},3000)
 		}
 			// 非法进入时直接跳到登录页
 			window.kk = '/';
@@ -81,6 +67,7 @@ axios.interceptors.response.use(result => {
 })
 
 function apiAxios(method, url, params, token) {
+	store.state.isLoading = true;
 	if (params) {
 		params = helper.filterNull(params)
 	}

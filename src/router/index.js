@@ -58,6 +58,16 @@ const routes = [
     name: 'SetPrebake',
     component: () => import('../views/prebake/SetPrebake.vue')
   },
+  {
+    path: '/EquipmentDetail',
+    name: 'EquipmentDetail',
+    component: () => import('../views/equipment/EquipmentDetail.vue')
+  },
+  {
+    path: '/Ovenware',
+    name: 'Ovenware',
+    component: () => import('../views/equipment/Ovenware.vue')
+  },
 ]
 
 const router = new VueRouter({

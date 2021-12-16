@@ -7,7 +7,7 @@
           <van-list v-model="loading" :error.sync="error" error-text="请求失败，点击重新加载" :finished="finished"
             finished-text="没有更多了" :immediate-check="false" @load="onLoad">
             <van-cell v-for="item in deviceList" :key="item.alarmId">
-              <div class="alarm">
+              <div class="alarm" @click="gotoEquipmentDetail(item)">
                 <div class="alarm-left">
                   <div class="content-item">
                     <div class="itemKey">设备编号：</div>
@@ -19,16 +19,26 @@
                   </div>
                 </div>
                 <div class="alarm-right">
-                  <van-icon class="iconfont icon" v-if="item.isonline==1" color="#00CC00" class-prefix='icon' name='xinhao' />
-                  <van-icon class="iconfont icon" v-if="item.isonline!=1" color="#FF0000" class-prefix='icon' name='xinhao' />
-                  <van-icon class="iconfont icon" v-if="item.openScreen==0" color="#00CC00" class-prefix='icon' name='kaiqipingmu' />
-                  <van-icon class="iconfont icon" v-if="item.openScreen==1" color="#FF0000" class-prefix='icon' name='guanbipingmu' />
-                  <van-icon class="iconfont icon" v-if="item.isoutofstock==0" color="#00CC00" class-prefix='icon' name='shouye' />
-                  <van-icon class="iconfont icon" v-if="item.isoutofstock==1" color="#FF0000" class-prefix='icon' name='gouwuchetianjia' />
-                  <van-icon class="iconfont icon" v-if="item.isbad==0" color="#00CC00" class-prefix='icon' name='weixiu' />
-                  <van-icon class="iconfont icon" v-if="item.isbad==1" color="#FF0000" class-prefix='icon' name='weixiujibie-' />
-                  <van-icon class="iconfont icon" v-if="item.stopSell==0" color="#00CC00" class-prefix='icon' name='tongzhi' />
-                  <van-icon class="iconfont icon" v-if="item.stopSell==1" color="#FF0000" class-prefix='icon' name='tongzhi' />
+                  <van-icon class="iconfont icon" v-if="item.isonline==1" color="#00CC00" class-prefix='icon'
+                    name='xinhao' />
+                  <van-icon class="iconfont icon" v-if="item.isonline!=1" color="#FF0000" class-prefix='icon'
+                    name='xinhao' />
+                  <van-icon class="iconfont icon" v-if="item.openScreen==0" color="#00CC00" class-prefix='icon'
+                    name='kaiqipingmu' />
+                  <van-icon class="iconfont icon" v-if="item.openScreen==1" color="#FF0000" class-prefix='icon'
+                    name='guanbipingmu' />
+                  <van-icon class="iconfont icon" v-if="item.isoutofstock==0" color="#00CC00" class-prefix='icon'
+                    name='shouye' />
+                  <van-icon class="iconfont icon" v-if="item.isoutofstock==1" color="#FF0000" class-prefix='icon'
+                    name='gouwuchetianjia' />
+                  <van-icon class="iconfont icon" v-if="item.isbad==0" color="#00CC00" class-prefix='icon'
+                    name='weixiu' />
+                  <van-icon class="iconfont icon" v-if="item.isbad==1" color="#FF0000" class-prefix='icon'
+                    name='weixiujibie-' />
+                  <van-icon class="iconfont icon" v-if="item.stopSell==0" color="#00CC00" class-prefix='icon'
+                    name='tongzhi' />
+                  <van-icon class="iconfont icon" v-if="item.stopSell==1" color="#FF0000" class-prefix='icon'
+                    name='tongzhi' />
                 </div>
               </div>
             </van-cell>
@@ -82,7 +92,8 @@
         loading: false,
         finished: false, //是否已加载完成，加载完成后不再触发load事件
         refreshing: false, //刷新成功为false
-        error: false //是否加载失败，加载失败后点击错误提示可以重新触发load事件
+        error: false, //是否加载失败，加载失败后点击错误提示可以重新触发load事件
+        isShow: false //切换nav禁止加载
       }
     },
     components: {
@@ -94,14 +105,15 @@
     watch: {},
     //方法集合
     methods: {
-      DevicelistFn() {
+      DevicelistFn() { //设备列表
         let data = {
           searchType: this.searchType,
           pageindex: this.pageindex,
           pagesize: this.pagesize
         }
         this.$api.DeviceList(data).then(res => {
-          console.log('设备列表返回', res);
+          console.log('返回', res);
+          this.isShow = false;
           if (this.refreshing) {
             this.refreshing = false; //刷新成功
           }
@@ -136,11 +148,9 @@
           console.log(err)
         })
       },
-
-      onLoad() {
+      onLoad() { // 数据加载
         console.log('调用')
-        // 数据全部加载完成
-        if (this.deviceList.length >= this.total) {
+        if (this.isShow || this.deviceList.length >= this.total) {
           this.finished = true;
           return true;
         }
@@ -167,8 +177,17 @@
         this.finished = false;
         this.pageindex = 1;
         this.deviceList = [];
+        this.isShow = true;
         this.DevicelistFn();
       },
+      gotoEquipmentDetail(equipmentData) {
+        this.$router.push({
+          path: '/EquipmentDetail',
+          query: {
+            equipmentData: JSON.stringify(equipmentData)
+          }
+        })
+      }
     },
     //生命周期 - 创建完成（可以访问当前this实例）
     created() {
@@ -258,5 +277,14 @@
     flex-direction: column;
     justify-content: center;
     margin: 0 2px;
+  }
+</style>
+<style lang="less">
+  .van-sticky--fixed {
+    position: fixed;
+    top: 0;
+    right: 12px;
+    left: 12px;
+    z-index: 99;
   }
 </style>

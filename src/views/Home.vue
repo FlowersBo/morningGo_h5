@@ -3,7 +3,6 @@
     <!-- <Login msg="报表" /> -->
     <!-- <router-link to="/Mine">Mine</router-link> -->
     <HeaderTitle :imgSrc="imgUrl" :title="titleDec" :text="textDec"></HeaderTitle>
-
     <van-tabs v-model="active" sticky offset-top="45" title-active-color="#F15A24" @click="onClickNav">
       <van-tab v-for="index in navTab" :key="index.index" :title="index.nav" :badge="index.totalCount">
         <van-pull-refresh class="alarmWrap" v-model="refreshing" @refresh="onRefresh">
@@ -48,11 +47,9 @@
             </van-cell>
           </van-list>
         </van-pull-refresh>
-
       </van-tab>
     </van-tabs>
-
-    <Footer :active="footerActive" :badgeNumber="badgeNumber"/>
+    <Footer :active="footerActive" :badgeNumber="badgeNumber" />
   </div>
 </template>
 
@@ -95,7 +92,8 @@
         loading: false,
         finished: false, //是否已加载完成，加载完成后不再触发load事件
         refreshing: false, //刷新成功为false
-        error: false //是否加载失败，加载失败后点击错误提示可以重新触发load事件
+        error: false, //是否加载失败，加载失败后点击错误提示可以重新触发load事件
+        isShow: false
       }
     },
     components: {
@@ -115,6 +113,7 @@
         }
         this.$api.Alarmlist(data).then(res => {
           console.log('返回', res);
+          this.isShow = false;
           if (this.refreshing) {
             this.refreshing = false; //刷新成功
           }
@@ -135,14 +134,13 @@
             totalCount: res.data.data.twoCount
           }];
           this.badgeNumber = res.data.data.allCount;
-          sessionStorage.setItem('badgeNumber',JSON.stringify(res.data.data.allCount));
+          sessionStorage.setItem('badgeNumber', JSON.stringify(res.data.data.allCount));
           this.navTab = this.navTab.map((item, index) => {
             return {
               ...item,
               ...totalList[index]
             };
           });
-          console.log(this.navTab)
           this.deviceList.push(...res.data.data.alarmlist);
         }).catch((err) => {
           console.log(err)
@@ -150,12 +148,13 @@
       },
 
       onLoad() {
-        console.log('调用')
         // 数据全部加载完成
-        if (this.deviceList.length >= this.total) {
+        if (this.isShow || this.deviceList.length >= this.total) {
+          console.log('加载完成')
           this.finished = true;
           return true;
         }
+        console.log('加载未完成')
         this.pageindex++;
         this.DevicelistFn();
       },
@@ -167,10 +166,6 @@
         this.deviceList = [];
         this.refreshing = true;
         this.DevicelistFn();
-        // 重新加载数据
-        // 将 loading 设置为 true，表示处于加载状态
-        // this.loading = true;
-        // this.onLoad();
       },
 
       clickCancelFn(alarmId) { //清除报警
@@ -209,6 +204,7 @@
         this.finished = false;
         this.pageindex = 1;
         this.deviceList = [];
+        this.isShow = true;
         this.DevicelistFn();
       },
 
@@ -222,7 +218,7 @@
         })
       },
 
-      gotoAlarmFn(alarmcode) {//跳转富文本
+      gotoAlarmFn(alarmcode) { //跳转富文本
         this.$router.push({
           path: '/Alarm',
           query: {
@@ -354,5 +350,14 @@
   .detailImg {
     width: 16px;
     height: 16px;
+  }
+</style>
+<style lang="less">
+  .van-sticky--fixed {
+    position: fixed;
+    top: 0;
+    right: 12px;
+    left: 12px;
+    z-index: 99;
   }
 </style>
