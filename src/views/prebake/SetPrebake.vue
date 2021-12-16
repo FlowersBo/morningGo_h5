@@ -432,6 +432,9 @@
   .roastStatus {
     color: blueviolet;
   }
+  van-tabs{
+    /* width: 375px; */
+  }
 </style>
 <style lang="less">
   .van-stepper__input {
@@ -441,5 +444,11 @@
 
   .van-grid-item__content {
     padding: 0;
+  }
+  .van-sticky--fixed {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
   }
 </style>
