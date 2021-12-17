@@ -18,7 +18,7 @@
             <td>
               <div class="library">{{item.count}}</div>
             </td>
-            <td><input type="number" v-model="item.number" v-on:input="numberInpChange(index)"></td>
+            <td><input type="number" v-model="item.number" v-on:input="numberInpChange(index)"/></td>
             <td><input type="number" v-model="item.warn" v-on:input="numberInpChange(index)" /></td>
             <td>
               <button class="btn" @click="removeFn(index)">清零</button>

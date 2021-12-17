@@ -68,6 +68,11 @@ const routes = [
     name: 'Ovenware',
     component: () => import('../views/equipment/Ovenware.vue')
   },
+  {
+    path: '/reportAbandon',
+    name: 'reportAbandon',
+    component: () => import('../views/equipment/reportAbandon.vue')
+  },
 ]
 
 const router = new VueRouter({

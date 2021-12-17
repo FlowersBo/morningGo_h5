@@ -1,5 +1,5 @@
 <template>
-  <div id="">
+  <div id="setPrebake">
     <HeaderTitle :imgSrc="imgUrl" :title="titleDec" :text="textDec"></HeaderTitle>
     <van-tabs v-model="active" sticky offset-top="45" title-active-color="#F15A24" @click="onClickNav">
       <van-tab title="预烤设置">
@@ -34,19 +34,17 @@
               <tr v-for="(item,index) in bakeTime">
                 <td>{{item.startTime}}-{{item.endTime}}</td>
                 <td>
-                  <van-stepper :value="item.aNum" :name="index" min="0" max="9" button-size="20" disable-input
+                  <van-stepper :value="item.aNum" :name="index" min="0" max="18" button-size="20" disable-input
                     @change="onStartChange" />
                 </td>
                 <td>
-                  <van-stepper :value="item.bNum" :name="index" min="0" max="9" button-size="20" disable-input
+                  <van-stepper :value="item.bNum" :name="index" min="0" max="18" button-size="20" disable-input
                     @change="onEndChange" />
                 </td>
                 <td>
                   <button class="btn" @click="bindSaveFn(index)">保存</button>
                 </td>
                 <!-- <td><button @click="insert">insert</button></td> -->
-              </tr>
-              <tr>
               </tr>
             </tbody>
           </table>
@@ -244,6 +242,10 @@
         this.bakeTime.forEach((element, item) => {
           if (index == item) {
             console.log('当前', element);
+            if ((element.aNum + element.bNum > 18)) {
+              this.$toast('设置总数超出烤盘范围');
+              return;
+            }
             Dialog.confirm({
                 title: '提示',
                 message: '确定保存该策略',
@@ -432,9 +434,6 @@
   .roastStatus {
     color: blueviolet;
   }
-  van-tabs{
-    /* width: 375px; */
-  }
 </style>
 <style lang="less">
   .van-stepper__input {
@@ -445,6 +444,7 @@
   .van-grid-item__content {
     padding: 0;
   }
+
   .van-sticky--fixed {
     position: fixed;
     top: 0;

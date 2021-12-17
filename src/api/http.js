@@ -4,7 +4,9 @@ import router from '../router/index'
 let qs = require('querystring')
 import helper from './helper'
 let root = '/api';
-import { Toast } from 'vant';
+import {
+	Toast
+} from 'vant';
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 //  REQUEST 请求异常拦截
 axios.interceptors.request.use(config => {
@@ -33,7 +35,8 @@ axios.interceptors.response.use(result => {
 	}
 	return result;
 }, err => {
-	console.log("请求异常");
+	store.state.isLoading = false;
+	Toast('请求失败');
 	if (err && err.response) {
 		switch (err.response.status) {
 			case 401:
@@ -51,14 +54,12 @@ axios.interceptors.response.use(result => {
 				break;
 			default:
 				err.message = `登录凭证过期,请重新登录!`;
-				setTimeout(function(){
-					store.state.isLoading = false;
-					Toast('请求失败');
-				},3000)
+				store.state.isLoading = false;
+				Toast('请求失败');
 		}
-			// 非法进入时直接跳到登录页
-			window.kk = '/';
-			return;
+		// 非法进入时直接跳到登录页
+		window.kk = '/';
+		return;
 	} else {
 		err.message = '连接服务器失败!'
 	}

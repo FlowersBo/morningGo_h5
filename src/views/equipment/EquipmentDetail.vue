@@ -229,8 +229,17 @@
               deviceno: this.device.deviceno
             }
           })
+        }else if (index == 3) {
+          this.$router.push({
+            path: '/reportAbandon',
+            query: {
+              factoryno: this.device.factoryno,
+              pointname: this.device.pointname,
+              deviceno: this.device.deviceno
+            }
+          })
         }
-      }
+      },
     },
     //生命周期 - 创建完成（可以访问当前this实例）
     created() {

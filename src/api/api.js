@@ -47,4 +47,10 @@ export default {
   DeviceList(data) {  //设备列表
     return http.get("/nav/deviceList", data)
   },
+  SelectWaste(data) {  //获取废弃信息
+    return http.get("/deviceinfo/v2/selectWaste", data)
+  },
+  WasteSave(data) {  //上报废弃信息
+    return http.post("/deviceinfo/wasteSave", data)
+  },
 }
