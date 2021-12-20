@@ -191,6 +191,7 @@
     },
     //生命周期 - 创建完成（可以访问当前this实例）
     created() {
+      this.deviceList = [];
       this.DevicelistFn();
     },
     //生命周期 - 挂载完成（可以访问DOM元素）
@@ -286,5 +287,9 @@
     right: 12px;
     left: 12px;
     z-index: 99;
+  }
+  .van-cell {
+    width: 350px;
+    padding: 0;
   }
 </style>

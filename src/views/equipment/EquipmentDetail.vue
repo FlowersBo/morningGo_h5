@@ -38,8 +38,8 @@
 
 
     <van-list v-model="loading" :error.sync="error" error-text="请求失败，点击重新加载" :finished="finished" finished-text="没有更多了"
-      :immediate-check="false" @load="onLoad">
-      <van-cell v-for="item in deviceList" :key="item.alarmId">
+      :immediate-check="false" @load="onLoadDetail">
+      <van-cell v-for="item in deviceListDetail" :key="item.alarmId">
         <div class="item">
           <div class="item-title">
             <div class="title-left">
@@ -113,7 +113,7 @@
           "机械臂归位",
           "初始化设备",
         ],
-        deviceList: [],
+        deviceListDetail: [],
         pageindex: 1,
         pagesize: 100,
         loading: false,
@@ -148,22 +148,23 @@
           } else {
             this.total = res.data.data.twoCount;
           }
-          this.deviceList.push(...res.data.data.alarmlist);
+          this.deviceListDetail.push(...res.data.data.alarmlist);
         }).catch((err) => {
           console.log(err)
         })
       },
 
-      onLoad() {
+      onLoadDetail() {
         // 数据全部加载完成
-        if (this.isShow || this.deviceList.length >= this.total) {
+        if (this.isShow || this.deviceListDetail.length >= this.total) {
           console.log('加载完成')
           this.finished = true;
           return true;
+        } else {
+          console.log('加载未完成')
+          this.pageindex++;
+          this.DevicelistFn();
         }
-        console.log('加载未完成')
-        this.pageindex++;
-        this.DevicelistFn();
       },
 
       clickCancelFn(alarmId) { //清除报警
@@ -179,7 +180,7 @@
                 this.$toast('清除告警成功');
                 this.finished = false;
                 this.pageindex = 1;
-                this.deviceList = [];
+                this.deviceListDetail = [];
                 this.DevicelistFn();
               })
               .catch(err => {
@@ -229,13 +230,20 @@
               deviceno: this.device.deviceno
             }
           })
-        }else if (index == 3) {
+        } else if (index == 3) {
           this.$router.push({
-            path: '/reportAbandon',
+            path: '/ReportAbandon',
             query: {
               factoryno: this.device.factoryno,
               pointname: this.device.pointname,
               deviceno: this.device.deviceno
+            }
+          })
+        } else if (index == 4) {
+          this.$router.push({
+            path: '/RepairRecord',
+            query: {
+              deviceid: this.device.deviceid
             }
           })
         }
@@ -243,7 +251,9 @@
     },
     //生命周期 - 创建完成（可以访问当前this实例）
     created() {
+      this.deviceListDetail = [];
       this.device = JSON.parse(this.$route.query.equipmentData);
+      this.isShow = false;
       this.DevicelistFn();
     },
     //生命周期 - 挂载完成（可以访问DOM元素）

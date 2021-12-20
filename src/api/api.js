@@ -1,4 +1,4 @@
-//  let ApiRootUrl = 'https://w3.morninggo.cn'
+ let ApiRootUrl = 'https://w3.morninggo.cn'
 import http from './http.js'
 export default {
   RefreshToken(data, token) {
@@ -50,7 +50,10 @@ export default {
   SelectWaste(data) {  //获取废弃信息
     return http.get("/deviceinfo/v2/selectWaste", data)
   },
-  WasteSave(data) {  //上报废弃信息
+  WasteSave(data) {  //上报废弃信息formData
     return http.post("/deviceinfo/wasteSave", data)
+  },
+  SuppleList(data) {  //补货记录
+    return http.get("/nav/suppleList", data)
   },
 }

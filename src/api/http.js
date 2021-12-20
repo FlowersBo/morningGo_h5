@@ -10,9 +10,10 @@ import {
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 //  REQUEST 请求异常拦截
 axios.interceptors.request.use(config => {
-	// const token = localStorage.getItem('token'); //取
-	// localStorage.setItem('app-refresh-token',JSON.stringify(A)); //存
-
+	console.log(config.url);
+	if (config.url == '/deviceinfo/wasteSave') {
+		config.headers.post["Content-Type"] = "multipart/form-data"
+	}
 	// 将Token添加到请求头里面
 	// config.headers['app-refresh-token'] = 'A';
 	// token && (config.headers.Token = token);
@@ -69,22 +70,47 @@ axios.interceptors.response.use(result => {
 
 function apiAxios(method, url, params, token) {
 	store.state.isLoading = true;
-	if (params) {
-		params = helper.filterNull(params)
+	if (url === '/deviceinfo/wasteSave') {
+		let formData = params.formData;
+		// console.log(formData.get('files'));
+
+		// axios.create().post('/deviceinfo/wasteSave', formData, {
+		// 	headers: {
+		// 		'Content-Type': 'multipart/form-data'
+		// 	}
+		// })
+		return axios({
+			method: method,
+			//拼接参数
+			url,
+			data: formData,
+			baseURL: root,
+			timeout: 10000,
+			headers: {
+				"mg-access-token": JSON.parse(localStorage.getItem('assessToken')),
+				"Content-Type": 'multipart/form-data',
+			}, //jwt
+			withCredentials: false
+		})
+	} else {
+		if (params) {
+			params = helper.filterNull(params)
+		}
+		return axios({
+			method: method,
+			//拼接参数
+			url: method === 'GET' || method === 'DELETE' ? helper.queryString(url, params) : url,
+			data: method === 'POST' || method === 'PUT' ? qs.stringify(params) : null,
+			baseURL: root,
+			timeout: 10000,
+			headers: {
+				// Authorization: `Bearer ${token}`
+				"mg-access-token": JSON.parse(localStorage.getItem('assessToken')),
+				"Content-Type": 'application/x-www-form-urlencoded',
+			}, //jwt
+			withCredentials: false
+		})
 	}
-	return axios({
-		method: method,
-		//拼接参数
-		url: method === 'GET' || method === 'DELETE' ? helper.queryString(url, params) : url,
-		data: method === 'POST' || method === 'PUT' ? qs.stringify(params) : null,
-		baseURL: root,
-		timeout: 10000,
-		headers: {
-			// Authorization: `Bearer ${token}`
-			"mg-access-token": JSON.parse(localStorage.getItem('assessToken')),
-		}, //jwt
-		withCredentials: false
-	})
 }
 
 // 返回在vue模板中的调用接口

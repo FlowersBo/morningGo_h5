@@ -69,9 +69,14 @@ const routes = [
     component: () => import('../views/equipment/Ovenware.vue')
   },
   {
-    path: '/reportAbandon',
-    name: 'reportAbandon',
-    component: () => import('../views/equipment/reportAbandon.vue')
+    path: '/ReportAbandon',
+    name: 'ReportAbandon',
+    component: () => import('../views/equipment/ReportAbandon.vue')
+  },
+  {
+    path: '/RepairRecord',
+    name: 'RepairRecord',
+    component: () => import('../views/equipment/RepairRecord.vue')
   },
 ]
 

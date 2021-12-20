@@ -52,7 +52,7 @@
           </tbody>
         </table>
         <div style="margin-top:10px;">上传照片：{{fileList.length}}/2</div>
-        <van-uploader class="uploader" accept="image/gif, image/jpeg, image/png" v-model="fileList" :max-count="2" :after-read="afterRead" />
+        <van-uploader class="uploader" v-model="fileList" :max-count="2" :after-read="afterRead" />
       </div>
       <div class="submitBtnWrap">
         <button class="submitBtn" @click="submitFn">提交</button>
@@ -117,25 +117,56 @@
           this.numberB = number
         }
       },
-      afterRead(file) { //上传图片
-        console.log(file)
-        file.status = 'uploading';
-        file.message = '上传中...';
 
-        setTimeout(() => {
-          file.status = 'done';
-          // file.message = '上传失败';
-        }, 1000);
+      afterRead(file) { //上传图片
+        let that = this;
+        console.log(file)
+        // file.status = 'uploading';
+        // file.message = '上传中...';
+        // let img = new Image(); //创建对象，这个img就是传给compress
+        // img.src = file.content
+        //   let id_card = that.compress(img) //这个id_card就是压缩后的一串base64代码，目测3M图片压缩后800kb
+        let formData = new FormData();
+        file.file.factoryNo = this.factoryno;
+        formData.append("files", file.file);
+        console.log(formData.get('files'));
+        this.$api.WasteSave({
+            formData
+          })
+          .then(result => {
+            console.log(result)
+          })
+        file.status = 'done';
       },
-      submitFn() {
-        if(this.fileList.length<=0){
+
+
+      compress(img) { //压缩图片
+        let url = ''
+        var w = Math.min(700, img.width); //当图片像素>700的时候，等比例压缩，这个数字可以调
+        var h = img.height * (w / img.width);
+        var canvas = document.createElement('canvas')
+        var ctx = canvas.getContext('2d')
+        canvas.width = w
+        canvas.height = h
+        ctx.drawImage(img, 0, 0, w, h)
+        url = canvas.toDataURL('image/png', 1) //1代表精细度，越高越好
+        return url
+      },
+
+
+
+
+
+
+      submitFn() { //提交
+        if (this.fileList.length <= 0) {
           this.$toast('请添加废弃实拍照片！');
           return;
         }
         this.$api.WasteSave({
-          factoryNo:this.factoryno
+          factoryNo: this.factoryno
         }).then(res => {
-
+          console.log('上传成功过', res)
         }).catch(err => {
           this.$toast(err.message);
         })
