@@ -368,12 +368,13 @@
   table {
     width: 100%;
     margin-top: 10px;
+    margin-bottom: 20px;
   }
 
   tr {
     height: 40px;
   }
-
+ 
   th,
   td {
     text-align: center;

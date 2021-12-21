@@ -56,4 +56,10 @@ export default {
   SuppleList(data) {  //补货记录
     return http.get("/nav/suppleList", data)
   },
+  Gettemperature(data) {  //温度信息
+    return http.get("/deviceinfo/gettemperature", data)
+  },
+  Getalarmlist(data) {  //单个设备报警
+    return http.get("/deviceinfo/getalarmlist", data)
+  },
 }

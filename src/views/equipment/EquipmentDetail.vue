@@ -115,11 +115,11 @@
         ],
         deviceListDetail: [],
         pageindex: 1,
-        pagesize: 100,
+        pagesize: 50,
         loading: false,
         finished: false, //是否已加载完成，加载完成后不再触发load事件
         error: false, //是否加载失败，加载失败后点击错误提示可以重新触发load事件
-        isShow: false,
+        isShow: true,
       }
     },
     //计算属性 类似于data概念
@@ -133,21 +133,15 @@
           pageindex: this.pageindex,
           pagesize: this.pagesize
         }
-        this.$api.Alarmlist(data).then(res => {
-          console.log('返回', res);
+        this.$api.Getalarmlist(data).then(res => {
+          console.log('单个设备报警返回', res);
           this.isShow = false;
           if (this.refreshing) {
             this.refreshing = false; //刷新成功
           }
           // 加载状态结束
           this.loading = false;
-          if (this.active === 0) {
-            this.total = res.data.data.allCount;
-          } else if (this.active === 1) {
-            this.total = res.data.data.oneCount;
-          } else {
-            this.total = res.data.data.twoCount;
-          }
+          this.total = res.data.data.total;
           this.deviceListDetail.push(...res.data.data.alarmlist);
         }).catch((err) => {
           console.log(err)
@@ -246,6 +240,24 @@
               deviceid: this.device.deviceid
             }
           })
+        } else if (index == 5) {
+          this.$router.push({
+            path: '/Temperature',
+            query: {
+              factoryno: this.device.factoryno,
+              pointname: this.device.pointname,
+              deviceno: this.device.deviceno,
+              isonline: this.device.isonline,
+              stopSell: this.device.stopSell,
+            }
+          })
+        } else if (index == 6) {
+          this.$router.push({
+            path: '/Facility',
+            query: {
+              deviceid: this.device.deviceid
+            }
+          })
         }
       },
     },
@@ -253,7 +265,6 @@
     created() {
       this.deviceListDetail = [];
       this.device = JSON.parse(this.$route.query.equipmentData);
-      this.isShow = false;
       this.DevicelistFn();
     },
     //生命周期 - 挂载完成（可以访问DOM元素）

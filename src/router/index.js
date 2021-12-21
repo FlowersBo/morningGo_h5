@@ -78,6 +78,16 @@ const routes = [
     name: 'RepairRecord',
     component: () => import('../views/equipment/RepairRecord.vue')
   },
+  {
+    path: '/Temperature',
+    name: 'Temperature',
+    component: () => import('../views/equipment/Temperature.vue')
+  },
+  {
+    path: '/Facility',
+    name: 'Facility',
+    component: () => import('../views/equipment/Facility.vue')
+  },
 ]
 
 const router = new VueRouter({

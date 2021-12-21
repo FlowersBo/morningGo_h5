@@ -37,10 +37,11 @@ module.exports = {
   /* webpack-dev-server 相关配置 */
   devServer: {
     /* 自动打开浏览器 */
-    open: true,
+    // open: true,
     /* 设置为0.0.0.0则所有的地址均能访问 */
     host: '0.0.0.0',
     port: 80,
+    disableHostCheck: true,
     https: false,
     hotOnly: false,
     /* 使用代理 */
