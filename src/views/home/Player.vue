@@ -32,7 +32,7 @@
           }],
           poster: "", //你的封面地址
           // width: document.documentElement.clientWidth,
-          notSupportedMessage: '此视频暂无法播放，请稍后再试', //允许覆盖Video.js无法播放媒体源时显示的默认信息。
+          notSupportedMessage: '视频正在加载中，请稍候...', //允许覆盖Video.js无法播放媒体源时显示的默认信息。
           controlBar: {
             timeDivider: true,
             durationDisplay: true,

@@ -28,35 +28,39 @@
         </div>
       </div>
       <div class="reportView">
-        <div>其他废弃上报：</div>
-        <table>
-          <thead>
-            <tr>
-              <th>商品名称</th>
-              <th>废弃数</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>A: {{deviceStock.paname}}</td>
-              <td>
-                <input type="number" v-model="numberA" v-on:input="numberInpChange(numberA,0)" />
-              </td>
-            </tr>
-            <tr>
-              <td>B: {{deviceStock.pbname}}</td>
-              <td>
-                <input type="number" v-model="numberB" v-on:input="numberInpChange(numberB,1)" />
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <div style="margin-top:10px;">上传照片：{{fileList.length}}/2</div>
-        <van-uploader class="uploader" v-model="fileList" :max-count="2" :after-read="afterRead" />
+        <form report-submit @submit.prevent="submitFn">
+          <div>其他废弃上报：</div>
+          <table>
+            <thead>
+              <tr>
+                <th>商品名称</th>
+                <th>废弃数</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>A: {{deviceStock.paname}}</td>
+                <td>
+                  <input type="number" name="counta" v-model="numberA" v-on:input="numberInpChange(numberA,0)" />
+                </td>
+              </tr>
+              <tr>
+                <td>B: {{deviceStock.pbname}}</td>
+                <td>
+                  <input type="number" name="countb" v-model="numberB" v-on:input="numberInpChange(numberB,1)" />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div style="margin-top:10px;">上传照片：{{fileList.length}}/2</div>
+          <van-uploader class="uploader" v-model="fileList" :max-count="2" :after-read="afterRead"
+            :before-delete="beforeDelete" />
+          <div class="submitBtnWrap">
+            <button class="submitBtn" formType="submitFn">提交</button>
+          </div>
+        </form>
       </div>
-      <div class="submitBtnWrap">
-        <button class="submitBtn" @click="submitFn">提交</button>
-      </div>
+
     </div>
   </div>
 </template>
@@ -126,17 +130,8 @@
         // let img = new Image(); //创建对象，这个img就是传给compress
         // img.src = file.content
         //   let id_card = that.compress(img) //这个id_card就是压缩后的一串base64代码，目测3M图片压缩后800kb
-        let formData = new FormData();
-        file.file.factoryNo = this.factoryno;
-        formData.append("files", file.file);
-        console.log(formData.get('files'));
-        this.$api.WasteSave({
-            formData
-          })
-          .then(result => {
-            console.log(result)
-          })
-        file.status = 'done';
+        //   console.log(id_card);
+        // file.status = 'done';
       },
 
 
@@ -153,23 +148,55 @@
         return url
       },
 
+      beforeDelete(e) { //删除图片
+        return new Promise((resolve, reject) => {
+          console.log(this.fileList);
+          this.fileList.forEach(element => {
+            if (element.file.lastModified == e.file.lastModified) {
+              console.log('删除', e);
+              this.fileList.splice(e.file.lastModified, 1)
+            }
+          });
+          console.log(this.fileList);
+          resolve()
+        })
+      },
 
 
 
 
-
-      submitFn() { //提交
+      submitFn(e) { //提交
+        let formData = new FormData();
+        for (let i in this.fileList) {
+          formData.append("files", this.fileList[i].file);
+        }
+        formData.append("factoryNo", this.factoryno);
+        formData.append("counta", e.target.counta.value);
+        formData.append("countb", e.target.countb.value);
+        console.log(formData.get('factoryNo'));
+        console.log(formData.get('counta'));
+        console.log(formData.get('countb'));
+        console.log(formData.getAll('files'));
         if (this.fileList.length <= 0) {
           this.$toast('请添加废弃实拍照片！');
           return;
         }
-        this.$api.WasteSave({
-          factoryNo: this.factoryno
-        }).then(res => {
-          console.log('上传成功过', res)
-        }).catch(err => {
-          this.$toast(err.message);
-        })
+        Dialog.confirm({
+            title: '提示',
+            message: '确认上报废弃',
+          })
+          .then(() => {
+            this.$api.WasteSave({
+              formData
+            }).then(res => {
+              console.log('上传成功', res)
+            }).catch(err => {
+              this.$toast(err.message);
+            })
+          }).catch(err => {
+
+          })
+
       },
     },
     //生命周期 - 创建完成（可以访问当前this实例）

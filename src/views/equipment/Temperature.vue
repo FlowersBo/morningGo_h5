@@ -19,7 +19,7 @@
         <van-icon class="iconfont icon" v-if="stopSell==1" color="#FF0000" class-prefix='icon' name='tongzhi' />
       </div>
     </div>
-    <div class="T">
+    <div class="T" v-if="temperatureT.length>0">
       <div class="title">当前温度(℃)</div>
       <div class="Tdetail">
         <div>储存箱温度</div>
@@ -47,7 +47,7 @@
           <tr>
             <td>加热管{{index+1}}</td>
             <td>{{item.curTemperature}}</td>
-            <td>{{item.openStatus==0?'打开':'关闭'}}</td>
+            <td>{{item.hotStatus}}</td>
           </tr>
         </div>
       </tbody>
@@ -87,8 +87,15 @@
             let temperatureList = res.data.data.temperature.list;
             this.temperature = temperatureList.slice(0, 7);
             this.temperatureT = temperatureList.slice(7, 10);
-            console.log(this.temperature);
-            console.log(this.temperatureT);
+            this.temperature.forEach(element => {
+              if (element.openStatus == 1) {
+                if (element.hotStatus == 1) {
+                  element.hotStatus = '加热';
+                } else {
+                  element.hotStatus = '保温';
+                }
+              }
+            });
           })
           .catch(err => {
 
@@ -198,7 +205,7 @@
     justify-content: space-between;
     box-sizing: border-box;
     padding-right: 40%;
-    color: #aaa;
+    color: rgb(145, 145, 145);
   }
 
   .Tdetail-item {
@@ -232,7 +239,8 @@
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-  td{
-    color: #aaa;
+
+  td {
+    color: rgb(145, 145, 145);
   }
 </style>

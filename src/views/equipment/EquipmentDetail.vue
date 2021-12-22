@@ -106,7 +106,7 @@
           "温度信息",
           "设备信息",
           "亮屏",
-          "息屏",
+          "熄屏",
           "消除故障告警",
           "重启上位机",
           "重启下位机",
@@ -255,9 +255,60 @@
           this.$router.push({
             path: '/Facility',
             query: {
-              deviceid: this.device.deviceid
+              factoryno: this.device.factoryno,
+              pointname: this.device.pointname,
+              deviceno: this.device.deviceno,
+              isonline: this.device.isonline,
+              stopSell: this.device.stopSell,
             }
           })
+        } else if (index == 7 || 8 || 9 || 10 || 11 || 12 || 13) {
+          let command = '',
+            commandText = '';
+          switch (index) {
+            case 7:
+              commandText = '亮屏';
+              command = 'sysSleep';
+              break;
+            case 8:
+              commandText = '熄屏';
+              command = 'sysWake'
+              break;
+            case 9:
+              commandText = '消除故障告警';
+              command = 'clearWarning'
+              break;
+            case 10:
+              commandText = '重启上位机';
+              command = 'restartAndroid'
+              break;
+            case 11:
+              commandText = '重启下位机';
+              command = 'restartMachine'
+              break;
+            case 12:
+              commandText = '机械臂归位';
+              command = 'initArm'
+              break;
+            case 13:
+              commandText = '初始化设备';
+              command = 'init'
+              break;
+          }
+          Dialog.confirm({
+            title: '提示',
+            message: `确认要${commandText}`,
+          }).then(() => {
+            // this.$api.Pubcmd({
+            //   factoryno: this.device.factoryno,
+            //   pointname: this.device.pointname,
+            //   deviceno: this.device.deviceno,
+            //   command
+            // }).then(res => {
+            console.log(commandText + ':' + res);
+            // }).catch(err => {})
+          }).catch(err => {})
+
         }
       },
     },

@@ -59,7 +59,22 @@ export default {
   Gettemperature(data) {  //温度信息
     return http.get("/deviceinfo/gettemperature", data)
   },
-  Getalarmlist(data) {  //单个设备报警
+  Getalarmlist(data) {  //单个设备报警列表
     return http.get("/deviceinfo/getalarmlist", data)
+  },
+  Getdeviceinfo(data) {  //设备信息
+    return http.get("/deviceinfo/getdeviceinfo", data)
+  },
+  Pubcmd(data) {  //MQTT命令下发
+    return http.post("/command/pubcmd", data)
+  },
+  OrderList(data) {  //订单列表
+    return http.get("/deviceinfo/orderList", data)
+  },
+  GetOrderVideo(data) {  //获取订单列表故障视频
+    return http.get("/command/getOrderVideo", data)
+  },
+  Qrcodelogin(data) {  //通过扫一扫登录
+    return http.post("/userinfo/qrcodelogin", data)
   },
 }
