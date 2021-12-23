@@ -77,4 +77,7 @@ export default {
   Qrcodelogin(data) {  //通过扫一扫登录
     return http.post("/userinfo/qrcodelogin", data)
   },
+  Wechatjsapi(data) {  //通过扫一扫登录
+    return http.post("/userinfo/wechatjsapi", data)
+  },
 }

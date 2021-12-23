@@ -26,7 +26,7 @@
     "vue-touch": "^2.0.0-beta.4",
     "vue-video-player": "^5.0.2",
     "vuex": "^3.4.0",
-    "weixin-js-sdk": "^1.6.0"
+    "weixin-jsapi": "^1.1.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",

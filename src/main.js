@@ -40,8 +40,7 @@ import VideoPlayer from 'vue-video-player'
 import 'video.js/dist/video-js.css'
 Vue.use(VideoPlayer)
 
-// 引入js_sdk
-import wxsdk from 'weixin-js-sdk';
+import wxsdk from 'weixin-jsapi';
 Vue.prototype.wxsdk = wxsdk
 
 Vue.config.productionTip = false
