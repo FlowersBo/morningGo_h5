@@ -125,26 +125,28 @@
       afterRead(file) { //上传图片
         let that = this;
         console.log(file)
-        // file.status = 'uploading';
-        // file.message = '上传中...';
-        // let img = new Image(); //创建对象，这个img就是传给compress
-        // img.src = file.content
-        //   let id_card = that.compress(img) //这个id_card就是压缩后的一串base64代码，目测3M图片压缩后800kb
-        //   console.log(id_card);
-        // file.status = 'done';
+        file.status = 'uploading';
+        file.message = '上传中...';
+        let img = new Image(); //创建对象，这个img就是传给compress
+        img.src = file.content;
+        img.onload = function () { //回调
+          let id_card = that.compress(img) //这个id_card就是压缩后的一串base64代码，目测3M图片压缩后800kb
+          console.log(id_card);
+        }
+        file.status = 'done';
       },
 
 
       compress(img) { //压缩图片
         let url = ''
-        var w = Math.min(700, img.width); //当图片像素>700的时候，等比例压缩，这个数字可以调
+        var w = Math.min(1900, img.width); //当图片像素>1900的时候，等比例压缩，这个数字可以调
         var h = img.height * (w / img.width);
         var canvas = document.createElement('canvas')
         var ctx = canvas.getContext('2d')
         canvas.width = w
         canvas.height = h
         ctx.drawImage(img, 0, 0, w, h)
-        url = canvas.toDataURL('image/png', 1) //1代表精细度，越高越好
+        url = canvas.toDataURL('image/png', .6) //1代表精细度，越高越好
         return url
       },
 
@@ -183,7 +185,7 @@
         }
         Dialog.confirm({
             title: '提示',
-            message: '确认上报废弃',
+            message: '确认提交上报废弃',
           })
           .then(() => {
             this.$api.WasteSave({

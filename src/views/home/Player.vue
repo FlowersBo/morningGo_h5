@@ -47,9 +47,15 @@
       }
     },
     created() {
-      this.alarmId = this.$route.query.alarmId;
-      this.factoryno = this.$route.query.factoryno;
-      this.getVideo(this.$route.query.alarmId, this.$route.query.factoryno);
+      this.url = this.$route.query.url;
+      if (this.$route.query.url === 'GetOrderVideo') {
+        this.orderId = this.$route.query.orderId;
+        this.getVideo(this.$route.query.url, this.$route.query.orderId);
+      } else {
+        this.alarmId = this.$route.query.alarmId;
+        this.factoryno = this.$route.query.factoryno;
+        this.getVideo(this.$route.query.url, this.$route.query.alarmId, this.$route.query.factoryno);
+      }
     },
     mounted() {},
     components: {
@@ -60,20 +66,37 @@
     watch: {},
     //方法集合
     methods: {
-      getVideo(alarmId, factoryno) {
-        let data = {
-          alarmId,
-          factoryno
+      getVideo(url, alarmId, factoryno) {
+        let api='',
+        data = {};
+        if (url === 'GetOrderVideo') {
+          data = {
+            orderId: alarmId
+          }
+          api = this.$api.GetOrderVideo;
+        } else {
+          data = {
+            alarmId,
+            factoryno
+          }
+          api = this.$api.Getvideo;
         }
-        this.$api.Getvideo(data).then(res => {
+        api(data).then(res => {
+          console.log(res)
             if (res.data.code === 1001) {
               this.timer = setTimeout(() => {
-                this.getVideo(this.alarmId, this.factoryno);
-              }, 3000);
+                if (url === 'GetOrderVideo') {
+                  this.getVideo(this.url, this.orderId);
+                } else {
+                  this.getVideo(this.url, this.alarmId, this.factoryno);
+                }
+              }, 4000);
             } else if (res.data.code == 200) {
-              console.log('视频',res)
+              console.log('视频', res)
               this.playerOptions.sources[0].src = res.data.data.video;
               // this.playerOptions.sources[0].src = 'https://media.w3.org/2010/05/sintel/trailer.mp4'
+            }else{
+              this.$toast('加载失败');
             }
           })
           .catch(err => {

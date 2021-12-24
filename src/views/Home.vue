@@ -213,7 +213,8 @@
           path: '/Player',
           query: {
             alarmId,
-            factoryno
+            factoryno,
+            url: 'Getvideo'
           }
         })
       },

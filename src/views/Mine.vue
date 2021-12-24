@@ -10,7 +10,7 @@
       </div>
       <div class="info">
         <van-cell title="所在小组:" />
-        <van-cell title="订单列表" is-link />
+        <van-cell title="订单列表" is-link  to="OrderList"/>
         <van-cell title="扫一扫" is-link @click="qrCode" />
         <van-cell title="修改密码" is-link />
       </div>
@@ -56,6 +56,7 @@
       wechatLogin() {
         console.log(location.href.split("#")[0])
         let url = location.href.split("#")[0];
+        // url= 'https://api.morninggo.cn/login.html';
         this.$api.Wechatjsapi({
           url
         }).then(res => {
@@ -201,6 +202,9 @@
   .info .van-cell {
     margin: 10px 0;
     border-radius: 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .btnWrap {
