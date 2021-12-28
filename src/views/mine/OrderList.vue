@@ -1,7 +1,5 @@
 <template>
   <div class="home">
-    <!-- <Login msg="报表" /> -->
-    <!-- <router-link to="/Mine">Mine</router-link> -->
     <HeaderTitle :imgSrc="imgUrl" :title="titleDec" :text="textDec"></HeaderTitle>
     <van-tabs v-model="active" sticky offset-top="45" title-active-color="#F15A24" @click="onClickNav">
       <van-tab v-for="index in navTab" :key="index.index" :title="index.nav">
@@ -30,7 +28,7 @@
                   </div>
                   <div class="content-item">
                     <div class="itemKey">订单金额：</div>
-                    <div class="itemValue">{{item.orderPrice}}</div>
+                    <div class="itemValue">￥{{item.orderPrice}}</div>
                   </div>
                 </div>
               </div>

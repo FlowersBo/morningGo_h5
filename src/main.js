@@ -41,7 +41,7 @@ import 'video.js/dist/video-js.css'
 Vue.use(VideoPlayer)
 
 import wxsdk from 'weixin-jsapi';
-Vue.prototype.wxsdk = wxsdk
+Vue.prototype.wx = wxsdk
 
 Vue.config.productionTip = false
 fastClick.attach(document.body)

@@ -34,6 +34,7 @@
     "@vue/cli-plugin-vuex": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
     "amfe-flexible": "^2.2.1",
+    "cross-env": "^7.0.3",
     "sass-loader": "^10.1.1",
     "sass-resources-loader": "^2.2.4",
     "style-loader": "^3.2.1",

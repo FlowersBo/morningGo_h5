@@ -10,15 +10,26 @@
       </div>
       <div class="info">
         <van-cell title="所在小组:" />
-        <van-cell title="订单列表" is-link  to="OrderList"/>
+        <van-cell title="订单列表" is-link to="OrderList" />
         <van-cell title="扫一扫" is-link @click="qrCode" />
-        <van-cell title="修改密码" is-link />
+        <van-cell title="修改密码" is-link @click="showPopup" />
       </div>
       <div class="btnWrap">
         <van-button round color="linear-gradient(to right, #F15A24, #877974)" @click="logOut">
           退出登录
         </van-button>
       </div>
+      <van-popup v-model="isShow">
+        <form class="subminWrap" report-submit @submit.prevent="submitFn">
+          <input class="inp" type="number" placeholder="旧密码" name="password" />
+          <input class="inp" type="number" placeholder="新密码" name="newpassword" />
+          <input class="inp" type="number" placeholder="确认密码" name="pwdRepeat" />
+          <div class="subBtn">
+            <button class="submitBtn" formType="submitFn">确认</button>
+            <button class="submitBtn" type="button" @click="showPopup">取消</button>
+          </div>
+        </form>
+      </van-popup>
     </div>
     <Footer :active="active" />
   </div>
@@ -27,6 +38,7 @@
 <script>
   import HeaderTitle from '../components/HeaderTitle.vue';
   import Footer from '@/components/footer.vue';
+  import wx from "weixin-jsapi";
   import {
     Dialog
   } from 'vant';
@@ -44,7 +56,8 @@
         titleDec: "我的",
         textDec: "",
         active: 4,
-        phoneNumber: ''
+        phoneNumber: '',
+        isShow: false
       }
     },
     //计算属性 类似于data概念
@@ -56,11 +69,11 @@
       wechatLogin() {
         console.log(location.href.split("#")[0])
         let url = location.href.split("#")[0];
-        // url= 'https://api.morninggo.cn/login.html';
+        url = 'https://api.morninggo.cn/h5/user.html';
         this.$api.Wechatjsapi({
           url
         }).then(res => {
-          console.log(res)
+          console.log('签名返回',res)
           let ticket = res.data.data.ticket;
           wx.config({
             debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
@@ -84,7 +97,7 @@
           //desc: 'scanQRCode desc',
           scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
           success: function (res) {
-            let result = res.resultStr; 
+            let result = res.resultStr;
             console.log(result);
             // let reqData = {
             //   username: loginname,
@@ -99,7 +112,7 @@
           },
           error: function (res) {
             if (res.errMsg.indexOf('function_not_exist') > 0) {
-             this.$toast('版本过低请升级')
+              this.$toast('版本过低请升级')
             }
           },
           fail: function (json) {
@@ -127,6 +140,57 @@
 
           })
         // window.localStorage.clear(); //清除所有key
+      },
+
+      showPopup() { //修改密码
+        this.isShow = !this.isShow;
+      },
+      submitFn(e) { //提交
+        console.log("password", e.target.password.value);
+        let password = e.target.password.value;
+        let newpassword = e.target.newpassword.value;
+        let pwdRepeat = e.target.pwdRepeat.value;
+        if (password.length < 6) {
+          this.$toast("旧密码至少六位");
+          return;
+        }
+        if (newpassword.length < 6) {
+          this.$toast("新密码至少六位");
+          return;
+        }
+        if (newpassword != pwdRepeat) {
+          this.$toast("新密码不一致");
+          return;
+        }
+        Dialog.confirm({
+            title: '提示',
+            message: '确认修改当前密码',
+          })
+          .then(() => {
+            this.$api.Changepw({
+              username: this.phoneNumber,
+              password: e.target.password.value,
+              newpassword: e.target.newpassword.value
+            }).then(res => {
+              console.log('修改密码', res)
+              if (res.data.code == '200') {
+                this.$toast(res.data.message)
+              } else {
+                e.target.password.value = '';
+                e.target.newpassword.value = '';
+                e.target.pwdRepeat.value = '';
+                this.$toast(res.data.message)
+              }
+            }).catch(err => {
+              this.$toast(err.message);
+              e.target.password.value = '';
+              e.target.newpassword.value = '';
+              e.target.pwdRepeat.value = '';
+            })
+            this.showPopup();
+          }).catch(err => {
+
+          })
       },
     },
     //生命周期 - 创建完成（可以访问当前this实例）
@@ -177,7 +241,7 @@
     border-radius: 10px;
     margin-top: 5px;
     box-sizing: border-box;
-    padding-right: 30px;
+    padding-right: 40px;
   }
 
   .imgWrap {
@@ -205,17 +269,63 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    padding: 16px;
   }
 
   .btnWrap {
     width: 100%;
-    margin-top: 100px;
+    margin-top: 60px;
     display: flex;
     justify-content: center;
   }
 
   .van-button {
-    width: 340px;
+    width: 100%;
+    height: 50px;
     font-size: 16px;
+  }
+
+  .van-popup,
+  .van-popup--center {
+    width: 340px;
+    border-radius: 10px;
+    background: #f1f1f1;
+  }
+
+  .subminWrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+    padding: 10px;
+  }
+
+  .inp {
+    width: 300px;
+    height: 40px;
+    border: none;
+    margin: 10px 0;
+    border-radius: 10px;
+    box-sizing: border-box;
+    padding-left: 10px;
+  }
+
+  .subBtn {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    box-sizing: border-box;
+    padding: 0 50px;
+    margin: 30px 0 10px;
+  }
+
+  .submitBtn {
+    width: 80px;
+    height: 36px;
+    line-height: 36px;
+    border: none;
+    border-radius: 10px;
+    background: #ff9900;
+    color: #fff;
   }
 </style>

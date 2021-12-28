@@ -3,10 +3,24 @@ import store from '../store/index'
 import router from '../router/index'
 let qs = require('querystring')
 import helper from './helper'
-let root = '/api';
 import {
 	Toast
 } from 'vant';
+
+let baseUrl = '';
+let routerMode = 'history';
+let DEBUG = false;
+const cancleHTTP = [];
+if (process.env.NODE_ENV == 'testing') {
+	let baseUrl = "https://w3.morninggo.cn";
+	DEBUG = false;
+} else if (process.env.NODE_ENV == 'production') {
+	baseUrl = "https://api.morninggo.cn";
+	DEBUG = false;
+}
+
+// let root = baseUrl;
+let root = '/api';
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 //  REQUEST 请求异常拦截
 axios.interceptors.request.use(config => {

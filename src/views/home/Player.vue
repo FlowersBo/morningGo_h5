@@ -90,7 +90,7 @@
                 } else {
                   this.getVideo(this.url, this.alarmId, this.factoryno);
                 }
-              }, 4000);
+              }, 3000);
             } else if (res.data.code == 200) {
               console.log('视频', res)
               this.playerOptions.sources[0].src = res.data.data.video;

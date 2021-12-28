@@ -212,10 +212,6 @@
           console.log(err)
         })
       },
-      // async refreshToken() {
-      //   let sliders = await (this.$api.RefreshToken());
-      //   console.log(sliders)
-      // }
     },
 
     //生命周期 - 创建完成（可以访问当前this实例）
@@ -223,8 +219,9 @@
       this.Uploads();
       let assessToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NDEzNzMwOTY1MzcsInBheWxvYWQiOiJ7XCJ3b3Jrcm9sZVwiOlwiMVwiLFwib3BlbmlkXCI6XCJvWjROUDZXa0wtVmdrN2FLUWl6N1h3SUE4Q3kwXCIsXCJuYW1lXCI6XCLniZvpob9cIixcImlkXCI6NDQsXCJncm91cG5hbWVcIjpcIua4qeamhuays-eDpOiCoOi_kOe7tFwiLFwidXNlcm5hbWVcIjpcIjE1MDAxMDgxNzE3XCJ9In0.94CvN_9LGRHBiisJiKlFZ4A2-EE9uZqRhUy9zRjvyVQ";
       localStorage.setItem('assessToken', JSON.stringify(assessToken));
-      // this.getWxJssdkConf();
-      // this.refreshToken()
+      if (JSON.parse(localStorage.getItem('phoneNumber'))) {
+        this.phoneNumber = JSON.parse(localStorage.getItem('phoneNumber'));
+      }
     },
 
     //生命周期 - 挂载完成（可以访问DOM元素）
@@ -233,9 +230,7 @@
       //   this.$router.push('/404')
       //   return
       // };
-      if (JSON.parse(localStorage.getItem('phoneNumber'))) {
-        this.phoneNumber = JSON.parse(localStorage.getItem('phoneNumber'));
-      }
+     
       // let code = this.$route.query.code;
       // if (!code) {
       //   //没有code，去重定向

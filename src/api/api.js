@@ -80,4 +80,7 @@ export default {
   Wechatjsapi(data) {  //获取微信公众号jsapi的签名信息
     return http.post("/userinfo/wechatjsapi", data)
   },
+  Changepw(data) {  //修改密码
+    return http.post("/userinfo/changepw", data)
+  },
 }
