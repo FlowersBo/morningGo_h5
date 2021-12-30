@@ -28,6 +28,9 @@ import api from './api/api.js'
 Vue.prototype.$http = http
 Vue.prototype.$api = api
 
+import qs from 'qs';
+Vue.prototype.$qs = qs;
+
 // 滑动
 import  VueTouch from 'vue-touch'
 Vue.use(VueTouch,{name:'v-touch'})

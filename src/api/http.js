@@ -1,7 +1,8 @@
 import axios from 'axios'
 import store from '../store/index'
 import router from '../router/index'
-let qs = require('querystring')
+// let qs = require('querystring')
+import qs from 'qs'
 import helper from './helper'
 import {
 	Toast
@@ -12,10 +13,13 @@ let routerMode = 'history';
 let DEBUG = false;
 const cancleHTTP = [];
 if (process.env.NODE_ENV == 'testing') {
-	let baseUrl = "https://w3.morninggo.cn";
+	baseUrl = "http://w3.waneyes.com";
 	DEBUG = false;
 } else if (process.env.NODE_ENV == 'production') {
-	baseUrl = "https://api.morninggo.cn";
+	// console.log(process.env.NODE_ENV)
+	// baseUrl = "https://api.morninggo.cn";
+	baseUrl = "http://w3.waneyes.com";
+
 	DEBUG = false;
 }
 
@@ -34,9 +38,7 @@ axios.interceptors.request.use(config => {
 	return config;
 }, err => {
 	// 错误处理
-	// Message.error({
-	// 	message: '请求超时!'
-	// });
+	Toast('请求超时!');
 	return Promise.resolve(err);
 	// return Promise.error(err);
 });
@@ -46,7 +48,23 @@ axios.interceptors.response.use(result => {
 	const that = this;
 	console.log("请求成功");
 	if (result.status === 200) {
-		store.state.isLoading = false
+		store.state.isLoading = false;
+		switch (result.data.code) {
+			case 401:
+				localStorage.removeItem('token');
+				localStorage.removeItem('userInfoLocal');
+				console.log("请求成功401");
+				router.push({
+					name: 'Login'
+				})
+				break;
+			case 403: //请求禁止,跳转到登录页面
+				console.log("请求成功403");
+				router.push({
+					name: 'Login'
+				})
+				break;
+		}
 	}
 	return result;
 }, err => {
@@ -55,20 +73,22 @@ axios.interceptors.response.use(result => {
 	if (err && err.response) {
 		switch (err.response.status) {
 			case 401:
-				err.message = '请求方式错误!';
 				break;
 			case 402:
 				err.message = '请求参数错误!';
 				break;
 			case 403: //请求禁止,跳转到登录页面
 				console.log('跳页面')
-				router.push({
-					name: 'Login'
-				})
+				// router.push({
+				// 	name: 'Login'
+				// })
 				err.message = '请求停止!';
 				break;
 			default:
 				err.message = `登录凭证过期,请重新登录!`;
+				// router.push({
+				// 	name: 'Login'
+				// })
 				store.state.isLoading = false;
 				Toast('请求失败');
 		}
@@ -101,7 +121,7 @@ function apiAxios(method, url, params, token) {
 			baseURL: root,
 			timeout: 10000,
 			headers: {
-				"mg-access-token": JSON.parse(localStorage.getItem('assessToken')),
+				"mg-access-token": JSON.parse(localStorage.getItem('token')),
 				"Content-Type": 'multipart/form-data',
 			}, //jwt
 			withCredentials: false
@@ -119,7 +139,7 @@ function apiAxios(method, url, params, token) {
 			timeout: 10000,
 			headers: {
 				// Authorization: `Bearer ${token}`
-				"mg-access-token": JSON.parse(localStorage.getItem('assessToken')),
+				"mg-access-token": JSON.parse(localStorage.getItem('token')),
 				"Content-Type": 'application/x-www-form-urlencoded',
 			}, //jwt
 			withCredentials: false

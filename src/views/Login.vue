@@ -41,8 +41,9 @@
     WeixinReturnBlock,
     WeixinCloseWindow
   } from '../utils/util.js'
-
+  import preventBack from 'vue-prevent-browser-back'
   export default {
+    mixins: [preventBack], //禁止返回
     name: "login",
     components: {
       HeaderTitle,
@@ -54,7 +55,7 @@
       return {
         imgUrl: '',
         titleDec: "登录",
-        textDec: "忘记密码",
+        textDec: "",
         phoneNumber: '15001081717',
         inputPassword: '',
         verificationCode: '', //验证码
@@ -71,7 +72,6 @@
     //方法集合
     methods: { // 调用时使用
       ...mapMutations(['changeisLoading']),
-
       getIsWxClient() {
         var ua = navigator.userAgent.toLowerCase();
         if (ua.match(/MicroMessenger/i) == "micromessenger") {
@@ -79,22 +79,6 @@
         }
         return false;
       },
-
-      getOpenId(code) {
-        // api.RefreshToken().then((res) => {
-        //   if (res.data.code == 200) {
-        //     let data = res.data || {};
-        //     this.$router.push('/Login')
-        //   } else {
-        //     //获取异常，关闭当前窗口
-        //     console.log('获取异常')
-        //     // setTimeout(() => {
-        //     //   WeixinCloseWindow()
-        //     // }, 2000)
-        //   }
-        // })
-      },
-
 
       // 切换验证码登录
       switchoverCodeFn() {
@@ -125,25 +109,26 @@
           }
         }
         console.log(this.phoneNumber, this.inputPassword, this.logintype);
-        let reqData = {
+        this.$api.Login({
           username: this.phoneNumber,
           password: this.inputPassword,
           type: this.logintype,
-          code: '031D5e1000N0TM1jeR300SgS890D5e15'
-        };
-        this.$api.Login(reqData).then(res => {
+          code: JSON.parse(localStorage.getItem('code')) 
+        }).then(res => {
           console.log('返回', res);
           if (res.data.code == 200) {
-            localStorage.setItem('assessToken', JSON.stringify(res.data.data.token));
-            localStorage.setItem('phoneNumber', JSON.stringify(res.data.data.user.username));
+            let token = res.data.data.token;
+            localStorage.setItem('userInfoLocal', JSON.stringify(res.data.data.user));
+            localStorage.setItem('token', JSON.stringify(token));
+            // window.location.href = location.href.split('#')[0];
+            this.$router.push({
+              // path: '/Home'
+              name: 'Home',
+              params: {
+                phoneNumber: this.phoneNumber
+              }
+            })
           }
-          this.$router.push({
-            // path: '/Home'
-            name: 'Home',
-            params: {
-              phoneNumber: this.phoneNumber
-            }
-          })
         }).catch((err) => {
           this.changeisLoading(true);
           console.log(err)
@@ -188,61 +173,25 @@
           }
         }, 1000)
       },
-
-      Uploads() {
-        // if (window.location.href.indexOf("state") !== -1) {
-        //   this.code = qs.parse(
-        //     window.location.href.split("#")[0].split("?")[1]
-        //   ).code;
-        // }
-        // console.log(this.code);
-        //   this.$api.Login(data).then(res => {
-        //     console.log('返回',res)
-        //   }).catch((err) => {
-        //     console.log(err)
-        //   })
-        // }
-        // let postData = {
-        //   refreshtoken: localStorage.getItem('assessToken')
-        // }
-        this.$api.RefreshToken().then(res => {
-          console.log('返回', res)
-        }).catch((err) => {
-          this.changeisLoading(true);
-          console.log(err)
-        })
-      },
     },
 
     //生命周期 - 创建完成（可以访问当前this实例）
     created() {
-      this.Uploads();
-      let assessToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NDEzNzMwOTY1MzcsInBheWxvYWQiOiJ7XCJ3b3Jrcm9sZVwiOlwiMVwiLFwib3BlbmlkXCI6XCJvWjROUDZXa0wtVmdrN2FLUWl6N1h3SUE4Q3kwXCIsXCJuYW1lXCI6XCLniZvpob9cIixcImlkXCI6NDQsXCJncm91cG5hbWVcIjpcIua4qeamhuays-eDpOiCoOi_kOe7tFwiLFwidXNlcm5hbWVcIjpcIjE1MDAxMDgxNzE3XCJ9In0.94CvN_9LGRHBiisJiKlFZ4A2-EE9uZqRhUy9zRjvyVQ";
-      localStorage.setItem('assessToken', JSON.stringify(assessToken));
-      if (JSON.parse(localStorage.getItem('phoneNumber'))) {
-        this.phoneNumber = JSON.parse(localStorage.getItem('phoneNumber'));
+      let code = localStorage.getItem('code');
+      if (code) {
+        console.log('有code', code)
+        return
+      } else {
+        let code = WeixinCode();
+        console.log(code);
+        if (code) {
+          localStorage.setItem('code', JSON.stringify(code));
+        }
       }
     },
 
     //生命周期 - 挂载完成（可以访问DOM元素）
-    mounted() {
-      // if (!this.getIsWxClient()) {
-      //   this.$router.push('/404')
-      //   return
-      // };
-     
-      // let code = this.$route.query.code;
-      // if (!code) {
-      //   //没有code，去重定向
-      //   WeixinCode()
-      //   console.log('获取code', WeixinCode())
-      // } else {
-      //   //添加返回拦截
-      //   WeixinReturnBlock.addEvent();
-      //   //根据code，获取信息
-      //   this.getOpenId(code)
-      // }
-    },
+    mounted() {},
     //生命周期-创建之前
     beforeCreated() {},
     //生命周期-挂载之前
@@ -254,9 +203,7 @@
     //生命周期-销毁之前
     beforeDestory() {},
     //生命周期-销毁完成
-    destoryed() {
-      WeixinReturnBlock.removeEvent();
-    },
+    destoryed() {},
     //如果页面有keep-alive缓存功能，这个函数会触发
     activated() {}
   }

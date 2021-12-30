@@ -41,7 +41,9 @@
     methods: {
       // 返回上一页
       getBack() {
-        this.$router.back(-1);
+        console.log('返回上一页');
+        // this.$router.back(-1);
+        window.history.back()
       },
       // 跳转修改密码
       gotoHome() {

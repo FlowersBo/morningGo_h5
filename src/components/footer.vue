@@ -50,7 +50,7 @@
     methods: {
       onChange(index) {
         const routerArray = [
-          "/Home",
+          "/",
           "/Repertory",
           "/Prebake",
           "/Equipment",

@@ -6,10 +6,10 @@
         <div class="imgWrap">
           <van-image class="img" width="90" height="46" :src="require('@/img/logo.png')" />
         </div>
-        <div class="infoPhone">登录账号：{{phoneNumber}}</div>
+        <div class="infoPhone">登录账号：{{userInfoLocal.username}}</div>
       </div>
       <div class="info">
-        <van-cell title="所在小组:" />
+        <van-cell title="所在小组:">{{userInfoLocal.groupname}}</van-cell>
         <van-cell title="订单列表" is-link to="OrderList" />
         <van-cell title="扫一扫" is-link @click="qrCode" />
         <van-cell title="修改密码" is-link @click="showPopup" />
@@ -67,13 +67,14 @@
     //方法集合
     methods: {
       wechatLogin() {
+        console.log(parent.location.href)
         console.log(location.href.split("#")[0])
         let url = location.href.split("#")[0];
         url = 'https://api.morninggo.cn/h5/user.html';
         this.$api.Wechatjsapi({
           url
         }).then(res => {
-          console.log('签名返回',res)
+          console.log('签名返回', res)
           let ticket = res.data.data.ticket;
           wx.config({
             debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
@@ -124,8 +125,6 @@
         });
       },
 
-
-
       logOut() {
         console.log('退出登录')
         Dialog.confirm({
@@ -133,8 +132,11 @@
             message: '确认退出登录',
           })
           .then(() => {
+            localStorage.removeItem('token');
+            localStorage.removeItem('userInfoLocal');
+            localStorage.removeItem('code');
             this.$router.push({
-              path: '/'
+              path: '/Login'
             })
           }).catch(err => {
 
@@ -195,7 +197,7 @@
     },
     //生命周期 - 创建完成（可以访问当前this实例）
     created() {
-      this.phoneNumber = JSON.parse(localStorage.getItem('phoneNumber'));
+      this.userInfoLocal = JSON.parse(localStorage.getItem('userInfoLocal'));
       this.wechatLogin();
     },
     //生命周期 - 挂载完成（可以访问DOM元素）

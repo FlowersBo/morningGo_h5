@@ -66,14 +66,15 @@
   import {
     Login
   } from "@/api/api.js";
-
+  import preventBack from 'vue-prevent-browser-back'
   export default {
+    mixins: [preventBack], //禁止返回
     data() {
       return {
         pageindex: 1,
         pagesize: 50,
         searchType: '',
-        imgUrl: require('@/img/back.png'),
+        imgUrl: '',
         titleDec: "告警",
         textDec: "",
         footerActive: 0,
@@ -93,7 +94,7 @@
         finished: false, //是否已加载完成，加载完成后不再触发load事件
         refreshing: false, //刷新成功为false
         error: false, //是否加载失败，加载失败后点击错误提示可以重新触发load事件
-        isShow: false
+        isShow: true
       }
     },
     components: {
@@ -111,8 +112,9 @@
           pageindex: this.pageindex,
           pagesize: this.pagesize
         }
-        this.$api.Alarmlist(data).then(res => {
-          console.log('返回', res);
+        this.$api.Alarmlist(data)
+        .then(res => {
+          console.log('告警列表返回', res);
           this.isShow = false;
           if (this.refreshing) {
             this.refreshing = false; //刷新成功
@@ -226,14 +228,32 @@
             alarmcode
           }
         })
+      },
+      refreshToken() {
+        this.$api.RefreshToken({}).then(res => {
+          console.log('token是否过期', res)
+          if(res.data.code==200){
+            this.DevicelistFn();
+          }
+        }).catch(err => {
+
+        })
       }
     },
     //生命周期 - 创建完成（可以访问当前this实例）
     created() {
-      this.DevicelistFn();
+      this.refreshToken();
+      console.log(location.href.split("#")[0])
+      // parent.location.href = location.href+'Login'
+      // 下边禁止返回
+      history.pushState(null, null, document.URL);
+      window.addEventListener("popstate", function () {
+        history.pushState(null, null, document.URL);
+      });
     },
     //生命周期 - 挂载完成（可以访问DOM元素）
     mounted() {
+				localStorage.removeItem('assessToken');
       // console.log(this.$route.params.phoneNumber);//获取上一页路由传参
     },
     //生命周期-创建之前
