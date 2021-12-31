@@ -98,12 +98,12 @@
           return;
         }
         if (this.logintype === 1) {
-          if (this.inputPassword.length < 0) {
+          if (this.inputPassword.length <= 0) {
             this.$toast('密码不能为空');
             return;
           }
         } else {
-          if (this.verificationCode.length < 0) {
+          if (this.verificationCode.length <= 0) {
             this.$toast('验证码不能为空');
             return;
           }
@@ -128,6 +128,8 @@
                 phoneNumber: this.phoneNumber
               }
             })
+          }else{
+            this.$toast(res.data.message);
           }
         }).catch((err) => {
           this.changeisLoading(true);
@@ -152,7 +154,7 @@
         };
         this.verificationCodeText = 60;
         this.$api.Getsmscode(reqData).then(res => {
-          console.log('返回', res)
+          console.log('返回', res);
           this.codeFn();
         }).catch((err) => {
           console.log(err)

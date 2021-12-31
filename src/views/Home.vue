@@ -246,10 +246,10 @@
       console.log(location.href.split("#")[0])
       // parent.location.href = location.href+'Login'
       // 下边禁止返回
-      history.pushState(null, null, document.URL);
-      window.addEventListener("popstate", function () {
-        history.pushState(null, null, document.URL);
-      });
+      // history.pushState(null, null, document.URL);
+      // window.addEventListener("popstate", function () {
+      //   history.pushState(null, null, document.URL);
+      // });
     },
     //生命周期 - 挂载完成（可以访问DOM元素）
     mounted() {

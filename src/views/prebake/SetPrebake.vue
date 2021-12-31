@@ -118,52 +118,55 @@
           factoryno
         }).then(res => {
           console.log('烤盘信息', res);
-          this.hotplate = res.data.data.hotplate;
-          this.hotplate.forEach(element => {
-            if (element.addressType == '1') {
-              element.addressType = "加热区";
-              element.bgc = true;
-            } else {
-              element.addressType = "保温区";
-              element.bgc = false;
-            }
-            let nowTime = new Date().getTime();
-            let d, h, m, s, m2, s2;
-            let showTime = "-";
-            let temperIsReach = "空";
-            if (element.haveSausage) {
-              let roastStatus = "";
-              //如果当前时间大于烤制结束时间
-              if (nowTime > element.endRoastTime) {
-                //烤制完成
-                let warmTime = new Date().getTime() - element.endRoastTime;
-                if (warmTime >= 0) {
-                  d = Math.floor(warmTime / 1000 / 60 / 60 / 24);
-                  h = Math.floor(warmTime / 1000 / 60 / 60 % 24);
-                  m2 = Math.floor(warmTime / 1000 / 60 % 60);
-                  s2 = Math.floor(warmTime / 1000 % 60);
-                }
-                roastStatus = "烤制完成";
-                element.showTime = h + "时" + m2 + "分" + s2 + "秒";
-
+          if (res.data.code == 200) {
+            this.hotplate = res.data.data.hotplate;
+            this.hotplate.forEach(element => {
+              if (element.addressType == '1') {
+                element.addressType = "加热区";
+                element.bgc = true;
               } else {
-                //烤制中
-                let roastTime = new Date().getTime() - element.startRoastTime;
-                if (roastTime >= 0) {
-                  m = Math.floor(roastTime / 1000 / 60 % 60);
-                  s = Math.floor(roastTime / 1000 % 60);
-                }
-                roastStatus = "烤制中";
-                element.showTime = m + "分" + s + "秒";
+                element.addressType = "保温区";
+                element.bgc = false;
               }
-              element.temperIsReach = element.stock;
-              element.roastStatus = roastStatus;
-            } else {
-              element.temperIsReach = temperIsReach;
-              element.showTime = '-'
-            }
+              let nowTime = new Date().getTime();
+              let d, h, m, s, m2, s2;
+              let showTime = "-";
+              let temperIsReach = "空";
+              if (element.haveSausage) {
+                let roastStatus = "";
+                //如果当前时间大于烤制结束时间
+                if (nowTime > element.endRoastTime) {
+                  //烤制完成
+                  let warmTime = new Date().getTime() - element.endRoastTime;
+                  if (warmTime >= 0) {
+                    d = Math.floor(warmTime / 1000 / 60 / 60 / 24);
+                    h = Math.floor(warmTime / 1000 / 60 / 60 % 24);
+                    m2 = Math.floor(warmTime / 1000 / 60 % 60);
+                    s2 = Math.floor(warmTime / 1000 % 60);
+                  }
+                  roastStatus = "烤制完成";
+                  element.showTime = h + "时" + m2 + "分" + s2 + "秒";
 
-          });
+                } else {
+                  //烤制中
+                  let roastTime = new Date().getTime() - element.startRoastTime;
+                  if (roastTime >= 0) {
+                    m = Math.floor(roastTime / 1000 / 60 % 60);
+                    s = Math.floor(roastTime / 1000 % 60);
+                  }
+                  roastStatus = "烤制中";
+                  element.showTime = m + "分" + s + "秒";
+                }
+                element.temperIsReach = element.stock;
+                element.roastStatus = roastStatus;
+              } else {
+                element.temperIsReach = temperIsReach;
+                element.showTime = '-'
+              }
+            });
+          } else {
+            this.$toast(res.data.message);
+          }
         }).catch((err) => {
           console.log(err)
         })
@@ -374,7 +377,7 @@
   tr {
     height: 40px;
   }
- 
+
   th,
   td {
     text-align: center;

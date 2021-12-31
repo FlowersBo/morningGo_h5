@@ -18,7 +18,7 @@
             <td>
               <div class="library">{{item.count}}</div>
             </td>
-            <td><input type="number" v-model="item.number" v-on:input="numberInpChange(index)"/></td>
+            <td><input type="number" v-model="item.number" v-on:input="numberInpChange(index)" /></td>
             <td><input type="number" v-model="item.warn" v-on:input="numberInpChange(index)" /></td>
             <td>
               <button class="btn" @click="removeFn(index)">清零</button>
@@ -87,17 +87,19 @@
     watch: {},
     //方法集合
     methods: {
-      readRepertoryFn(factoryno) { //读取烤盘数据
+      readRepertoryFn(factoryno) {
         this.$api.Getstock({
           factoryno
         }).then(res => {
-          console.log('烤盘数据', res);
+          console.log('库存数据', res);
           if (res.data.code == 200) {
             let stock = res.data.data.stock;
             this.plateData[0].count = stock.astock;
             this.plateData[1].count = stock.bstock;
             this.plateData[2].count = stock.pegwood;
             this.plateData[3].count = stock.discardedbox;
+          } else {
+            this.$toast(res.data.message);
           }
         }).catch(err => {})
       },
@@ -110,7 +112,11 @@
                 message: `${element.name}库存清零`,
               })
               .then(() => {
-                element.count = 0;
+                // if(res.data.code == 200){
+                //   element.count = 0;
+                // }else{
+                //   this.$toast(res.data.message);
+                // }
               }).catch(() => {
 
               });
@@ -145,7 +151,11 @@
                 this.$api.Changestock({
                   factoryno
                 }).then(res => {
-
+                  console.log('库存设置',res);
+                  if (res.data.code == 200) {
+                  } else {
+                    this.$toast(res.data.message);
+                  }
                 }).catch(err => {
 
                 })

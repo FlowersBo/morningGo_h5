@@ -299,16 +299,20 @@
             title: '提示',
             message: `确认要${commandText}`,
           }).then(() => {
-            // this.$api.Pubcmd({
-            //   factoryno: this.device.factoryno,
-            //   pointname: this.device.pointname,
-            //   deviceno: this.device.deviceno,
-            //   command
-            // }).then(res => {
-            console.log(commandText + ':' + res);
-            // }).catch(err => {})
+            this.$api.Pubcmd({
+              factoryno: this.device.factoryno,
+              pointname: this.device.pointname,
+              deviceno: this.device.deviceno,
+              command
+            }).then(res => {
+              console.log(commandText,res);
+              if (res.data.code == 200) {
+                this.$toast(commandText + '成功')
+              } else {
+                this.$toast(res.data.message);
+              }
+            }).catch(err => {})
           }).catch(err => {})
-
         }
       },
     },

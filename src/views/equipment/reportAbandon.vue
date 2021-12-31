@@ -192,6 +192,8 @@
               formData
             }).then(res => {
               console.log('上传成功', res)
+              this.$toast('上传成功');
+              this.$router.go(-1);
             }).catch(err => {
               this.$toast(err.message);
             })

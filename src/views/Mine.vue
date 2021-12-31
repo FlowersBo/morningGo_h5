@@ -67,10 +67,9 @@
     //方法集合
     methods: {
       wechatLogin() {
-        console.log(parent.location.href)
-        console.log(location.href.split("#")[0])
+        // console.log(parent.location.href)
+        console.log('域名',location.href.split("#")[0])
         let url = location.href.split("#")[0];
-        url = 'https://api.morninggo.cn/h5/user.html';
         this.$api.Wechatjsapi({
           url
         }).then(res => {
@@ -99,17 +98,15 @@
           scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
           success: function (res) {
             let result = res.resultStr;
-            console.log(result);
-            // let reqData = {
-            //   username: loginname,
-            //   factoryno: result
-            // };
-            // this.$api.Qrcodelogin({})
-            // .then(res=>{
+            console.log('扫码返回',result);
+            this.$api.Qrcodelogin({
+              username: this.userInfoLocal, factoryno: result 
+            })
+            .then(res=>{
+              console.log('扫码登陆');
+            }).catch(err=>{
 
-            // }).catch(err=>{
-
-            // })
+            })
           },
           error: function (res) {
             if (res.errMsg.indexOf('function_not_exist') > 0) {
@@ -266,11 +263,13 @@
   }
 
   .info .van-cell {
+    width: 360px;
     margin: 10px 0;
     border-radius: 4px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    box-sizing: border-box;
     padding: 16px;
   }
 

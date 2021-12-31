@@ -72,7 +72,11 @@
           })
           .then(res => {
             console.log('设备信息', res);
-            this.deviceinfo = res.data.data.deviceinfo;
+            if(res.data.code==200){
+              this.deviceinfo = res.data.data.deviceinfo;
+            }else{
+              this.$toast(res.data.message);
+            }
           })
           .catch(err => {
 

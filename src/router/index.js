@@ -110,22 +110,22 @@ router.beforeEach((to, from, next) => {
   // from: Route: 当前导航正要离开的路由
   // next: Function: 必定要调用该方法来 resolve 这个钩子。执行效果依赖 next 方法的调用参数
   console.log(to, from);
-  // const nextRoute = ['home', 'good-list', 'good-detail', 'cart', 'profile'];
+  // const nextRoute = ['Home', 'Login'];
   // let isLogin = global.isLogin; // 是否登陆
   // // 未登陆状态；当路由到nextRoute指定页时，跳转至login
   // if (nextRoute.indexOf(to.name) >= 0) {
   //   if (!isLogin) {
   //     console.log('what fuck');
   //     router.push({
-  //       name: 'login'
+  //       name: 'Login'
   //     })
   //   }
   // }
   // // 已登陆状态；当路由到login时，跳转至home 
-  // if (to.name === 'login') {
+  // if (to.name === 'Login') {
   //   if (isLogin) {
   //     router.push({
-  //       name: 'home'
+  //       name: 'Home'
   //     });
   //   }
   // }
