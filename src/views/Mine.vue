@@ -39,6 +39,7 @@
   import HeaderTitle from '../components/HeaderTitle.vue';
   import Footer from '@/components/footer.vue';
   import wx from "weixin-jsapi";
+  // import wx from "weixin-js-sdk";
   import {
     Dialog
   } from 'vant';
@@ -68,23 +69,21 @@
     methods: {
       wechatLogin() {
         // console.log(parent.location.href)
-        console.log('域名',location.href.split("#")[0])
-        let url = location.href.split("#")[0];
+        console.log('域名', window.location.href.split("#")[0])
+        // let url = location.href.split("#")[0];
+        let url = window.location.href.split("#")[0];
         this.$api.Wechatjsapi({
           url
         }).then(res => {
-          console.log('签名返回', res)
+          console.log('签名返回：', res)
           let ticket = res.data.data.ticket;
           wx.config({
             debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-            appId: ticket.appid, // 必填， 公众号的唯一标识
+            appId: ticket.appId, // 必填， 公众号的唯一标识
             timestamp: ticket.timestamp, // 必填，生成签名的时间戳
             nonceStr: ticket.nonceStr, // 必填，生成签名的随机串
             signature: ticket.signature, // 必填，签名，见附录1
             jsApiList: ["scanQRCode"] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
-          });
-          wx.ready(function (res) {
-            console.log("wx.ready", res);
           });
           wx.error(function (res) {
             console.log("调用微信jsapi返回的状态:" + res.errMsg);
@@ -92,33 +91,36 @@
         }).catch(err => {})
       },
       qrCode() {
-        wx.scanQRCode({
-          needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
-          //desc: 'scanQRCode desc',
-          scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
-          success: function (res) {
-            let result = res.resultStr;
-            console.log('扫码返回',result);
-            this.$api.Qrcodelogin({
-              username: this.userInfoLocal, factoryno: result 
+        console.log('扫码haa');
+        wx.ready(function () {
+        //{errMsg: "scanQRCode:ok", resultStr: "{"scan_code": {"scan_result":"scan resultStr is here"}}"}
+          wx.scanQRCode({
+            needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+            scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
+            success: function (res) {
+              let result = res.resultStr;
+              console.log('扫码返回', result);
+              this.$api.Qrcodelogin({
+                  username: this.userInfoLocal,
+                  factoryno: result
+                })
+                .then(res => {
+                  console.log('扫码登陆');
+                }).catch(err => {
+                  console.log('扫码登陆失败', err);
+                })
+            },
+            fail: (err => {
+              console.log('扫码错误返回', err);
+              if (res.errMsg.indexOf('function_not_exist') > 0) {
+                this.$toast('版本过低请升级')
+              }
+            }),
+            complete: (res => {
+              console.log('扫码', res);
             })
-            .then(res=>{
-              console.log('扫码登陆');
-            }).catch(err=>{
+          })
 
-            })
-          },
-          error: function (res) {
-            if (res.errMsg.indexOf('function_not_exist') > 0) {
-              this.$toast('版本过低请升级')
-            }
-          },
-          fail: function (json) {
-            //this.$toast("fail");
-          },
-          complete: function (json) {
-            //this.$toast("complete");
-          }
         });
       },
 

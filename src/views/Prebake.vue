@@ -9,7 +9,7 @@
             <div class="alarm-content">
               <div class="content-item">
                 <div class="itemKey">设备编号：</div>
-                <div class="itemValue">{{item.deviceno}} (出厂编号)</div>
+                <div class="itemValue">{{item.factoryno}} (出厂编号)</div>
               </div>
               <div class="content-item">
                 <div class="itemKey">点位名称：</div>

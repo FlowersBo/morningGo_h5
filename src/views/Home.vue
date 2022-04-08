@@ -113,40 +113,42 @@
           pagesize: this.pagesize
         }
         this.$api.Alarmlist(data)
-        .then(res => {
-          console.log('告警列表返回', res);
-          this.isShow = false;
-          if (this.refreshing) {
-            this.refreshing = false; //刷新成功
-          }
-          // 加载状态结束
-          this.loading = false;
-          if (this.active === 0) {
-            this.total = res.data.data.allCount;
-          } else if (this.active === 1) {
-            this.total = res.data.data.oneCount;
-          } else {
-            this.total = res.data.data.twoCount;
-          }
-          let totalList = [{
-            totalCount: res.data.data.allCount
-          }, {
-            totalCount: res.data.data.oneCount
-          }, {
-            totalCount: res.data.data.twoCount
-          }];
-          this.badgeNumber = res.data.data.allCount;
-          sessionStorage.setItem('badgeNumber', JSON.stringify(res.data.data.allCount));
-          this.navTab = this.navTab.map((item, index) => {
-            return {
-              ...item,
-              ...totalList[index]
-            };
-          });
-          this.deviceList.push(...res.data.data.alarmlist);
-        }).catch((err) => {
-          console.log(err)
-        })
+          .then(res => {
+            console.log('告警列表返回', res);
+            this.isShow = false;
+            this.finished = false;
+            console.log('加载重置',this.isShow);
+            if (this.refreshing) {
+              this.refreshing = false; //刷新成功
+            }
+            // 加载状态结束
+            this.loading = false;
+            if (this.active === 0) {
+              this.total = res.data.data.allCount;
+            } else if (this.active === 1) {
+              this.total = res.data.data.oneCount;
+            } else {
+              this.total = res.data.data.twoCount;
+            }
+            let totalList = [{
+              totalCount: res.data.data.allCount
+            }, {
+              totalCount: res.data.data.oneCount
+            }, {
+              totalCount: res.data.data.twoCount
+            }];
+            this.badgeNumber = res.data.data.allCount;
+            sessionStorage.setItem('badgeNumber', JSON.stringify(res.data.data.allCount));
+            this.navTab = this.navTab.map((item, index) => {
+              return {
+                ...item,
+                ...totalList[index]
+              };
+            });
+            this.deviceList.push(...res.data.data.alarmlist);
+          }).catch((err) => {
+            console.log(err)
+          })
       },
 
       onLoad() {
@@ -232,7 +234,7 @@
       refreshToken() {
         this.$api.RefreshToken({}).then(res => {
           console.log('token是否过期', res)
-          if(res.data.code==200){
+          if (res.data.code == 200) {
             this.DevicelistFn();
           }
         }).catch(err => {
@@ -253,7 +255,7 @@
     },
     //生命周期 - 挂载完成（可以访问DOM元素）
     mounted() {
-				localStorage.removeItem('assessToken');
+      localStorage.removeItem('assessToken');
       // console.log(this.$route.params.phoneNumber);//获取上一页路由传参
     },
     //生命周期-创建之前

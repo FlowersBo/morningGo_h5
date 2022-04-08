@@ -42,9 +42,10 @@ VueTouch.config.swipe = {
 import VideoPlayer from 'vue-video-player'
 import 'video.js/dist/video-js.css'
 Vue.use(VideoPlayer)
+import wx from "weixin-js-sdk";
 
-import wxsdk from 'weixin-jsapi';
-Vue.prototype.wx = wxsdk
+// import wxsdk from 'weixin-jsapi';
+// Vue.prototype.wx = wxsdk
 
 Vue.config.productionTip = false
 fastClick.attach(document.body)

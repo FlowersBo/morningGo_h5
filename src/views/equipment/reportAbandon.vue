@@ -138,7 +138,7 @@
 
 
       compress(img) { //压缩图片
-        let url = ''
+        let url = '';
         var w = Math.min(1900, img.width); //当图片像素>1900的时候，等比例压缩，这个数字可以调
         var h = img.height * (w / img.width);
         var canvas = document.createElement('canvas')
