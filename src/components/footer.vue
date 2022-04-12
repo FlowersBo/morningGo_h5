@@ -56,7 +56,12 @@
           "/Equipment",
           "/Mine"
         ];
-        this.$router.push(routerArray[index]);
+        if (index == 4) {
+          console.log('window.location.href跳转',index)
+          window.location.href = '/Mine'
+        } else {
+          this.$router.push(routerArray[index]);
+        }
       },
       updateBadgeNumber() {
         // setTimeout(() => {

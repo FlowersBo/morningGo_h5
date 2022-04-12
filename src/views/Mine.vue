@@ -91,37 +91,50 @@
         }).catch(err => {})
       },
       qrCode() {
-        console.log('扫码haa');
+        let that = this;
         wx.ready(function () {
-        //{errMsg: "scanQRCode:ok", resultStr: "{"scan_code": {"scan_result":"scan resultStr is here"}}"}
           wx.scanQRCode({
             needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
             scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
             success: function (res) {
               let result = res.resultStr;
-              console.log('扫码返回', result);
-              this.$api.Qrcodelogin({
-                  username: this.userInfoLocal,
-                  factoryno: result
-                })
-                .then(res => {
-                  console.log('扫码登陆');
-                }).catch(err => {
-                  console.log('扫码登陆失败', err);
-                })
+              result = result.split('/', 1)[0];
+              that.qrLogin(result);
             },
             fail: (err => {
               console.log('扫码错误返回', err);
               if (res.errMsg.indexOf('function_not_exist') > 0) {
                 this.$toast('版本过低请升级')
               }
-            }),
-            complete: (res => {
-              console.log('扫码', res);
             })
           })
-
         });
+      },
+      qrLogin: function (result) {
+        console.log('当前factryNo', result);
+        this.$api.Qrcodelogin({
+            username: this.userInfoLocal.username,
+            factoryno: result
+          }).then(res => {
+            console.log('扫码登陆', res);
+            if (res.data.code !== 200) {
+              Dialog.confirm({
+                title: '提示',
+                message: res.data.message,
+              })
+            } else {
+              Dialog.confirm({
+                title: '提示',
+                message: '登录成功',
+              })
+            }
+          }).catch(err => {
+            console.log('扫码登陆失败', err);
+            Dialog.confirm({
+              title: '提示',
+              message: '登陆失败',
+            })
+          })
       },
 
       logOut() {

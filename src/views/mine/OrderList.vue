@@ -89,18 +89,20 @@
         this.$api.OrderList(data).then(res => {
           console.log('返回', res);
           this.isShow = false;
+          this.finished = false;
           if (this.refreshing) {
             this.refreshing = false; //刷新成功
           }
           // 加载状态结束
           this.loading = false;
-          if (this.active === 0) {
-            this.total = res.data.data.total;
-          } else if (this.active === 1) {
-            this.total = res.data.data.total;
-          } else {
-            this.total = res.data.data.total;
-          }
+          this.total = res.data.data.total;
+          // if (this.active === 0) {
+          //   this.total = res.data.data.total;
+          // } else if (this.active === 1) {
+          //   this.total = res.data.data.total;
+          // } else {
+          //   this.total = res.data.data.total;
+          // }
           // let totalList = [{
           //   totalCount: res.data.data.allCount
           // }, {
@@ -284,5 +286,9 @@
     right: 12px;
     left: 12px;
     z-index: 99;
+  }
+  .van-cell {
+    width: 350px;
+    padding: 0;
   }
 </style>

@@ -103,7 +103,6 @@ const router = new VueRouter({
 
 
 // 全局路由守卫
-
 router.beforeEach((to, from, next) => {
   console.log('navigation-guards');
   // to: Route: 即将要进入的目标 路由对象
