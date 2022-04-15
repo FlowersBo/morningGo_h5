@@ -10,32 +10,50 @@ Vue.use(VueRouter)
 const routes = [{
     path: '/Login',
     name: 'Login',
-    component: () => import('../views/Login.vue')
+    component: () => import('../views/Login.vue'),
+    meta:{
+      requireAuth: false
+    }
   },
   {
     path: '/',
     name: 'Home',
-    component: () => import('../views/Home.vue')
+    component: () => import('../views/Home.vue'),
+    meta:{
+      requireAuth: false
+    }
   },
   {
     path: '/Repertory',
     name: 'Repertory',
-    component: () => import( /* webpackChunkName: "Repertory" */ '../views/Repertory.vue')
+    component: () => import( /* webpackChunkName: "Repertory" */ '../views/Repertory.vue'),
+    meta:{
+      requireAuth: true
+    }
   },
   {
     path: '/Prebake',
     name: 'Prebake',
-    component: () => import('../views/Prebake.vue')
+    component: () => import('../views/Prebake.vue'),
+    meta:{
+      requireAuth: true
+    }
   },
   {
     path: '/Equipment',
     name: 'Equipment',
-    component: () => import('../views/Equipment.vue')
+    component: () => import('../views/Equipment.vue'),
+    meta:{
+      requireAuth: true
+    }
   },
   {
     path: '/Mine',
     name: 'Mine',
-    component: () => import('../views/Mine.vue')
+    component: () => import('../views/Mine.vue'),
+    meta:{
+      requireAuth: true
+    }
   },
   {
     path: '/Player',
@@ -103,12 +121,12 @@ const router = new VueRouter({
 
 
 // 全局路由守卫
-router.beforeEach((to, from, next) => {
-  console.log('navigation-guards');
+// router.beforeEach((to, from, next) => {
+  // console.log('navigation-guards');
   // to: Route: 即将要进入的目标 路由对象
   // from: Route: 当前导航正要离开的路由
   // next: Function: 必定要调用该方法来 resolve 这个钩子。执行效果依赖 next 方法的调用参数
-  console.log(to, from);
+  // console.log(to, from);
   // const nextRoute = ['Home', 'Login'];
   // let isLogin = global.isLogin; // 是否登陆
   // // 未登陆状态；当路由到nextRoute指定页时，跳转至login
@@ -128,7 +146,7 @@ router.beforeEach((to, from, next) => {
   //     });
   //   }
   // }
-  next();
-});
+  // next();
+// });
 
 export default router

@@ -9,7 +9,7 @@
         <div class="infoPhone">登录账号：{{userInfoLocal.username}}</div>
       </div>
       <div class="info">
-        <van-cell title="所在小组:">{{userInfoLocal.groupname}}</van-cell>
+        <van-cell title="所在小组：">{{userInfoLocal.groupname}}</van-cell>
         <van-cell title="订单列表" is-link to="OrderList" />
         <van-cell title="扫一扫" is-link @click="qrCode" />
         <van-cell title="修改密码" is-link @click="showPopup" />
@@ -57,7 +57,6 @@
         titleDec: "我的",
         textDec: "",
         active: 4,
-        phoneNumber: '',
         isShow: false
       }
     },
@@ -182,7 +181,7 @@
           })
           .then(() => {
             this.$api.Changepw({
-              username: this.phoneNumber,
+              username: this.userInfoLocal.username,
               password: e.target.password.value,
               newpassword: e.target.newpassword.value
             }).then(res => {

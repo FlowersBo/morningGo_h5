@@ -120,6 +120,7 @@
             let token = res.data.data.token;
             localStorage.setItem('userInfoLocal', JSON.stringify(res.data.data.user));
             localStorage.setItem('token', JSON.stringify(token));
+            this.$store.state.token = res.data.data.token;
             // window.location.href = location.href.split('#')[0];
             this.$router.push({
               // path: '/Home'

@@ -5,6 +5,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     isLoading: false, //loading全局开关
+    token: ''
   },
   mutations: {
     changeisLoading(state, data) {
