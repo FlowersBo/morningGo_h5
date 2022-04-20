@@ -452,7 +452,7 @@
   .van-sticky--fixed {
     position: fixed;
     top: 0;
-    right: 0;
-    left: 0;
+    right: 0 !important;
+    left: 0 !important;
   }
 </style>

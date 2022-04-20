@@ -21,8 +21,8 @@
             <td><input type="number" v-model="item.number" v-on:input="numberInpChange(index)" /></td>
             <td><input type="number" v-model="item.warn" v-on:input="numberInpChange(index)" /></td>
             <td>
-              <button class="btn" @click="removeFn(index)">清零</button>
-              <button class="btn" @click="saveFn(index)">保存</button>
+              <button class="btn" @click="saveFn(index,'sub')">清零</button>
+              <button class="btn" @click="saveFn(index,'add')">保存</button>
             </td>
             <!-- <td><button @click="insert">insert</button></td> -->
           </tr>
@@ -98,6 +98,10 @@
             this.plateData[1].count = stock.bstock;
             this.plateData[2].count = stock.pegwood;
             this.plateData[3].count = stock.discardedbox;
+            this.plateData[0].warn = stock.aStockLimit;
+            this.plateData[1].warn = stock.bStockLimit;
+            this.plateData[2].warn = stock.pegwoodLimit;
+            this.plateData[3].warn = stock.discardedLimit;
           } else {
             this.$toast(res.data.message);
           }
@@ -105,6 +109,7 @@
       },
 
       removeFn(index) { //库存清零
+        let that = this;
         this.plateData.forEach((element, item) => {
           if (index == item) {
             Dialog.confirm({
@@ -139,25 +144,40 @@
         });
       },
 
-      saveFn(index) {
+      saveFn(index, calculate) {
         this.plateData.forEach((element, item) => {
           if (index == item) {
+            let that = this;
             Dialog.confirm({
                 title: '提示',
-                message: `${element.name}库存保存`,
+                message: `${element.name}${calculate==='add'?'库存保存':'库存清零'}?`,
               })
               .then(() => {
-                console.log(element);
-                this.$api.Changestock({
-                  factoryno
+                let num = '',
+                  warnLimit = ''
+                if (calculate === 'sub') {
+                  num = 0 - element.count;
+                  warnLimit = 0 - element.warn;
+                } else {
+                  num = element.number;
+                  warnLimit = element.warn;
+                }
+                console.log('保存数据', element);
+                console.log('保存数据', num, warnLimit);
+                that.$api.Changestock({
+                  factoryno: that.factoryno,
+                  type: index + 1,
+                  num,
+                  warnLimit
                 }).then(res => {
-                  console.log('库存设置',res);
+                  console.log('库存设置', res);
                   if (res.data.code == 200) {
+                    that.$toast(res.data.message);
                   } else {
-                    this.$toast(res.data.message);
+                    that.$toast(res.data.message);
                   }
                 }).catch(err => {
-
+                  console.log('保存错误', err);
                 })
               }).catch(() => {
 
@@ -168,10 +188,18 @@
       removeReportFn() {
         Dialog.confirm({
             title: '提示',
-            message: '确认要消除全部库存告警',
+            message: '确认要消除全部库存告警吗?',
           })
           .then(() => {
-            this.readRepertoryFn(this.factoryno);
+            this.$api.Pubcmd({
+              factoryno: this.factoryno,
+              deviceid: this.deviceid,
+              command: 'stockWarning'
+            }).then(res => {
+              this.$toast(res.data.message);
+            }).catch(err => {
+              this.$toast(res.data.message);
+            })
           }).catch(() => {
 
           });
@@ -181,6 +209,8 @@
     created() {
       this.titleDec = `${this.titleDec} (${this.$route.query.pointname})`;
       this.factoryno = this.$route.query.factoryno;
+      this.deviceid = this.$route.query.deviceid
+
       this.readRepertoryFn(this.$route.query.factoryno);
     },
     //生命周期 - 挂载完成（可以访问DOM元素）

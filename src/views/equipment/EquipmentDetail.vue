@@ -131,7 +131,8 @@
       DevicelistFn() {
         let data = {
           pageindex: this.pageindex,
-          pagesize: this.pagesize
+          pagesize: this.pagesize,
+          deviceid: this.device.deviceid
         }
         this.$api.Getalarmlist(data).then(res => {
           console.log('单个设备报警返回', res);
@@ -202,7 +203,8 @@
             path: '/SetRepertory',
             query: {
               factoryno: this.device.factoryno,
-              pointname: this.device.pointname
+              pointname: this.device.pointname,
+              deviceid: this.device.deviceid
             }
           })
         } else if (index == 1) {
@@ -301,8 +303,9 @@
           }).then(() => {
             this.$api.Pubcmd({
               factoryno: this.device.factoryno,
-              pointname: this.device.pointname,
+              // pointname: this.device.pointname,
               deviceno: this.device.deviceno,
+              deviceid: this.device.deviceid,
               command
             }).then(res => {
               console.log(commandText,res);
@@ -486,7 +489,7 @@
   }
 
   .item-detail {
-    height: 30px;
+    min-height: 30px;
     display: flex;
     justify-content: space-between;
     align-items: center;
