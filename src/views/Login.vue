@@ -56,7 +56,7 @@
         imgUrl: '',
         titleDec: "登录",
         textDec: "",
-        phoneNumber: '15001081717',
+        phoneNumber: '',
         inputPassword: '',
         verificationCode: '', //验证码
         verificationCodeText: '获取验证码',

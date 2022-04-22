@@ -97,7 +97,7 @@
             scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
             success: function (res) {
               let result = res.resultStr;
-              result = result.split('/', 1)[0];
+              // result = result.split('/', 1)[0];
               that.qrLogin(result);
             },
             fail: (err => {
@@ -124,7 +124,7 @@
             } else {
               Dialog.confirm({
                 title: '提示',
-                message: '登录成功',
+                message: '登录失败',
               })
             }
           }).catch(err => {

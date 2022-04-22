@@ -58,25 +58,25 @@
             'name': 'A区',
             'count': '',
             'number': '0',
-            'warn': '20'
+            'warn': ''
           },
           {
             'name': 'B区',
             'count': '',
             'number': '0',
-            'warn': '20'
+            'warn': ''
           },
           {
             'name': '签子',
             'count': '',
             'number': '0',
-            'warn': '20'
+            'warn': ''
           },
           {
             'name': '废弃盒',
             'count': '',
             'number': '0',
-            'warn': '20'
+            'warn': ''
           },
         ]
       }

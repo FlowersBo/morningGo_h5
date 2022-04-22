@@ -13,12 +13,13 @@ let routerMode = 'history';
 let DEBUG = false;
 const cancleHTTP = [];
 if (process.env.NODE_ENV == 'testing') {
-	baseUrl = "http://w3.waneyes.com";
+	baseUrl = "http://devops.morninggo.cn/";
+	// baseUrl = "http://w3.waneyes.com";
 	DEBUG = false;
 } else if (process.env.NODE_ENV == 'production') {
 	// console.log(process.env.NODE_ENV)
-	// baseUrl = "https://api.morninggo.cn";
-	baseUrl = "http://w3.waneyes.com";
+	baseUrl = "http://devops.morninggo.cn/";
+	// baseUrl = "http://w3.waneyes.com";
 
 	DEBUG = false;
 }

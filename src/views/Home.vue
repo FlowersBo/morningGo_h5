@@ -359,7 +359,7 @@
   }
 
   .alarm-detail {
-    height: 30px;
+    /* height: 30px; */
     display: flex;
     justify-content: space-between;
     align-items: center;
