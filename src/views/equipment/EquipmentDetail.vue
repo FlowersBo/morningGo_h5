@@ -319,7 +319,13 @@
             }).then(res => {
               console.log(commandText, res);
               if (res.data.code == 200) {
-                this.$toast(commandText + '成功')
+                this.$toast(commandText + '成功');
+                if (command === 'clearWarning') {
+                  this.finished = false;
+                  this.pageindex = 1;
+                  this.deviceListDetail = [];
+                  this.DevicelistFn();
+                }
               } else {
                 this.$toast(res.data.message);
               }
@@ -384,7 +390,7 @@
     white-space: nowrap;
   }
 
-  .itemKey{
+  .itemKey {
     min-width: 75px;
   }
 
