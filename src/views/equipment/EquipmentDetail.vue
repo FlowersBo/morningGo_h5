@@ -5,7 +5,7 @@
       <div class="alarm-left">
         <div class="content-item">
           <div class="itemKey">设备编号：</div>
-          <div class="itemValue">{{device.deviceno}}(出厂编号)</div>
+          <div class="itemValue">{{device.deviceno}}</div>
         </div>
         <div class="content-item">
           <div class="itemKey">点位名称：</div>
@@ -48,8 +48,8 @@
               <!-- <van-icon v-else class="iconfont icon" color="#F15A24" class-prefix='icon' name='gouwuchetianjia' /> -->
             </div>
             <div class="title-right">
-              <!-- <van-icon class="iconfont iten-icon" color="#C4D0FF" class-prefix='icon' name='gaoqingshexiang'
-                @click="gotoVideo(item.alarmId,item.factoryno)" /> -->
+              <van-icon class="iconfont iten-icon" color="#C4D0FF" class-prefix='icon' name='gaoqingshexiang'
+                @click="gotoVideo(item.alarmId,item.factoryno)" />
               <div class="titleBtn" @click="clickCancelFn(item.alarmId)">消除</div>
             </div>
           </div>
@@ -115,7 +115,7 @@
         ],
         deviceListDetail: [],
         pageindex: 1,
-        pagesize: 50,
+        pagesize: 30,
         loading: false,
         finished: false, //是否已加载完成，加载完成后不再触发load事件
         error: false, //是否加载失败，加载失败后点击错误提示可以重新触发load事件
@@ -161,7 +161,16 @@
           this.DevicelistFn();
         }
       },
-
+      gotoVideo(alarmId, factoryno) { //跳转视频
+        this.$router.push({
+          path: '/Player',
+          query: {
+            alarmId,
+            factoryno,
+            url: 'Getvideo'
+          }
+        })
+      },
       clickCancelFn(alarmId) { //清除报警
         Dialog.confirm({
             title: '提示',
@@ -308,7 +317,7 @@
               deviceid: this.device.deviceid,
               command
             }).then(res => {
-              console.log(commandText,res);
+              console.log(commandText, res);
               if (res.data.code == 200) {
                 this.$toast(commandText + '成功')
               } else {
@@ -373,6 +382,10 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+
+  .itemKey{
+    min-width: 75px;
   }
 
   .itemValue {

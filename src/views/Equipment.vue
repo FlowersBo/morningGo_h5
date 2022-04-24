@@ -11,7 +11,7 @@
                 <div class="alarm-left">
                   <div class="content-item">
                     <div class="itemKey">设备编号：</div>
-                    <div class="itemValue">{{item.factoryno}}(出厂编号)</div>
+                    <div class="itemValue">{{item.factoryno}}</div>
                   </div>
                   <div class="content-item">
                     <div class="itemKey">点位名称：</div>
@@ -70,7 +70,7 @@
     data() {
       return {
         pageindex: 1,
-        pagesize: 50,
+        pagesize: 30,
         searchType: '',
         imgUrl: '',
         titleDec: "设备",

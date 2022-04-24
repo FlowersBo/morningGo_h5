@@ -25,6 +25,9 @@ export default {
   StoreList(data) {  //库存列表
     return http.get("/nav/storeList", data)
   },
+  RoastList(data) {  //预烤列表
+    return http.get("/nav/roastList", data)
+  },
   Getstock(data) {  //读取设备库存
     return http.get("/deviceinfo/getstock", data)
   },

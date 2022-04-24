@@ -48,6 +48,7 @@
     },
     created() {
       this.url = this.$route.query.url;
+      this.titleDec = `${this.url === 'GetOrderVideo'?'订单视频':'告警视频'}`;
       if (this.$route.query.url === 'GetOrderVideo') {
         this.orderId = this.$route.query.orderId;
         this.getVideo(this.$route.query.url, this.$route.query.orderId);
@@ -57,7 +58,12 @@
         this.getVideo(this.$route.query.url, this.$route.query.alarmId, this.$route.query.factoryno);
       }
     },
-    mounted() {},
+    mounted() {
+      // 通过 $once 来监听定时器，在 beforeDestroy 钩子可以被清除。
+      this.$once('hook:beforeDestroy', () => {
+        clearInterval(this.timer);
+      })
+    },
     components: {
       HeaderTitle
     },
@@ -67,8 +73,8 @@
     //方法集合
     methods: {
       getVideo(url, alarmId, factoryno) {
-        let api='',
-        data = {};
+        let api = '',
+          data = {};
         if (url === 'GetOrderVideo') {
           data = {
             orderId: alarmId
@@ -82,7 +88,7 @@
           api = this.$api.Getvideo;
         }
         api(data).then(res => {
-          console.log(res)
+            console.log(res)
             if (res.data.code === 1001) {
               this.timer = setTimeout(() => {
                 if (url === 'GetOrderVideo') {
@@ -95,7 +101,7 @@
               console.log('视频', res)
               this.playerOptions.sources[0].src = res.data.data.video;
               // this.playerOptions.sources[0].src = 'https://media.w3.org/2010/05/sintel/trailer.mp4'
-            }else{
+            } else {
               this.$toast('加载失败');
             }
           })
@@ -107,6 +113,7 @@
         });
       },
     },
+
     beforeDestroy() {
       clearTimeout(this.timer);
       this.timer = null;

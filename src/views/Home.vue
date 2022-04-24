@@ -7,7 +7,7 @@
       <van-tab v-for="index in navTab" :key="index.index" :title="index.nav" :badge="index.totalCount">
         <van-pull-refresh class="alarmWrap" v-model="refreshing" @refresh="onRefresh">
           <van-list v-model="loading" :error.sync="error" error-text="请求失败，点击重新加载" :finished="finished"
-            finished-text="没有更多了" :immediate-check="false" @load="onLoad">
+            finished-text="没有更多了" :immediate-check="true" @load="onLoad">
             <van-cell v-for="item in deviceList" :key="item.alarmId">
               <div class="alarm">
                 <div class="alarm-title">
@@ -72,7 +72,7 @@
     data() {
       return {
         pageindex: 1,
-        pagesize: 50,
+        pagesize: 30,
         searchType: '',
         imgUrl: '',
         titleDec: "告警",
@@ -91,7 +91,7 @@
         deviceList: [],
         // 刷新加载
         loading: false,
-        finished: false, //是否已加载完成，加载完成后不再触发load事件
+        finished: true, //是否已加载完成，加载完成后不再触发load事件
         refreshing: false, //刷新成功为false
         error: false, //是否加载失败，加载失败后点击错误提示可以重新触发load事件
         isShow: true
@@ -358,12 +358,17 @@
     margin: 10px 0;
   }
 
+  .itemKey{
+    min-width: 75px;
+  }
+
   .alarm-detail {
     /* height: 30px; */
     display: flex;
     justify-content: space-between;
     align-items: center;
     color: #FF9A03;
+    padding: 5px 0;
   }
 
   .detailText {

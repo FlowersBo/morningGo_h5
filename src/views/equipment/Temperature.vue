@@ -26,11 +26,11 @@
         <div class="Tdetail-item">{{temperatureT[2].curTemperature}}</div>
       </div>
       <div class="Tdetail">
-        <div>上部机箱环境</div>
+        <div>机箱</div>
         <div class="Tdetail-item">{{temperatureT[1].curTemperature}}</div>
       </div>
       <div class="Tdetail">
-        <div>下部机箱环境</div>
+        <div>冰箱环境</div>
         <div class="Tdetail-item">{{temperatureT[0].curTemperature}}</div>
       </div>
     </div>
@@ -85,7 +85,7 @@
           .then(res => {
             console.log('温度显示', res);
             let temperatureList = res.data.data.temperature.list;
-            this.temperature = temperatureList.slice(0, 7);
+            this.temperature = (temperatureList.slice(0, 7)).reverse();
             this.temperatureT = temperatureList.slice(7, 10);
             this.temperature.forEach(element => {
               if (element.openStatus == 1) {

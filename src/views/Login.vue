@@ -180,17 +180,17 @@
 
     //生命周期 - 创建完成（可以访问当前this实例）
     created() {
-      let code = localStorage.getItem('code');
-      if (code) {
-        console.log('有code', code)
-        return
-      } else {
+      // let code = localStorage.getItem('code');
+      // if (code) {
+      //   console.log('有code', code)
+      //   return
+      // } else {
         let code = WeixinCode();
         console.log(code);
         if (code) {
           localStorage.setItem('code', JSON.stringify(code));
         }
-      }
+      // }
     },
 
     //生命周期 - 挂载完成（可以访问DOM元素）

@@ -120,7 +120,7 @@ function apiAxios(method, url, params, token) {
 			url,
 			data: formData,
 			baseURL: root,
-			timeout: 10000,
+			timeout: 20000,
 			headers: {
 				"mg-access-token": JSON.parse(localStorage.getItem('token')),
 				"Content-Type": 'multipart/form-data',

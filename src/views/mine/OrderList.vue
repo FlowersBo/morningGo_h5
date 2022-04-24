@@ -49,7 +49,7 @@
     data() {
       return {
         pageindex: 1,
-        pagesize: 50,
+        pagesize: 30,
         searchType: '',
         imgUrl: require('@/img/back.png'),
         titleDec: "订单",
