@@ -61,10 +61,9 @@
         repertoryList: [],
         // 刷新加载
         loading: false,
-        finished: false, //是否已加载完成，加载完成后不再触发load事件
+        finished: true, //是否已加载完成，加载完成后不再触发load事件
         refreshing: false, //刷新成功为false
         error: false, //是否加载失败，加载失败后点击错误提示可以重新触发load事件
-        finished: true
       }
     },
     //计算属性 类似于data概念
