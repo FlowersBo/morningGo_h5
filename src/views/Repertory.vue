@@ -3,7 +3,7 @@
     <HeaderTitle :imgSrc="imgUrl" :title="titleDec" :text="textDec"></HeaderTitle>
     <van-pull-refresh class="alarmWrap" v-model="refreshing" @refresh="onRefresh">
       <van-list v-model="loading" :error.sync="error" error-text="请求失败，点击重新加载" :finished="finished"
-        finished-text="没有更多了" :immediate-check="false" @load="onLoad" offset="0">
+        finished-text="没有更多了" :immediate-check="false" @load="onLoad" offset="-30">
         <van-cell v-for="item in repertoryList" :key="item.deviceid">
           <div class="alarm" @click="gotoSetRepertory(item.factoryno,item.pointname,item.deviceid)">
             <div class="alarm-content">
@@ -76,6 +76,7 @@
           })
           .catch(err => {
             console.log(err)
+            this.loading = false;
           })
       },
       onLoad() {
@@ -84,8 +85,8 @@
         // 数据全部加载完成
         if (this.repertoryList.length >= this.total) {
           this.finished = true;
-          return true;
           this.loading = false;
+          return;
         }
         this.pageindex++;
         this.repertoryFn();
