@@ -7,7 +7,7 @@
       <van-tab v-for="index in navTab" :key="index.index" :title="index.nav" :badge="index.totalCount">
         <van-pull-refresh class="alarmWrap" v-model="refreshing" @refresh="onRefresh">
           <van-list v-model="loading" :error.sync="error" error-text="请求失败，点击重新加载" :finished="finished"
-            finished-text="没有更多了" :immediate-check="true" @load="onLoad">
+            finished-text="没有更多了" :immediate-check="false" @load="onLoad">
             <van-cell v-for="item in deviceList" :key="item.alarmId">
               <div class="alarm">
                 <div class="alarm-title">
