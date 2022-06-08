@@ -112,6 +112,7 @@
           "重启下位机",
           "机械臂归位",
           "初始化设备",
+          "预定开关",
         ],
         deviceListDetail: [],
         pageindex: 1,
@@ -271,6 +272,18 @@
               deviceno: this.device.deviceno,
               isonline: this.device.isonline,
               stopSell: this.device.stopSell,
+            }
+          })
+        } else if (index == 14) {
+          this.$router.push({
+            path: '/SetYukao',
+            query: {
+              factoryno: this.device.factoryno,
+              pointname: this.device.pointname,
+              deviceno: this.device.deviceno,
+              isonline: this.device.isonline,
+              stopSell: this.device.stopSell,
+              deviceid: this.device.deviceid
             }
           })
         } else if (index == 7 || 8 || 9 || 10 || 11 || 12 || 13) {

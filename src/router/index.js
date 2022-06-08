@@ -86,6 +86,11 @@ const routes = [{
     component: () => import('../views/equipment/Ovenware.vue')
   },
   {
+    path: '/SetYukao',
+    name: 'SetYukao',
+    component: () => import('../views/equipment/SetYukao.vue')
+  },
+  {
     path: '/ReportAbandon',
     name: 'ReportAbandon',
     component: () => import('../views/equipment/ReportAbandon.vue')

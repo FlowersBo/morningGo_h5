@@ -86,4 +86,10 @@ export default {
   Changepw(data) {  //修改密码
     return http.post("/userinfo/changepw", data)
   },
+  GetReserveEnable(data){//查询预烤设置
+    return http.get("/deviceinfo/getReserveEnable", data)
+  },
+  SaveReserveEnable(data){//保存预烤设置
+    return http.get("/deviceinfo/saveReserveEnable", data)
+  }
 }
