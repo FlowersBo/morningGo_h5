@@ -23,10 +23,10 @@
                     name='xinhao' />
                   <van-icon class="iconfont icon" v-if="item.isonline!=1" color="#FF0000" class-prefix='icon'
                     name='xinhao' />
-                  <van-icon class="iconfont icon" v-if="item.openScreen==0" color="#00CC00" class-prefix='icon'
+                  <!-- <van-icon class="iconfont icon" v-if="item.openScreen==0" color="#00CC00" class-prefix='icon'
                     name='kaiqipingmu' />
                   <van-icon class="iconfont icon" v-if="item.openScreen==1" color="#FF0000" class-prefix='icon'
-                    name='guanbipingmu' />
+                    name='guanbipingmu' /> -->
                   <van-icon class="iconfont icon" v-if="item.isoutofstock==0" color="#00CC00" class-prefix='icon'
                     name='shouye' />
                   <van-icon class="iconfont icon" v-if="item.isoutofstock==1" color="#FF0000" class-prefix='icon'
@@ -268,6 +268,7 @@
     flex: 1;
     display: flex;
     margin: 10px 0;
+    justify-content: flex-end;
   }
 
   .icon {
@@ -288,6 +289,7 @@
     left: 12px;
     z-index: 99;
   }
+
   .van-cell {
     width: 350px;
     padding: 0;

@@ -15,10 +15,10 @@
       <div class="alarm-right">
         <van-icon class="iconfont icon" v-if="device.isonline==1" color="#00CC00" class-prefix='icon' name='xinhao' />
         <van-icon class="iconfont icon" v-if="device.isonline!=1" color="#FF0000" class-prefix='icon' name='xinhao' />
-        <van-icon class="iconfont icon" v-if="device.openScreen==0" color="#00CC00" class-prefix='icon'
+        <!-- <van-icon class="iconfont icon" v-if="device.openScreen==0" color="#00CC00" class-prefix='icon'
           name='kaiqipingmu' />
         <van-icon class="iconfont icon" v-if="device.openScreen==1" color="#FF0000" class-prefix='icon'
-          name='guanbipingmu' />
+          name='guanbipingmu' /> -->
         <van-icon class="iconfont icon" v-if="device.isoutofstock==0" color="#00CC00" class-prefix='icon'
           name='shouye' />
         <van-icon class="iconfont icon" v-if="device.isoutofstock==1" color="#FF0000" class-prefix='icon'
@@ -417,6 +417,7 @@
     flex: 1;
     display: flex;
     margin: 10px 0;
+    justify-content: flex-end;
   }
 
   .icon {

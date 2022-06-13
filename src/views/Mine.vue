@@ -112,28 +112,23 @@
       qrLogin: function (result) {
         console.log('当前factryNo', result);
         this.$api.Qrcodelogin({
-            username: this.userInfoLocal.username,
-            factoryno: result
-          }).then(res => {
-            console.log('扫码登陆', res);
-            if (res.data.code !== 200) {
-              Dialog.confirm({
-                title: '提示',
-                message: res.data.message,
-              })
-            } else {
-              Dialog.confirm({
-                title: '提示',
-                message: '登录失败',
-              })
-            }
-          }).catch(err => {
-            console.log('扫码登陆失败', err);
+          username: this.userInfoLocal.username,
+          factoryno: result
+        }).then(res => {
+          console.log('扫码登陆', res);
+          if (res.data.code !== 200) {
             Dialog.confirm({
               title: '提示',
-              message: '登陆失败',
+              message: res.data.message,
             })
+          }
+        }).catch(err => {
+          console.log('扫码登陆失败', err);
+          Dialog.confirm({
+            title: '提示',
+            message: '登陆失败',
           })
+        })
       },
 
       logOut() {
