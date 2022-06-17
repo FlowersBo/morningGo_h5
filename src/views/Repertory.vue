@@ -16,7 +16,7 @@
                 <div class="itemValue">{{item.pointname}}</div>
               </div>
               <div class="content-item">
-                <div class="itemKey">当前库存：A区：{{item.aStore}} B区：{{item.bStore}} 签盒：{{item.pegwood}}</div>
+                <div class="itemKey">当前库存：A区：{{item.aStore}}  B区：{{item.bStore}}  签子：{{item.pegwood}}</div>
               </div>
             </div>
           </div>

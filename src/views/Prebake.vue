@@ -22,8 +22,8 @@
                 <div class="itemKey">
                   烤盘信息：
                   <div>
-                    <span>A区：烤制中3 已完成5</span>
-                    <span>B区：烤制中3 已完成5</span>
+                    <span>A区：烤制中{{item.aing}} 已完成{{item.aed}}</span>
+                    <span>B区：烤制中{{item.bing}} 已完成{{item.bing}}</span>
                   </div>
                 </div>
               </div>

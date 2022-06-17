@@ -134,8 +134,8 @@
 
   .ovenware-content {
     width: 100%;
-    height: 100%;
-    padding: 16px 0;
+    height: 80px;
+    /* padding: 16px 0; */
     display: flex;
     flex-direction: column;
     align-items: center;
