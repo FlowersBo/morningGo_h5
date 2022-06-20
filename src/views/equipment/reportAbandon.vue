@@ -56,11 +56,10 @@
           <van-uploader class="uploader" v-model="fileList" :max-count="2" :after-read="afterRead"
             :before-delete="beforeDelete" />
           <div class="submitBtnWrap">
-            <button class="submitBtn" formType="submitFn">提交</button>
+            <button class="submitBtn" :disabled="isBtn" formType="submitFn">提交</button>
           </div>
         </form>
       </div>
-
     </div>
   </div>
 </template>
@@ -80,7 +79,8 @@
         deviceStock: '',
         numberA: 0,
         numberB: 0,
-        fileList: []
+        fileList: [],
+        isBtn: false
       }
     },
     components: {
@@ -183,6 +183,7 @@
           this.$toast('请添加废弃实拍照片！');
           return;
         }
+        this.isBtn = true;
         Dialog.confirm({
             title: '提示',
             message: '确认提交上报废弃',
@@ -192,13 +193,18 @@
               formData
             }).then(res => {
               console.log('上传成功', res)
-              this.$toast('上传成功');
-              this.$router.go(-1);
+              if (res.data.code == 200) {
+                this.$toast('上传成功');
+                this.$router.go(-1);
+              } else {
+                this.isBtn = false;
+              }
             }).catch(err => {
               this.$toast(err.message);
+              this.isBtn = false;
             })
           }).catch(err => {
-
+            this.isBtn = false;
           })
 
       },
