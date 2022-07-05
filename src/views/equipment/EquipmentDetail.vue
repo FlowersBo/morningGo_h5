@@ -105,8 +105,8 @@
           "补货记录",
           "温度信息",
           "设备信息",
-          "亮屏",
-          "熄屏",
+          "恢复A肠盒故障",
+          "恢复B肠盒故障",
           "消除故障告警",
           "重启上位机",
           "重启下位机",
@@ -291,12 +291,12 @@
             commandText = '';
           switch (index) {
             case 7:
-              commandText = '亮屏';
-              command = 'sysSleep';
+              commandText = '恢复A肠盒故障';
+              command = 'recoverABox';
               break;
             case 8:
-              commandText = '熄屏';
-              command = 'sysWake'
+              commandText = '恢复B肠盒故障';
+              command = 'recoverBBox'
               break;
             case 9:
               commandText = '消除故障告警';
