@@ -31,7 +31,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(item,index) in bakeTime">
+              <tr v-for="(item,index) in bakeTime" :key="index">
                 <td>{{item.startTime}}-{{item.endTime}}</td>
                 <td>
                   <van-stepper :value="item.aNum" :name="index" min="0" max="18" button-size="20" disable-input
