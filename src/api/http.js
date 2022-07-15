@@ -17,7 +17,6 @@ if (process.env.NODE_ENV == 'testing') {
 	// baseUrl = "http://w3.waneyes.com";
 	DEBUG = false;
 } else if (process.env.NODE_ENV == 'production') {
-	// console.log(process.env.NODE_ENV)
 	baseUrl = "http://devops.morninggo.cn/";
 	// baseUrl = "http://w3.waneyes.com";
 
