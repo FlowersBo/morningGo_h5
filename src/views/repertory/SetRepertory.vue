@@ -13,7 +13,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(item,index) in plateData">
+          <tr v-for="(item,index) in plateData" :key="index">
             <td class="name">{{item.name}}</td>
             <td>
               <div class="library">{{item.count}}</div>

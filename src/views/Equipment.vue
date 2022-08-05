@@ -184,7 +184,8 @@
         this.$router.push({
           path: '/EquipmentDetail',
           query: {
-            equipmentData: JSON.stringify(equipmentData)
+            // equipmentData: JSON.stringify(equipmentData)
+            factoryNo: equipmentData.factoryno
           }
         })
       }

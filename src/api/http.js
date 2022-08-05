@@ -19,8 +19,9 @@ if (process.env.NODE_ENV == 'testing') {
 } else if (process.env.NODE_ENV == 'production') {
 	baseUrl = "http://devops.morninggo.cn/";
 	// baseUrl = "http://w3.waneyes.com";
-
 	DEBUG = false;
+}else{
+	baseUrl = "http://devops.morninggo.cn/";
 }
 
 // let root = baseUrl;

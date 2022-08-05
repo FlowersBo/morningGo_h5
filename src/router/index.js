@@ -11,7 +11,7 @@ const routes = [{
     path: '/Login',
     name: 'Login',
     component: () => import('../views/Login.vue'),
-    meta:{
+    meta: {
       requireAuth: false
     }
   },
@@ -19,7 +19,7 @@ const routes = [{
     path: '/',
     name: 'Home',
     component: () => import('../views/Home.vue'),
-    meta:{
+    meta: {
       requireAuth: false
     }
   },
@@ -27,7 +27,7 @@ const routes = [{
     path: '/Repertory',
     name: 'Repertory',
     component: () => import( /* webpackChunkName: "Repertory" */ '../views/Repertory.vue'),
-    meta:{
+    meta: {
       requireAuth: true
     }
   },
@@ -35,7 +35,7 @@ const routes = [{
     path: '/Prebake',
     name: 'Prebake',
     component: () => import('../views/Prebake.vue'),
-    meta:{
+    meta: {
       requireAuth: true
     }
   },
@@ -43,7 +43,7 @@ const routes = [{
     path: '/Equipment',
     name: 'Equipment',
     component: () => import('../views/Equipment.vue'),
-    meta:{
+    meta: {
       requireAuth: true
     }
   },
@@ -51,7 +51,7 @@ const routes = [{
     path: '/Mine',
     name: 'Mine',
     component: () => import('../views/Mine.vue'),
-    meta:{
+    meta: {
       requireAuth: true
     }
   },
@@ -71,9 +71,26 @@ const routes = [{
     component: () => import('../views/repertory/SetRepertory.vue')
   },
   {
-    path: '/SetPrebake',
+    path: '/SetPrebake/',
     name: 'SetPrebake',
-    component: () => import('../views/prebake/SetPrebake.vue')
+    // children: [ 
+    //   {
+    //     path: 'Calendar',
+    //     name: 'Calendar',
+    //     component: () => import('@/views/prebake/Calendar.vue')
+    //   }
+    // ],
+    component: () => import('@/views/prebake/SetPrebake.vue')
+  },
+  {
+    path: '/Calendar',
+    name: 'Calendar',
+    component: () => import('../views/prebake/Calendar.vue')
+  },
+  {
+    path: '/CopyEquipment',
+    name: 'CopyEquipment',
+    component: () => import('../views/prebake/CopyEquipment.vue')
   },
   {
     path: '/EquipmentDetail',
@@ -127,31 +144,31 @@ const router = new VueRouter({
 
 // 全局路由守卫
 // router.beforeEach((to, from, next) => {
-  // console.log('navigation-guards');
-  // to: Route: 即将要进入的目标 路由对象
-  // from: Route: 当前导航正要离开的路由
-  // next: Function: 必定要调用该方法来 resolve 这个钩子。执行效果依赖 next 方法的调用参数
-  // console.log(to, from);
-  // const nextRoute = ['Home', 'Login'];
-  // let isLogin = global.isLogin; // 是否登陆
-  // // 未登陆状态；当路由到nextRoute指定页时，跳转至login
-  // if (nextRoute.indexOf(to.name) >= 0) {
-  //   if (!isLogin) {
-  //     console.log('what fuck');
-  //     router.push({
-  //       name: 'Login'
-  //     })
-  //   }
-  // }
-  // // 已登陆状态；当路由到login时，跳转至home 
-  // if (to.name === 'Login') {
-  //   if (isLogin) {
-  //     router.push({
-  //       name: 'Home'
-  //     });
-  //   }
-  // }
-  // next();
+// console.log('navigation-guards');
+// to: Route: 即将要进入的目标 路由对象
+// from: Route: 当前导航正要离开的路由
+// next: Function: 必定要调用该方法来 resolve 这个钩子。执行效果依赖 next 方法的调用参数
+// console.log(to, from);
+// const nextRoute = ['Home', 'Login'];
+// let isLogin = global.isLogin; // 是否登陆
+// // 未登陆状态；当路由到nextRoute指定页时，跳转至login
+// if (nextRoute.indexOf(to.name) >= 0) {
+//   if (!isLogin) {
+//     console.log('what fuck');
+//     router.push({
+//       name: 'Login'
+//     })
+//   }
+// }
+// // 已登陆状态；当路由到login时，跳转至home 
+// if (to.name === 'Login') {
+//   if (isLogin) {
+//     router.push({
+//       name: 'Home'
+//     });
+//   }
+// }
+// next();
 // });
 
 export default router

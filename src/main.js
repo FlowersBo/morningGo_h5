@@ -2,12 +2,20 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store/index'
-import 'vant/lib/index.css';
-import Vant from 'vant';
+import 'vant/lib/index.css'
+import Vant from 'vant'
 import './asstes/font/iconfont.css'
-import axios from 'axios';
+import axios from 'axios'
+import moment from 'moment'
+import 'xe-utils'//表格
+import VXETable from 'vxe-table'
+import 'vxe-table/lib/style.css'
+
+Vue.use(VXETable)
+Vue.prototype.$moment = moment
+
 Vue.prototype.$axios = axios
-// import VueAxios from 'vue-axios';
+// import VueAxios from 'vue-axios'
 // Vue.use(axios);
 Vue.use(Vant);
 import {
@@ -48,27 +56,28 @@ import wx from "weixin-js-sdk";
 
 // import wxsdk from 'weixin-jsapi';
 // Vue.prototype.wx = wxsdk
-router.beforeEach((to, from, next) => {
-  if (to.meta.requireAuth) { //判断是否要登录才能打开页面
-    if (localStorage.getItem('token')) { //有登录状态,直接跳转
-      next()
-    } else {
-      if (to.path == '/Login') {
-        //如果是登录页面,就停留登录页,不在重复跳转
-        next();
-      } else {
-        next({
-          path: '/', //无登录状态,先跳转到登录页面
-          query: {
-            redirect: to.fullPath
-          } // 登录成功后跳转回到该路由
-        })
-      }
-    }
-  } else {
-    next()
-  }
-})
+
+// router.beforeEach((to, from, next) => {
+//   if (to.meta.requireAuth) { //判断是否要登录才能打开页面
+//     if (localStorage.getItem('token')) { //有登录状态,直接跳转
+//       next()
+//     } else {
+//       if (to.path == '/Login') {
+//         //如果是登录页面,就停留登录页,不在重复跳转
+//         next();
+//       } else {
+//         next({
+//           path: '/', //无登录状态,先跳转到登录页面
+//           query: {
+//             redirect: to.fullPath
+//           } // 登录成功后跳转回到该路由
+//         })
+//       }
+//     }
+//   } else {
+//     next()
+//   }
+// })
 
 Vue.config.productionTip = false
 fastClick.attach(document.body)

@@ -175,7 +175,12 @@
         formData.append("factoryNo", this.factoryno);
         formData.append("counta", e.target.counta.value);
         formData.append("countb", e.target.countb.value);
+        formData.append("productida", this.deviceStock.productida);
+        formData.append("productidb", this.deviceStock.productidb);
+        
         console.log(formData.get('factoryNo'));
+        console.log(formData.get('productida'));
+        console.log(formData.get('productidb'));
         console.log(formData.get('counta'));
         console.log(formData.get('countb'));
         console.log(formData.getAll('files'));

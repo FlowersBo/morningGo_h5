@@ -41,7 +41,6 @@
     methods: {
       // 返回上一页
       getBack() {
-        console.log('返回上一页');
         // this.$router.back(-1);
         this.$router.go(-1);
         // window.history.back();

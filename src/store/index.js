@@ -7,6 +7,9 @@ export default new Vuex.Store({
     isLoading: false, //loading全局开关
     token: ''
   },
+  getters: {
+
+  },
   mutations: {
     changeisLoading(state, data) {
       state.isLoading = data

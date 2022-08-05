@@ -1,4 +1,4 @@
- let ApiRootUrl = 'https://w3.morninggo.cn'
+ let ApiRootUrl = 'http://devops.morninggo.cn/'
 import http from './http.js'
 export default {
   RefreshToken(data, token) {
@@ -50,6 +50,9 @@ export default {
   DeviceList(data) {  //设备列表
     return http.get("/nav/deviceList", data)
   },
+  DeviceStatus(data) {  //单个设备状态信息
+    return http.get("/nav/deviceStatus", data)
+  },
   SelectWaste(data) {  //获取废弃信息
     return http.get("/deviceinfo/v2/selectWaste", data)
   },
@@ -91,5 +94,8 @@ export default {
   },
   SaveReserveEnable(data){//保存预烤设置
     return http.get("/deviceinfo/saveReserveEnable", data)
+  },
+  GetCalander(data){//日历复现选项
+    return http.get("/tactics/calander", data)
   }
 }

@@ -26,7 +26,8 @@
           plugins: [
             require('postcss-pxtorem')({
               rootValue: 37.5, //这个37.5就是当做750px的设计稿上1rem为37.5px
-              //设计稿元素尺寸/37.5 换算的基数 750/37.5=20rem  css中设置了100px 也就是再750中的设计稿中量取到100px  这时候是这样算的： ( 100px / 37.5 ) * （当前html的font-size 也就是底下 rem.js 设置的font-size ）
+              //设计稿元素尺寸/37.5 换算的基数 750/37.5=20rem  css中设置了100px 也就是再750中的设计稿中量取到100px  
+              //这时候是这样算的： ( 100px / 37.5 ) * （当前html的font-size 也就是底下 rem.js 设置的font-size ）
               selectorBlackList: [], // 忽略转换正则匹配项
               propList: ['*'], //用来设定可以从 px 转为 rem 的属性
             }),
@@ -52,7 +53,8 @@
         '/api': {
           /* 目标代理服务器地址 */
           // target: 'http://w3.waneyes.com',
-          target: 'http://devops.morninggo.cn/',
+          // target: 'http://devops.morninggo.cn/',
+          target: 'http://api.morninggo.cn/',
           /* 允许跨域 */
           changeOrigin: true,
           ws: true, //如果要代理 websockets，配置这个参数
