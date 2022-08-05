@@ -97,5 +97,8 @@ export default {
   },
   GetCalander(data){//日历复现选项
     return http.get("/tactics/calander", data)
+  },
+  GetDate(data){//获取指定日期的烤制策略
+    return http.get("/tactics/date", data)
   }
 }
