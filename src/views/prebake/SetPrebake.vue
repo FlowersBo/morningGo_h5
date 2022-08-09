@@ -15,8 +15,8 @@
       <van-tab title="预烤设置">
         <div class="preheat">
           <div class="facility">
-            <div>设备编号：{{ deviceno }}</div>
-            <div>点位名称：{{ pointname }}</div>
+            <div>设备编号：{{ device.factoryno }}</div>
+            <div>点位名称：{{ device.pointname }}</div>
           </div>
           <div class="operation">
             <div class="operationTime">
@@ -33,6 +33,7 @@
                         tactics.startOpen ? tactics.startOpen : "运营开始时间"
                       }}
                     </div>
+                    <span style="margin-right: 6px">~</span>
                     <div class="onSetTimer" @click="setStartTime('e')">
                       {{ tactics.endOpen ? tactics.endOpen : "运营结束时间" }}
                     </div>
@@ -57,7 +58,6 @@
           </div>
 
           <!-- 日期选择 -->
-
           <div class="calendarWrap">
             <div v-if="selectDate !== undefined && selectDate.length > 0">
               当前选择共计{{ selectDate.length }}天
@@ -86,7 +86,11 @@
                 <van-icon name="arrow" />
               </div>
             </div>
-            <button class="today gotocalendar timerBtn" @click="selectDate=[]">
+            <button
+              class="today gotocalendar timerBtn"
+              v-if="selectDate !== undefined && selectDate.length > 0"
+              @click="selectDate = []"
+            >
               今日
             </button>
             <button class="gotocalendar timerBtn" @click="gotocalendarFn">
@@ -214,32 +218,8 @@ export default {
       tactics: {},
       currentTime: "07:00",
       show: false,
-      bakeTime: [
-        { aNum: 1, bNum: 2 },
-        { aNum: 12, bNum: 2 },
-        { aNum: 1, bNum: 15 },
-        { aNum: 10, bNum: 2 },
-        { aNum: 11, bNum: 2 },
-        { aNum: 1, bNum: 14 },
-        { aNum: 1, bNum: 11 },
-        { aNum: 11, bNum: 2 },
-        { aNum: 8, bNum: 2 },
-        { aNum: 6, bNum: 5 },
-        { aNum: 8, bNum: 6 },
-        { aNum: 1, bNum: 1 },
-        { aNum: 1, bNum: 2 },
-        { aNum: 1, bNum: 5 },
-        { aNum: 1, bNum: 7 },
-        { aNum: 10, bNum: 8 },
-        { aNum: 2, bNum: 2 },
-        { aNum: 1, bNum: 1 },
-        { aNum: 0, bNum: 0 },
-        { aNum: 1, bNum: 0 },
-        { aNum: 0, bNum: 2 },
-        { aNum: 0, bNum: 0 },
-        { aNum: 10, bNum: 0 },
-        { aNum: 10, bNum: 2 },
-      ],
+      device: "",
+      bakeTime: [],
       hotplate: [],
       checked: "1",
       digit: 10,
@@ -247,6 +227,7 @@ export default {
       dateStr: new Date(),
       isShowBirth: false,
       selectDate: [],
+      isAllDay: false,
     };
   },
   components: {
@@ -260,25 +241,73 @@ export default {
     changeRad(e) {
       //监听选项radio
       console.log("当前选项", e);
+      if (e === "1") {
+        this.isAllDay = false;
+      } else {
+        this.isAllDay = true;
+      }
     },
     saveFormFn() {
       //保存预烤设置
+      Dialog.confirm({
+        title: "提示",
+        message: "确定保存该策略",
+      })
+        .then(() => {
+          let dates;
+          if (this.selectDate && this.selectDate.length > 0) {
+            dates = this.selectDate;
+          } else {
+            dates = this.selectDate.concat(this.currentDate);
+          }
+          console.log(dates,this.bakeTime)
+          this.$api
+            .SaveAll({
+              deviceId: "1353880641422229504",
+              dates,
+              roasts: this.bakeTime,
+            })
+            .then((res) => {
+              if (res.data.code == "200") {
+                this.$toast("保存成功");
+              } else {
+                this.$toast(res.data.message);
+              }
+            })
+            .catch((err) => {
+              this.$toast("保存失败");
+            });
+        })
+        .catch(() => {});
     },
-    readimelistFn(factoryno) {
-      //预烤设置
+    readimelistFn() {
+      //预烤
       this.$api
-        .SelectTactics({
-          factoryno,
+        .GetDate({
+          deviceId: "1353880641422229504",
+          searchDate: this.currentDate,
         })
         .then((res) => {
-          console.log("烤制策略", res);
-          this.tactics = res.data.data.tactics;
-          this.bakeTime = res.data.data.tactics.tactic;
+          console.log("返回的烤制策略", res);
+          if (res.data.code === 200) {
+            this.tactics = res.data.data.tactics;
+            this.bakeTime = res.data.data.tactics.tactic;
+            this.device = res.data.data.device;
+            this.isAllDay = res.data.data.tactics.isAllDay;
+            if (res.data.data.tactics.isAllDay) {
+              this.checked = "2";
+            } else {
+              this.checked = "1";
+            }
+          } else {
+            this.$toast(res.data.message);
+          }
         })
         .catch((err) => {
           console.log(err);
         });
     },
+
     readOvenwareFn(factoryno) {
       //烤盘信息
       this.$api
@@ -376,7 +405,9 @@ export default {
           .add(1, "days")
           .format("YYYY-MM-DD");
       }
+      this.readimelistFn();
     },
+    // 下拉选择日期
     async confirmFn(e) {
       //确认日期选项
       console.log(e);
@@ -384,13 +415,7 @@ export default {
       console.log("时间格式转换", dateStr);
       this.isShowBirth = false;
       this.currentDate = dateStr;
-      // await updateProfileAPI({
-      //   birthday: dateStr,
-      // });
-      // // 前端页面同步
-      // this.currentDate = dateStr;
-      // // 时间选择器关闭
-      // this.isShowBirth = false;
+      this.readimelistFn();
     },
 
     gotocalendarFn() {
@@ -402,22 +427,28 @@ export default {
     },
 
     onSetTimerChange() {
-      //保存运营时间
       Dialog.confirm({
         title: "提示",
         message: "确定保存营业时间",
       })
         .then(() => {
+          let dates;
+          if (this.selectDate && this.selectDate.length > 0) {
+            dates = this.selectDate;
+          } else {
+            dates = this.selectDate.concat(this.currentDate);
+          }
+          console.log('营业开始时间',this.tactics.startOpen)
           this.$api
-            .SaveBusinessTime({
-              id: this.tactics.id,
-              deviceId: this.tactics.deviceId,
-              startTime: this.tactics.startOpen,
-              endTime: this.tactics.endOpen,
+            .Business({
+              deviceId: "1353880641422229504",
+              dates,
+              startOpen: this.tactics.startOpen,
+              endOpen: this.tactics.endOpen,
+              isAllDay: this.isAllDay,
             })
             .then((res) => {
               console.log(res);
-              6;
               if (res.data.code == "200") {
                 this.$toast("保存成功");
               } else {
@@ -451,7 +482,7 @@ export default {
     },
 
     bindSaveFn(index) {
-      //保存烤制策略
+      //判断A+B数量<18
       console.log("当前下标", index);
       this.bakeTime.forEach((element, item) => {
         if (index == item) {
@@ -467,47 +498,25 @@ export default {
               }时设置总数超出烤盘范围`
             );
             return;
+          } else {
           }
-          //   Dialog.confirm({
-          //     title: "提示",
-          //     message: "确定保存该策略",
-          //   })
-          //     .then(() => {
-          //       this.$api
-          //         .SaveOneTactics({
-          //           id: element.id,
-          //           deviceId: element.deviceId,
-          //           counta: element.aNum,
-          //           countb: element.bNum,
-          //         })
-          //         .then((res) => {
-          //           if (res.data.code == "200") {
-          //             this.$toast("保存成功");
-          //           } else {
-          //             this.$toast(res.data.message);
-          //           }
-          //         })
-          //         .catch((err) => {
-          //           this.$toast("保存失败");
-          //         });
-          //     })
-          //     .catch(() => {});
         }
       });
     },
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {
-    this.pointname = this.$route.query.pointname;
-    this.deviceno = this.$route.query.deviceno;
-    this.factoryno = this.$route.query.factoryno;
+    // this.pointname = this.$route.query.pointname;
+    // this.deviceno = this.$route.query.deviceno;
+    // this.factoryno = this.$route.query.factoryno;
     this.readimelistFn(this.$route.query.factoryno);
     // this.readOvenwareFn(this.$route.query.factoryno);
   },
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
-    if (this.$route.params) {
+    if (this.$route.params.selectDate) {
       this.selectDate = this.$route.params.selectDate;
+      console.log("多选后", this.selectDate);
     }
   },
   //生命周期-创建之前
@@ -713,7 +722,7 @@ td:last-child {
   position: relative;
   margin-top: 10px;
 }
-.calendarSelsct{
+.calendarSelsct {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -745,9 +754,9 @@ td:last-child {
   margin-top: -12px;
   font-size: 12px;
 }
-.today{
+.today {
   left: 10px;
-  background: #F15A24;
+  background: #f15a24;
 }
 /* 烤盘信息 */
 .van-grid {

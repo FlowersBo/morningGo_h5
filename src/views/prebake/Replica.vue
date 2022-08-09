@@ -6,20 +6,21 @@
       :text="textDec"
     ></HeaderTitle>
     <div class="facility">
-      <div>设备编号：{{ deviceno }}</div>
-      <div>点位名称：{{ pointname }}</div>
+      <div>设备编号：{{ factoryNo }}</div>
+      <div>点位名称：{{ pointName }}</div>
     </div>
     <form report-submit @submit.prevent="submitFn">
       <div class="condition">
         <div>
           <div class="condition-item">
             <div>城市：</div>
-            <div class="city" @click="isShowBirth = true" name="city">
+            <div class="city" @click="isShowBirth = true" name="cities">
               {{ city ? city : "选择城市" }}
             </div>
             <van-popup v-model="isShowBirth" position="bottom" round>
               <van-picker
-                :columns="columns"
+                :columns="cities"
+                value-key="name"
                 show-toolbar
                 v-model="isShowBirth"
                 title="城市"
@@ -50,11 +51,13 @@
       @checkbox-change="selectChangeEvent"
     >
       <vxe-column class="checkboxType" type="checkbox" width="60"></vxe-column>
-      <vxe-column field="code" title="设备编号"></vxe-column>
-      <vxe-column field="address" title="点位名称" show-overflow></vxe-column>
+      <vxe-column field="factoryNo" title="设备编号"></vxe-column>
+      <vxe-column field="pointName" title="点位名称" show-overflow></vxe-column>
     </vxe-table>
-
     <div class="saveWrap">
+      <span class="upload" @click="bindUpload" v-if="tableData.length > 0">{{
+        pages > pageindex ? "加载更多" : "加载完成"
+      }}</span>
       <button class="btn save" @click="saveFn">保存策略</button>
     </div>
   </div>
@@ -63,6 +66,7 @@
 <script>
 import HeaderTitle from "../../components/HeaderTitle.vue";
 import VXETable from "vxe-table";
+import { Dialog } from "vant";
 export default {
   components: { HeaderTitle },
   props: {},
@@ -71,18 +75,16 @@ export default {
       imgUrl: require("@/img/back.png"),
       titleDec: "复制策略",
       textDec: "",
-      deviceno: "1111111111111111",
-      pointname: "乱七八糟点位",
+      factoryNo: "",
+      pointName: "",
       isShowBirth: false,
       city: "",
-      columns: ["杭州", "宁波", "温州", "绍兴", "湖州", "嘉兴", "金华"],
-      tableData: [
-        { id: 10001, code: "1161616", address: "温榆河公园犄角旮旯" },
-        { id: 10002, code: "1223434", address: "温榆河公园犄角旮旯" },
-        { id: 10003, code: "24e3243", address: "温榆河公园犄角旮旯" },
-        { id: 10004, code: "3434324", address: "温榆河公园犄角旮旯" },
-        { id: 10005, code: "3432423", address: "温榆河公园犄角旮旯" },
-      ],
+      cities: [],
+      tableData: [],
+      records: [],
+      pageindex: 1,
+      pagesize: 10,
+      regionId: "",
     };
   },
   //计算属性 类似于data概念
@@ -93,11 +95,43 @@ export default {
   methods: {
     confirmdateFn(val) {
       this.isShowBirth = false;
-      console.log(val);
-      this.city = val;
+      this.city = val.name;
+      this.regionId = val.id;
     },
+    // 查询表格
     submitFn(e) {
       console.log(e.target.pt.value, e.target.partner.value);
+      this.partner = e.target.partner.value;
+      this.pt = e.target.pt.value;
+      this.tableData = [];
+      this.pageindex = 1;
+      this.PointsFn();
+    },
+
+    bindUpload() {
+      if (this.pages > this.pageindex) {
+        this.pageindex += 1;
+      } else {
+        this.$toast("加载完成");
+        return;
+      }
+      this.PointsFn();
+    },
+
+    PointsFn() {
+      this.$api
+        .Points({
+          regionId: this.regionId,
+          agencyName: this.partner,
+          pointName: this.pt,
+          pageindex: this.pageindex,
+          pagesize: this.pagesize,
+        })
+        .then((res) => {
+          console.log("设备列表", res);
+          this.tableData = this.tableData.concat(res.data.data.list.list);
+          this.pages = res.data.data.list.pages;
+        });
     },
 
     // 表格
@@ -112,10 +146,59 @@ export default {
       this.records = records;
     },
     // 保存策略
-    saveFn() {},
+    saveFn() {
+      Dialog.confirm({
+        title: "提示",
+        message: "确定复制该策略吗？",
+      }).then(() => {
+        let dates;
+        if (this.selectDate && this.selectDate.length > 0) {
+          dates = this.selectDate;
+        }
+        let records = this.records;
+        let devicesIds = [];
+        if (records.length <= 0) {
+          this.$toast("请先勾选设备");
+          return;
+        }
+        records.forEach((element) => {
+          devicesIds.push(element.id);
+        });
+        this.$api
+          .CopyStrategy({
+            deviceId: "1353880641422229504",
+            dates,
+            devicesIds,
+          })
+          .then((res) => {
+            console.log("保存策略", res);
+            if (res.data.code === 200) {
+              this.$toast(res.data.message);
+            } else {
+              this.$toast(res.data.message);
+            }
+          })
+          .catch((err) => {
+            this.$toast(res.data.message);
+          });
+      });
+    },
+
+    // 城市列表
+    cityListFn() {
+      this.$api.Cities({}).then((res) => {
+        console.log("城市", res);
+        this.cities = res.data.data.cities;
+      });
+    },
   },
   //生命周期 - 创建完成（可以访问当前this实例）
-  created() {},
+  created() {
+    this.selectDate = this.$route.query.selectDate;
+    this.factoryNo = this.$route.query.factoryNo;
+    this.pointName = this.$route.query.pointName;
+    this.cityListFn();
+  },
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {},
   //生命周期-创建之前
@@ -182,18 +265,22 @@ export default {
   border: none;
   font-size: 12px;
 }
-.saveWrap{
-  margin: 20px 0;
+.saveWrap {
+  margin-bottom: 20px;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 }
 .save {
+  margin-top: 20px;
   width: 160px;
   height: 36px;
   font-size: 14px;
-
 }
-
+.upload {
+  font-size: 12px;
+  margin-top: 2px;
+}
 .vxe-table {
   margin-top: 30px;
 }

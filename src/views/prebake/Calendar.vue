@@ -127,44 +127,10 @@ export default {
           this.pointName = res.data.data.pointName;
           let tactics = res.data.data.tactics;
           this.tactics = tactics;
-          tactics = [
-            {
-              isAllDay: "0",
-              startOpen: "",
-              endOpen: "",
-              dat: "2022-08-24",
-              memo: "",
-              type: "0",
-            },
-            {
-              isAllDay: "1",
-              startOpen: "",
-              endOpen: "",
-              dat: "2022-08-29",
-              memo: "",
-              type: "0",
-            },
-            {
-              isAllDay: "0",
-              startOpen: "07:00",
-              endOpen: "23:11",
-              dat: "2022-08-28",
-              memo: "",
-              type: "0",
-            },
-            {
-              isAllDay: "0",
-              startOpen: "19:00",
-              endOpen: "21:30",
-              dat: "2022-08-27",
-              memo: "",
-              type: "0",
-            }
-          ];
           this.formatter = function (day) {
             tactics.forEach((element) => {
               if (this.$moment(day.date).format("YYYY-MM-DD") === element.dat) {
-                if (element.isAllDay==="0") {
+                if (element.isAllDay === "0") {
                   day.bottomInfo = `${
                     element.startOpen ? element.startOpen + "-" : ""
                   }${element.endOpen ? element.endOpen : ""}`;
@@ -212,12 +178,23 @@ export default {
 
     // 跳转烤制策略
     gotoSetPrebake() {
-      this.$router.replace({ name: "SetPrebake", params: { selectDate:this.selectDate } });
+      this.$router.replace({
+        name: "SetPrebake",
+        params: { selectDate: this.selectDate },
+      });
     },
     gotoCopyEquipment() {
+      if (this.selectDate <= 0) {
+        this.$toast("请先选择日期");
+        return
+      }
       this.$router.push({
-        name: "CopyEquipment",
-        query: {},
+        name: "Replica",
+        query: {
+          selectDate: this.selectDate,
+          factoryNo: this.factoryNo,
+          pointName: this.pointName,
+        },
       });
     },
     onClick(e) {
@@ -226,6 +203,12 @@ export default {
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {
+    localStorage.setItem(
+      "token",
+      JSON.stringify(
+        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NjAyNzAzMTYwMjMsInBheWxvYWQiOiJ7XCJ3b3Jrcm9sZVwiOlwiMVwiLFwib3BlbmlkXCI6XCJvWjROUDZWSExNU3NRSU9IR0lUS2dUUW9oOWo0XCIsXCJuYW1lXCI6XCLlrovmloxcIixcImlkXCI6NTIsXCJncm91cG5hbWVcIjpcIua4qeamhuays-eDpOiCoOi_kOe7tCzlrp3og73njq_nkIPmsYfvvIjopb_kuL3lupfvvIks5bm_5bee5Lic56uZ5rG96L2m56uZLOS4nOadpeahg-a6kCznmb7lt53lrrblsYUs5rWO5Y2X6KW_5Z-O6am-5qChLOWNg-miguaWh-WMluWbrSzplb_mspnmgLvpg6gs6ZW_5rKZ54OI5aOr6Zm15ZutXCIsXCJ1c2VybmFtZVwiOlwiMTg5MTE3MDQwNDBcIn0ifQ.rEi5fH1ulXuN659rVs9bAkECxQtlPO1SNrGGc4zsnuM"
+      )
+    );
     this.getCalander(this.currentMonth);
   },
   //生命周期 - 挂载完成（可以访问DOM元素）

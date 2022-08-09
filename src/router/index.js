@@ -88,9 +88,9 @@ const routes = [{
     component: () => import('../views/prebake/Calendar.vue')
   },
   {
-    path: '/CopyEquipment',
-    name: 'CopyEquipment',
-    component: () => import('../views/prebake/CopyEquipment.vue')
+    path: '/Replica',
+    name: 'Replica',
+    component: () => import('../views/prebake/Replica.vue')
   },
   {
     path: '/EquipmentDetail',
