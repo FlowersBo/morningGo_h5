@@ -118,4 +118,7 @@
   CopyStrategy(data) { //复制一台设备某些天的策略 到 其它选择的设备 
     return http.post("/tactics/copy", data)
   },
+  Using(data) { //设置烤管 启用/禁用 
+    return http.post("/deviceinfo/using", data)
+  },
  }

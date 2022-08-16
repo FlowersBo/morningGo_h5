@@ -5,7 +5,7 @@
       <van-list v-model="loading" :error.sync="error" error-text="请求失败，点击重新加载" :finished="finished"
         finished-text="没有更多了" :immediate-check="false" @load="onLoad" offset="0">
         <van-cell v-for="item in repertoryList" :key="item.deviceid">
-          <div class="alarm" @click="gotoSetRepertory(item.factoryno,item.pointname,item.deviceno)">
+          <div class="alarm" @click="gotoSetRepertory(item.factoryno,item.pointname,item.deviceno,item.deviceid)">
             <div class="alarm-content">
               <div class="content-item">
                 <div class="itemKey">设备编号：</div>
@@ -113,13 +113,14 @@
         // this.loading = true;
       },
 
-      gotoSetRepertory(factoryno, pointname, deviceno) { //跳转设置
+      gotoSetRepertory(factoryno, pointname, deviceno,deviceid) { //跳转设置
         this.$router.push({
           path: '/SetPrebake',
           query: {
             factoryno,
             pointname,
-            deviceno
+            deviceno,
+            deviceid
           }
         })
       },

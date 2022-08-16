@@ -89,7 +89,7 @@
             <button
               class="today gotocalendar timerBtn"
               v-if="selectDate !== undefined && selectDate.length > 0"
-              @click="selectDate = []"
+              @click="clickToday"
             >
               今日
             </button>
@@ -260,10 +260,10 @@ export default {
           } else {
             dates = this.selectDate.concat(this.currentDate);
           }
-          console.log(dates,this.bakeTime)
+          console.log(dates, this.bakeTime);
           this.$api
             .SaveAll({
-              deviceId: "1353880641422229504",
+              deviceId: this.deviceId,
               dates,
               roasts: this.bakeTime,
             })
@@ -284,7 +284,7 @@ export default {
       //预烤
       this.$api
         .GetDate({
-          deviceId: "1353880641422229504",
+          deviceId: this.deviceId,
           searchDate: this.currentDate,
         })
         .then((res) => {
@@ -373,7 +373,7 @@ export default {
       //切换nav
       console.log("当前选中标签", this.active);
       if (this.active == 0) {
-        this.readimelistFn(this.factoryno);
+        this.readimelistFn();
       } else {
         this.readOvenwareFn(this.factoryno);
       }
@@ -420,10 +420,18 @@ export default {
 
     gotocalendarFn() {
       //跳转日历
-      this.$router.push({
+      this.$router.replace({
         name: "Calendar",
-        query: {},
+        query: {
+          deviceId: this.deviceId,
+        },
       });
+      // this.$router.replace({
+      //   name: "Calendar",
+      //   query: {
+      //     deviceId: this.deviceId,
+      //   },
+      // });
     },
 
     onSetTimerChange() {
@@ -438,10 +446,10 @@ export default {
           } else {
             dates = this.selectDate.concat(this.currentDate);
           }
-          console.log('营业开始时间',this.tactics.startOpen)
+          console.log("营业开始时间", this.tactics.startOpen);
           this.$api
             .Business({
-              deviceId: "1353880641422229504",
+              deviceId: this.deviceId,
               dates,
               startOpen: this.tactics.startOpen,
               endOpen: this.tactics.endOpen,
@@ -503,21 +511,28 @@ export default {
         }
       });
     },
+
+    // 今日
+    clickToday() {
+      this.selectDate = [];
+      this.readimelistFn();
+    },
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {
-    // this.pointname = this.$route.query.pointname;
-    // this.deviceno = this.$route.query.deviceno;
-    // this.factoryno = this.$route.query.factoryno;
-    this.readimelistFn(this.$route.query.factoryno);
-    // this.readOvenwareFn(this.$route.query.factoryno);
+    if (this.$route.query.deviceid) {
+      localStorage.setItem("deviceId", this.$route.query.deviceid);
+      localStorage.setItem("factoryno", this.$route.query.factoryno);
+    }
+    this.deviceId = localStorage.getItem("deviceId");
+    this.factoryno = localStorage.getItem("factoryno");
+    this.readimelistFn();
+    this.readOvenwareFn(this.factoryno);
   },
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
-    if (this.$route.params.selectDate) {
-      this.selectDate = this.$route.params.selectDate;
-      console.log("多选后", this.selectDate);
-    }
+    this.selectDate = this.$route.params.selectDate;
+    console.log("多选后", this.selectDate);
   },
   //生命周期-创建之前
   beforeCreated() {},

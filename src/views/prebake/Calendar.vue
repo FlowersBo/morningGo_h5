@@ -118,7 +118,7 @@ export default {
     getCalander(currentMonth) {
       this.$api
         .GetCalander({
-          deviceId: "1353880641422229504",
+          deviceId: this.deviceId,
           searchMonth: currentMonth,
         })
         .then((res) => {
@@ -178,15 +178,23 @@ export default {
 
     // 跳转烤制策略
     gotoSetPrebake() {
+      if (this.selectDate.length <= 0) {
+        this.$toast("请先选择日期");
+        return;
+      }
       this.$router.replace({
         name: "SetPrebake",
-        params: { selectDate: this.selectDate },
+        params: {
+          selectDate: this.selectDate,
+          deviceId: this.deviceId,
+          factoryno: this.factoryNo,
+        },
       });
     },
     gotoCopyEquipment() {
-      if (this.selectDate <= 0) {
+      if (this.selectDate.length <= 0) {
         this.$toast("请先选择日期");
-        return
+        return;
       }
       this.$router.push({
         name: "Replica",
@@ -194,6 +202,7 @@ export default {
           selectDate: this.selectDate,
           factoryNo: this.factoryNo,
           pointName: this.pointName,
+          deviceId: this.deviceId,
         },
       });
     },
@@ -203,12 +212,7 @@ export default {
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {
-    localStorage.setItem(
-      "token",
-      JSON.stringify(
-        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NjAyNzAzMTYwMjMsInBheWxvYWQiOiJ7XCJ3b3Jrcm9sZVwiOlwiMVwiLFwib3BlbmlkXCI6XCJvWjROUDZWSExNU3NRSU9IR0lUS2dUUW9oOWo0XCIsXCJuYW1lXCI6XCLlrovmloxcIixcImlkXCI6NTIsXCJncm91cG5hbWVcIjpcIua4qeamhuays-eDpOiCoOi_kOe7tCzlrp3og73njq_nkIPmsYfvvIjopb_kuL3lupfvvIks5bm_5bee5Lic56uZ5rG96L2m56uZLOS4nOadpeahg-a6kCznmb7lt53lrrblsYUs5rWO5Y2X6KW_5Z-O6am-5qChLOWNg-miguaWh-WMluWbrSzplb_mspnmgLvpg6gs6ZW_5rKZ54OI5aOr6Zm15ZutXCIsXCJ1c2VybmFtZVwiOlwiMTg5MTE3MDQwNDBcIn0ifQ.rEi5fH1ulXuN659rVs9bAkECxQtlPO1SNrGGc4zsnuM"
-      )
-    );
+    this.deviceId = this.$route.query.deviceId;
     this.getCalander(this.currentMonth);
   },
   //生命周期 - 挂载完成（可以访问DOM元素）

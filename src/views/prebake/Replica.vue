@@ -166,7 +166,7 @@ export default {
         });
         this.$api
           .CopyStrategy({
-            deviceId: "1353880641422229504",
+            deviceId: this.deviceId,
             dates,
             devicesIds,
           })
@@ -194,6 +194,7 @@ export default {
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {
+    this.deviceId = this.$route.query.deviceId;
     this.selectDate = this.$route.query.selectDate;
     this.factoryNo = this.$route.query.factoryNo;
     this.pointName = this.$route.query.pointName;
@@ -280,6 +281,7 @@ export default {
 .upload {
   font-size: 12px;
   margin-top: 2px;
+  color: rgb(97, 97, 97);
 }
 .vxe-table {
   margin-top: 30px;
