@@ -280,8 +280,9 @@ export default {
         })
         .catch(() => {});
     },
+
+    //预烤设置查询
     readimelistFn() {
-      //预烤
       this.$api
         .GetDate({
           deviceId: this.deviceId,
@@ -520,6 +521,7 @@ export default {
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {
+    console.log('接参',this.$route.query.deviceid,this.$route.query.factoryno)
     if (this.$route.query.deviceid) {
       localStorage.setItem("deviceId", this.$route.query.deviceid);
       localStorage.setItem("factoryno", this.$route.query.factoryno);

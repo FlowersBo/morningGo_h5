@@ -303,6 +303,7 @@ export default {
             factoryno: this.device.factoryno,
             pointname: this.device.pointname,
             deviceno: this.device.deviceno,
+            deviceid: this.device.deviceid,
           },
         });
       } else if (index == 2) {
