@@ -468,7 +468,9 @@ export default {
               this.$toast("保存失败");
             });
         })
-        .catch(() => {});
+        .catch((err) => {
+          console.log('保存营业时间失败',err)
+        });
     },
 
     onStartChange(startV) {
