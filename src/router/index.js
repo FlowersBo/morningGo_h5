@@ -115,6 +115,28 @@ const routes = [{
     name: 'OrderList',
     component: () => import('../views/mine/OrderList.vue')
   },
+  {
+    path: '/NewSetPrebake/',
+    name: 'NewSetPrebake',
+    // children: [ 
+    //   {
+    //     path: 'Calendar',
+    //     name: 'Calendar',
+    //     component: () => import('@/views/prebake/Calendar.vue')
+    //   }
+    // ],
+    component: () => import('@/views/newVersions/SetPrebake')
+  },
+  {
+    path: '/Calendar',
+    name: 'Calendar',
+    component: () => import('../views/newVersions/Calendar.vue')
+  },
+  {
+    path: '/Replica',
+    name: 'Replica',
+    component: () => import('../views/newVersions/Replica.vue')
+  },
 ]
 
 const router = new VueRouter({

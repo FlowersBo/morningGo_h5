@@ -1,4 +1,5 @@
-  module.exports = {
+let Timestamp = new Date().getTime();
+module.exports = {
     /* 部署生产环境和开发环境下的URL：可对当前环境进行区分，baseUrl 从 Vue CLI 3.3 起已弃用，要使用publicPath */
     // publicPath: process.env.NODE_ENV === 'production' ? '/public/' : '/',
     /* 输出文件目录：在npm run build时，生成文件的目录名称 */
@@ -63,5 +64,11 @@
         },
       },
       before: app => {},
-    }
+    },
+    configureWebpack: { // webpack 配置
+      output: { // 输出重构  打包编译后的 文件名称  【模块名称.版本号.时间戳】
+          filename: `assets/js/[name].${process.env.VUE_APP_Version}.${Timestamp}.js`,
+          chunkFilename: `assets/js/[name].${process.env.VUE_APP_Version}.${Timestamp}.js`
+      },
+  },
   }

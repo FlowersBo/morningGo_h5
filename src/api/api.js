@@ -91,5 +91,31 @@ export default {
   },
   SaveReserveEnable(data){//保存预烤设置
     return http.get("/deviceinfo/saveReserveEnable", data)
-  }
+  },
+
+  //  新修改
+  GetCalander(data) { //日历复现日期
+    return http.get("/tactics/calander", data)
+  },
+  GetDate(data) { //获取指定日期的烤制策略
+    return http.get("/tactics/date", data)
+  },
+  Business(data) { //保存营业时间
+    return http.post("/tactics/business", data)
+  },
+  SaveAll(data) { //保存烤制策略
+   return http.post("/tactics/save", data)
+ },
+ Cities(data) { //查询城市列表
+   return http.post("/tactics/cities", data)
+ },
+ Points(data) { //查询复制策略时的可选择点位 
+   return http.get("/tactics/points", data)
+ },
+ CopyStrategy(data) { //复制一台设备某些天的策略 到 其它选择的设备 
+   return http.post("/tactics/copy", data)
+ },
+ Using(data) { //设置烤管 启用/禁用 
+   return http.post("/deviceinfo/using", data)
+ },
 }
