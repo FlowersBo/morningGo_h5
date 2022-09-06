@@ -228,6 +228,7 @@ export default {
       isShowBirth: false,
       selectDate: [],
       isAllDay: false,
+      isBtn: true, //判断大于18保存无效
     };
   },
   components: {
@@ -248,6 +249,9 @@ export default {
       }
     },
     saveFormFn() {
+      if (!this.isBtn) {
+        return;
+      }
       //保存预烤设置
       Dialog.confirm({
         title: "提示",
@@ -512,8 +516,10 @@ export default {
                 1 + Number(index)
               }时设置总数超出烤盘范围`
             );
+            this.isBtn = false;
             return;
           } else {
+            this.isBtn = true;
           }
         }
       });
@@ -543,8 +549,7 @@ export default {
   },
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
-    console.log(this.$route.params.selectDate)
-    if (this.$route.params.selectDate.length > 0) {
+    if (this.$route.params.selectDate) {
       this.selectDate = this.$route.params.selectDate;
     }
     console.log("多选后", this.selectDate);

@@ -130,6 +130,14 @@ export default {
           this.formatter = function (day) {
             tactics.forEach((element) => {
               if (this.$moment(day.date).format("YYYY-MM-DD") === element.dat) {
+                if(element.type==='1'){
+                  element.type='节假日'
+                }else if(element.type==='2'){
+                  element.type='补班'
+                }else{
+                  element.type=''
+                }
+                day.topInfo = element.type;
                 if (element.isAllDay === "0") {
                   day.bottomInfo = `${
                     element.startOpen ? element.startOpen + "-" : ""
@@ -214,6 +222,18 @@ export default {
   created() {
     this.deviceId = this.$route.query.deviceId;
     this.getCalander(this.currentMonth);
+    this.minDate = new Date(
+      this.$moment(this.currentMonth)
+        .startOf("month")
+        .format("YYYY-MM-DD")
+        .replace(/\-/g, "/")
+    );
+    this.maxDate = new Date(
+      this.$moment(this.currentMonth)
+        .endOf("month")
+        .format("YYYY-MM-DD")
+        .replace(/\-/g, "/")
+    );
   },
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {},
@@ -299,7 +319,10 @@ export default {
   -webkit-align-items: stretch !important;
   align-items: stretch !important;
   box-sizing: border-box;
-  padding-top: 10px;
+  padding-top: 5px;
+}
+.van-calendar__top-info{
+  top: 0.65rem;
 }
 .selectDay {
   background: #ffbf00;

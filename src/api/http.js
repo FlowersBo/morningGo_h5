@@ -17,11 +17,11 @@ if (process.env.NODE_ENV == 'testing') {
 	// baseUrl = "http://w3.waneyes.com";
 	DEBUG = false;
 } else if (process.env.NODE_ENV == 'production') {
-	// console.log(process.env.NODE_ENV)
 	baseUrl = "http://devops.morninggo.cn/";
 	// baseUrl = "http://w3.waneyes.com";
-
 	DEBUG = false;
+}else{
+	baseUrl = "http://w3.morninggo.cn/";
 }
 
 // let root = baseUrl;
@@ -32,6 +32,8 @@ axios.interceptors.request.use(config => {
 	console.log(config.url);
 	if (config.url == '/deviceinfo/wasteSave') {
 		config.headers.post["Content-Type"] = "multipart/form-data"
+	}else{
+		config.headers.post["Content-Type"] = "application/json"
 	}
 	// 将Token添加到请求头里面
 	// config.headers['app-refresh-token'] = 'A';
@@ -124,6 +126,23 @@ function apiAxios(method, url, params, token) {
 			headers: {
 				"mg-access-token": JSON.parse(localStorage.getItem('token')),
 				"Content-Type": 'multipart/form-data',
+			}, //jwt
+			withCredentials: false
+		})
+	}else if(url === '/tactics/business'||url === '/tactics/save'||url==='/tactics/cities'||url==='/tactics/copy'){
+		if (params) {
+			params = helper.filterNull(params)
+		}
+		return axios({
+			method: method,
+			//拼接参数
+			url: method === 'GET' || method === 'DELETE' ? helper.queryString(url, params) : url,
+			data: method === 'POST' || method === 'PUT' ? params : null,
+			baseURL: root,
+			timeout: 10000,
+			headers: {
+				"mg-access-token": JSON.parse(localStorage.getItem('token')),
+				"Content-Type": 'application/json',
 			}, //jwt
 			withCredentials: false
 		})

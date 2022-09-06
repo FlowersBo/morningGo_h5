@@ -70,7 +70,7 @@
     data() {
       return {
         pageindex: 1,
-        pagesize: 30,
+        pagesize: 1000,
         searchType: '',
         imgUrl: '',
         titleDec: "设备",
