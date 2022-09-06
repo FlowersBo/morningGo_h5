@@ -13,12 +13,12 @@
         </div>
         <div class="inp" v-if='isShow'>
           <van-icon class="iconfont icon" class-prefix='icon' name='mima' />
-          <input type="password" v-model="inputPassword" placeholder="密码" placeholder-class="input-placeholder"></input>
+          <input type="password" v-model="inputPassword" placeholder="密码" placeholder-class="input-placeholder" />
         </div>
         <div class="inp" v-else>
           <van-icon class="iconfont icon" class-prefix='icon' name='yanzhengyanzhengma' />
           <input type="number" v-model="verificationCode" placeholder="验证码"
-            placeholder-class="input-placeholder"></input>
+            placeholder-class="input-placeholder" />
           <div class="verificationCode" @click="verificationCodeFn">{{verificationCodeText}}</div>
         </div>
       </div>

@@ -254,7 +254,9 @@ export default {
         message: "确定保存该策略",
       })
         .then(() => {
+          console.log("1");
           let dates;
+          console.log("输入的", this.selectDate);
           if (this.selectDate && this.selectDate.length > 0) {
             dates = this.selectDate;
           } else {
@@ -436,40 +438,42 @@ export default {
     },
 
     onSetTimerChange() {
+      let that = this;
       Dialog.confirm({
         title: "提示",
         message: "确定保存营业时间",
       })
         .then(() => {
           let dates;
-          if (this.selectDate && this.selectDate.length > 0) {
-            dates = this.selectDate;
+          console.log("营业时间的selectDate", that.selectDate);
+          if (that.selectDate && that.selectDate.length > 0) {
+            dates = that.selectDate;
           } else {
-            dates = this.selectDate.concat(this.currentDate);
+            dates = that.selectDate.concat(that.currentDate);
           }
-          console.log("营业开始时间", this.tactics.startOpen);
-          this.$api
+          console.log("营业开始时间", that.tactics.startOpen);
+          that.$api
             .Business({
-              deviceId: this.deviceId,
+              deviceId: that.deviceId,
               dates,
-              startOpen: this.tactics.startOpen,
-              endOpen: this.tactics.endOpen,
-              isAllDay: this.isAllDay,
+              startOpen: that.tactics.startOpen,
+              endOpen: that.tactics.endOpen,
+              isAllDay: that.isAllDay,
             })
             .then((res) => {
               console.log(res);
               if (res.data.code == "200") {
-                this.$toast("保存成功");
+                that.$toast("保存成功");
               } else {
-                this.$toast(res.data.message);
+                that.$toast(res.data.message);
               }
             })
             .catch(() => {
-              this.$toast("保存失败");
+              that.$toast("保存失败");
             });
         })
         .catch((err) => {
-          console.log('保存营业时间失败',err)
+          console.log("保存营业时间失败", err);
         });
     },
 
@@ -523,7 +527,11 @@ export default {
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {
-    console.log('接参',this.$route.query.deviceid,this.$route.query.factoryno)
+    console.log(
+      "接参",
+      this.$route.query.deviceid,
+      this.$route.query.factoryno
+    );
     if (this.$route.query.deviceid) {
       localStorage.setItem("deviceId", this.$route.query.deviceid);
       localStorage.setItem("factoryno", this.$route.query.factoryno);
@@ -535,7 +543,10 @@ export default {
   },
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
-    this.selectDate = this.$route.params.selectDate;
+    console.log(this.$route.params.selectDate)
+    if (this.$route.params.selectDate.length > 0) {
+      this.selectDate = this.$route.params.selectDate;
+    }
     console.log("多选后", this.selectDate);
   },
   //生命周期-创建之前

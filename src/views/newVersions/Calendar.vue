@@ -183,7 +183,7 @@ export default {
         return;
       }
       this.$router.replace({
-        name: "SetPrebake",
+        name: "NewSetPrebake",
         params: {
           selectDate: this.selectDate,
           deviceId: this.deviceId,
