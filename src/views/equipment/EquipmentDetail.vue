@@ -177,7 +177,6 @@ export default {
         "机械臂归位",
         "初始化设备",
         "预定开关",
-        "预烤设置(新)",
       ],
       deviceListDetail: [],
       pageindex: 1,
@@ -290,14 +289,28 @@ export default {
         });
       } else if (index == 1) {
         this.$router.push({
-          path: "/SetPrebake",
+          path: "/NewSetPrebake",
           query: {
             factoryno: this.device.factoryno,
             pointname: this.device.pointname,
             deviceno: this.device.deviceno,
+            deviceid: this.device.deviceid,
+            isonline: this.device.isonline,
+            stopSell: this.device.stopSell,
           },
         });
-      } else if (index == 2) {
+      }
+      // else if (index == 1) {
+      //   this.$router.push({
+      //     path: "/SetPrebake",
+      //     query: {
+      //       factoryno: this.device.factoryno,
+      //       pointname: this.device.pointname,
+      //       deviceno: this.device.deviceno,
+      //     },
+      //   });
+      // }
+      else if (index == 2) {
         this.$router.push({
           path: "/Ovenware",
           query: {
@@ -341,18 +354,6 @@ export default {
             factoryno: this.device.factoryno,
             pointname: this.device.pointname,
             deviceno: this.device.deviceno,
-            isonline: this.device.isonline,
-            stopSell: this.device.stopSell,
-          },
-        });
-      } else if (index == 15) {
-        this.$router.push({
-          path: "/NewSetPrebake",
-          query: {
-            factoryno: this.device.factoryno,
-            pointname: this.device.pointname,
-            deviceno: this.device.deviceno,
-            deviceid: this.device.deviceid,
             isonline: this.device.isonline,
             stopSell: this.device.stopSell,
           },

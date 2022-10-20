@@ -89,7 +89,7 @@
           this.logintype = 2
         }
       },
-      gotoHome() {
+      gotoHome() { //15001081717
         if (this.phoneNumber.length < 11) {
           this.$toast('手机号输入错误');
           return;
