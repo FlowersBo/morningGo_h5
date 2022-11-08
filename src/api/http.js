@@ -8,21 +8,22 @@ import {
 	Toast
 } from 'vant';
 
-let baseUrl = '';
-let routerMode = 'history';
-let DEBUG = false;
-const cancleHTTP = [];
-if (process.env.NODE_ENV == 'testing') {
-	baseUrl = "http://devops.morninggo.cn/";
-	// baseUrl = "http://w3.waneyes.com";
-	DEBUG = false;
-} else if (process.env.NODE_ENV == 'production') {
-	baseUrl = "http://devops.morninggo.cn/";
-	// baseUrl = "http://w3.waneyes.com";
-	DEBUG = false;
-}else{
-	baseUrl = "http://w3.morninggo.cn/";
-}
+// let baseUrl = '';
+// let routerMode = 'history';
+// let DEBUG = false;
+// if (process.env.NODE_ENV == 'testing') {
+// 	// baseUrl = "http://devops.morninggo.cn/";
+// 	// baseUrl = "http://w3.waneyes.com";
+// 	baseUrl = "http://192.168.110.97:8080/app-http/";
+// 	DEBUG = false;
+// } else if (process.env.NODE_ENV == 'production') {
+// 	// baseUrl = "http://devops.morninggo.cn/";
+// 	// baseUrl = "http://w3.waneyes.com";
+// 	baseUrl = "http://192.168.110.97:8080/app-http/";
+// 	DEBUG = false;
+// }else{
+// 	baseUrl = "http://w3.morninggo.cn/";
+// }
 
 // let root = baseUrl;
 let root = '/api';
@@ -109,13 +110,6 @@ function apiAxios(method, url, params, token) {
 	store.state.isLoading = true;
 	if (url === '/deviceinfo/wasteSave') {
 		let formData = params.formData;
-		// console.log(formData.get('files'));
-
-		// axios.create().post('/deviceinfo/wasteSave', formData, {
-		// 	headers: {
-		// 		'Content-Type': 'multipart/form-data'
-		// 	}
-		// })
 		return axios({
 			method: method,
 			//拼接参数
@@ -129,7 +123,8 @@ function apiAxios(method, url, params, token) {
 			}, //jwt
 			withCredentials: false
 		})
-	}else if(url === '/tactics/business'||url === '/tactics/save'||url==='/tactics/cities'||url==='/tactics/copy'){
+	}else if(url === '/tactics/business'||url === '/tactics/save'||url==='/tactics/cities'||
+	url==='/tactics/copy'||url==='/workOrder/poolList'||url==='/workOrder/orderList'||url==='/workOrder/getWorker'){
 		if (params) {
 			params = helper.filterNull(params)
 		}

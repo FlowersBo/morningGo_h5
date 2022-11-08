@@ -116,6 +116,11 @@ const routes = [{
     component: () => import('../views/mine/OrderList.vue')
   },
   {
+    path: '/WorkOrderList',
+    name: 'WorkOrderList',
+    component: () => import('../views/mine/WorkOrderList.vue')
+  },
+  {
     path: '/NewSetPrebake/',
     name: 'NewSetPrebake',
     // children: [ 

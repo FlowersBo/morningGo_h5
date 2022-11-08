@@ -9,8 +9,9 @@
         <div class="infoPhone">登录账号：{{userInfoLocal.username}}</div>
       </div>
       <div class="info">
-        <van-cell title="所在小组：">{{userInfoLocal.groupname}}</van-cell>
+        <van-cell title="所在小组：" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">{{userInfoLocal.groupname}}</van-cell>
         <van-cell title="订单列表" is-link to="OrderList" />
+        <van-cell title="我的工单" is-link to="WorkOrderList" />
         <van-cell title="扫一扫" is-link @click="qrCode" />
         <van-cell title="修改密码" is-link @click="showPopup" />
       </div>

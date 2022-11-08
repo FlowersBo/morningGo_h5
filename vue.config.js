@@ -41,7 +41,7 @@ module.exports = {
     outputDir: 'dist', // 输出文件目录
     devServer: {
       /* 自动打开浏览器 */
-      // open: true,
+      open: true,
       /* 设置为0.0.0.0则所有的地址均能访问 */
       host: '0.0.0.0',
       port: 80,
@@ -49,11 +49,22 @@ module.exports = {
       https: false,
       hotOnly: false,
       /* 使用代理 */
+      // proxy: {// 配置跨域
+      //   // detail: https://cli.vuejs.org/config/#devserver-proxy
+      //   [process.env.VUE_APP_BASE_API]: {
+      //     target: process.env.VUE_APP_BASE_URL,//要访问的接口域名
+      //     changeOrigin: true,//是否跨域
+      //     pathRewrite: {//重置路径
+      //       ['^' + process.env.VUE_APP_BASE_API]: ''
+      //     }
+      //   }
+      // },
       proxy: {
         '/api': {
           /* 目标代理服务器地址 */
           // target: 'http://w3.waneyes.com',
-          target: 'http://devops.morninggo.cn/',
+          // target: 'http://devops.morninggo.cn/',
+          target: 'http://192.168.110.97:8080/app-http/',
           /* 允许跨域 */
           changeOrigin: true,
           ws: true, //如果要代理 websockets，配置这个参数

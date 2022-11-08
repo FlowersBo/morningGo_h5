@@ -22,7 +22,7 @@
                     <div class="itemKey">点位名称：</div>
                     <div class="itemValue">{{item.pointName}}</div>
                   </div>
-                  <div class="content-item" v-for="itemChild in item.detailList">
+                  <div class="content-item" v-for="itemChild in item.detailList" :key="itemChild.id">
                     <div class="itemKey">{{itemChild.productName}}：</div>
                     <div class="itemValue">{{itemChild.shipStatus==1?'已出货':'未出货'}}</div>
                   </div>
