@@ -124,7 +124,8 @@ function apiAxios(method, url, params, token) {
 			withCredentials: false
 		})
 	}else if(url === '/tactics/business'||url === '/tactics/save'||url==='/tactics/cities'||
-	url==='/tactics/copy'||url==='/workOrder/poolList'||url==='/workOrder/orderList'||url==='/workOrder/getWorker'){
+	url==='/tactics/copy'||url==='/workOrder/poolList'||url==='/workOrder/orderList'||url==='/workOrder/getWorker'||
+	url==='/workOrder/suspend'||url==='/workOrder/finish'||url==='/workOrder/assign'){
 		if (params) {
 			params = helper.filterNull(params)
 		}

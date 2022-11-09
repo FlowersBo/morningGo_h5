@@ -6,7 +6,7 @@
       :text="textDec"
     ></HeaderTitle>
     <!-- 搜索 -->
-    
+    <van-search v-model="value" placeholder="点位查询" @search="onSearch" />
     <van-tabs
       v-model="active"
       type="card"
@@ -40,9 +40,16 @@
               <div class="alarm">
                 <div class="alarm-title">
                   <div class="title-left">
-                    <div class="title-state" style="display:flex;align-items: center;">
-                      <van-icon class="iconfont icon" color="#555" class-prefix='icon'
-                    name='gongdanguanli' />
+                    <div
+                      class="title-state"
+                      style="display: flex; align-items: center"
+                    >
+                      <van-icon
+                        class="iconfont icon"
+                        color="#555"
+                        class-prefix="icon"
+                        name="gongdanguanli"
+                      />
                       单号：{{ item.orderNo }}
                     </div>
                   </div>
@@ -60,7 +67,9 @@
                 <div class="alarm-content">
                   <div class="content-item">
                     <div class="itemKey">点位：{{ item.pointName }}</div>
-                    <div>剩余：{{ item.differenceTime }}</div>
+                    <div v-if="item.status == 1">
+                      剩余：{{ item.differenceTime }}
+                    </div>
                   </div>
                   <div class="content-item">
                     <div class="itemKey">报警内容：</div>
@@ -73,12 +82,24 @@
                   <div v-if="item.status == 4">
                     <div class="content-item">
                       <div class="itemKey">处理结果：</div>
-                      <div class="itemValue">{{ item.statusStr }}</div>
+                      <div class="itemValue">{{ item.solvePlan }}</div>
                     </div>
                     <div class="content-item">
                       <div class="itemKey">完结时间：</div>
                       <div class="itemValue">{{ item.finishTime }}</div>
                     </div>
+                  </div>
+                </div>
+                <div class="btnWrap">
+                  <template v-if="item.status == 4">
+                    <div @click="changeOrder((isMsk = true))">重新指派</div>
+                    <div @click="changeOrder((isMsk = true))">挂起</div>
+                  </template>
+                  <div
+                    v-if="item.status == 1 || item.status == 4"
+                    @click="changeOrder((isMsk = true))"
+                  >
+                    完结
                   </div>
                 </div>
               </div>
@@ -87,6 +108,48 @@
         </van-pull-refresh>
       </van-tab>
     </van-tabs>
+    <van-popup v-model="isMsk">
+      <div class="maskWrap">
+        <div class="title">完结</div>
+        <van-form @submit="onSubmit">
+          <van-cell-group inset>
+            <van-field
+              v-model="resultValue"
+              is-link
+              readonly
+              name="picker"
+              label="协作人"
+              placeholder="无"
+              @click="showPicker = true"
+            />
+
+            <van-field
+              name="inputbox"
+              v-model="inputbox"
+              rows="2"
+              autosize
+              type="textarea"
+              maxlength="50"
+              placeholder="请输入内容"
+              show-word-limit
+            />
+          </van-cell-group>
+
+          <div style="margin: 16px">
+            <van-button round block type="primary" native-type="submit">
+              提交
+            </van-button>
+          </div>
+        </van-form>
+      </div>
+    </van-popup>
+    <van-popup v-model="showPicker" position="bottom">
+      <van-picker
+        :columns="columns"
+        @confirm="onConfirm"
+        @cancel="showPicker = false"
+      />
+    </van-popup>
   </div>
 </template>
 
@@ -96,6 +159,12 @@ import { Dialog } from "vant";
 export default {
   data() {
     return {
+      value: "",
+      isMsk: true,
+      inputbox: "",
+      columns: ["杭州", "宁波", "温州", "嘉兴", "湖州"],
+      showPicker: false,
+      resultValue: "",
       pageindex: 1,
       pagesize: 30,
       searchType: "",
@@ -142,6 +211,8 @@ export default {
         status: this.searchType,
         pageNum: this.pageindex,
         pageSize: this.pagesize,
+        deviceId: this.deviceId,
+        pointName: this.value,
       };
       this.$api
         .WorkOrderList(data)
@@ -239,6 +310,21 @@ export default {
         },
       });
     },
+    onSearch(ev) {
+      console.log("搜索传参", ev);
+      this.finished = false;
+      this.pageindex = 1;
+      this.orderList = [];
+      this.refreshing = true;
+      this.orderListFn();
+    },
+    onConfirm: (value) => {
+      this.resultValue = value;
+      this.showPicker = false;
+    },
+    onSubmit(event) {
+      console.log("提交", event);
+    },
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {
@@ -285,7 +371,7 @@ export default {
 
 .van-tabs {
   width: 350px;
-  margin-top: 20px;
+  margin-top: 6px;
 }
 .alarm {
   width: 100%;
@@ -351,6 +437,35 @@ export default {
 }
 .alarm-content .content-item:last-child {
   color: #ff9a03;
+}
+.btnWrap {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  padding: 6px 0;
+}
+.btnWrap div {
+  margin-left: 10px;
+  box-sizing: border-box;
+  padding: 0 16px;
+  border: 1px solid #333;
+  border-radius: 4px;
+}
+.van-popup{
+  background: none;
+}
+.maskWrap{
+  width: 350px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  padding: 20px;
+  background: #fff;
+  border-radius: 20px;
+}
+.title{
+  font-size: 16px;
+  border-bottom: 1px solid #999;
+  padding-bottom: 10px;
 }
 </style>
 <style lang="less">

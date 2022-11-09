@@ -130,4 +130,13 @@
    Init(data) { //角标
     return http.get("/workOrder/init", data)
   },
+  Suspend(data) { //挂起
+    return http.get("/workOrder/suspend", data)
+  },
+  Finish(data) { //完结
+    return http.get("/workOrder/finish", data)
+  },
+  Assign(data) { //重新指派
+    return http.get("/workOrder/assign", data)
+  },
  }
