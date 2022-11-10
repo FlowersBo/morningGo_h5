@@ -92,12 +92,26 @@
                 </div>
                 <div class="btnWrap">
                   <template v-if="item.status == 4">
-                    <div @click="changeOrder((isMsk = true))">重新指派</div>
-                    <div @click="changeOrder((isMsk = true))">挂起</div>
+                    <div
+                      @click="
+                        changeOrder((isMsk = true), (isStatus = item.status))
+                      "
+                    >
+                      重新指派
+                    </div>
+                    <div
+                      @click="
+                        changeOrder((isMsk = true), (isStatus = item.status))
+                      "
+                    >
+                      挂起
+                    </div>
                   </template>
                   <div
                     v-if="item.status == 1 || item.status == 4"
-                    @click="changeOrder((isMsk = true))"
+                    @click="
+                      changeOrder((isMsk = true), (isStatus = item.status))
+                    "
                   >
                     完结
                   </div>
@@ -113,38 +127,75 @@
         <div class="title">完结</div>
         <van-form @submit="onSubmit">
           <van-cell-group inset>
-            <van-field
-              v-model="resultValue"
-              is-link
-              readonly
-              name="picker"
-              label="协作人"
-              placeholder="无"
-              @click="showPicker = true"
-            />
-
-            <van-field
-              name="inputbox"
-              v-model="inputbox"
-              rows="2"
-              autosize
-              type="textarea"
-              maxlength="50"
-              placeholder="请输入内容"
-              show-word-limit
-            />
+            <div class="content">
+              <span class="content-title">处理结果：</span>
+              <van-field
+                style="
+                  width: 100%;
+                  height: 100px;
+                  border: 1px solid #aaa;
+                  box-sizing: border-box;
+                  padding: 4px;
+                "
+                name="inputbox1"
+                v-model="inputbox1"
+                maxlength="150"
+                placeholder="请输入内容"
+              />
+            </div>
+            <div class="cooperation">
+              <div class="cooperation-title">协作人(选填)：</div>
+              <van-field
+                v-model="resultValue"
+                is-link
+                readonly
+                name="picker"
+                placeholder="请选择"
+                @click="showPicker = true"
+                style="
+                  border: 1px solid #aaa;
+                  box-sizing: border-box;
+                  padding: 0 10px;
+                "
+              />
+            </div>
+            <div class="content">
+              <span class="content-title">备注(选填)：</span>
+              <van-field
+                style="
+                  width: 100%;
+                  height: 100px;
+                  border: 1px solid #aaa;
+                  box-sizing: border-box;
+                  padding: 4px;
+                "
+                name="inputbox2"
+                v-model="inputbox2"
+                maxlength="150"
+                placeholder="请输入内容"
+              />
+            </div>
           </van-cell-group>
-
-          <div style="margin: 16px">
-            <van-button round block type="primary" native-type="submit">
-              提交
-            </van-button>
-          </div>
+          <van-button
+            style="
+              width: 100px;
+              height: 40px;
+              margin-left: auto;
+              margin-top: 10px;
+              border-radius: 6px;
+            "
+            block
+            color="#F15A24"
+            native-type="submit"
+          >
+            确认完结
+          </van-button>
         </van-form>
       </div>
     </van-popup>
     <van-popup v-model="showPicker" position="bottom">
       <van-picker
+        show-toolbar
         :columns="columns"
         @confirm="onConfirm"
         @cancel="showPicker = false"
@@ -161,7 +212,8 @@ export default {
     return {
       value: "",
       isMsk: true,
-      inputbox: "",
+      inputbox1: "",
+      inputbox2: "",
       columns: ["杭州", "宁波", "温州", "嘉兴", "湖州"],
       showPicker: false,
       resultValue: "",
@@ -318,7 +370,8 @@ export default {
       this.refreshing = true;
       this.orderListFn();
     },
-    onConfirm: (value) => {
+    onConfirm(value) {
+      console.log("选取", value);
       this.resultValue = value;
       this.showPicker = false;
     },
@@ -451,10 +504,10 @@ export default {
   border: 1px solid #333;
   border-radius: 4px;
 }
-.van-popup{
+.van-popup {
   background: none;
 }
-.maskWrap{
+.maskWrap {
   width: 350px;
   margin: 0 auto;
   box-sizing: border-box;
@@ -462,9 +515,28 @@ export default {
   background: #fff;
   border-radius: 20px;
 }
-.title{
+.title {
   font-size: 16px;
   border-bottom: 1px solid #999;
+  padding-bottom: 10px;
+}
+.cooperation {
+  display: flex;
+  align-items: center;
+  margin: 20px 0;
+}
+.cooperation-title {
+  width: 300px;
+}
+.van-cell .van-cell--clickable .van-field {
+  border: 1px solid #555 !important;
+}
+.content-title {
+  display: inline-block;
+  margin: 10px 0;
+}
+.van-cell-group--inset {
+  margin: 0;
   padding-bottom: 10px;
 }
 </style>
