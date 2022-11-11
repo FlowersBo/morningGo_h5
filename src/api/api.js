@@ -124,19 +124,22 @@
    WorkOrderList(data) { //我的工单
      return http.post("/workOrder/orderList", data)
    },
-   GetWorker(data) { //工单指派人
+   GetWorker(data) { //工单指派人列表
      return http.get("/workOrder/getWorker", data)
    },
    Init(data) { //角标
     return http.get("/workOrder/init", data)
   },
   Suspend(data) { //挂起
-    return http.get("/workOrder/suspend", data)
+    return http.post("/workOrder/suspend", data)
   },
   Finish(data) { //完结
-    return http.get("/workOrder/finish", data)
+    return http.post("/workOrder/finish", data)
   },
   Assign(data) { //重新指派
-    return http.get("/workOrder/assign", data)
+    return http.post("/workOrder/assign", data)
+  },
+  WorkDetail(data) { //工单详情
+    return http.get("/workOrder/detail", data)
   },
  }
