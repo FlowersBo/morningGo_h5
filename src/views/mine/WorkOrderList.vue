@@ -78,13 +78,8 @@
           <van-cell-group inset>
             <div class="content" v-if="isMskId!=1">
               <span class="content-title">{{isMskId==2?'挂起原因':'处理结果'}}：</span>
-              <van-field style="
-                  width: 100%;
-                  height: 100px;
-                  border: 1px solid #aaa;
-                  box-sizing: border-box;
-                  padding: 4px;
-                " name="inputbox1" v-model="inputbox1" maxlength="150" placeholder="请输入内容" />
+              <van-field style="width: 100%;height: 100px;border: 1px solid #aaa;box-sizing: border-box;padding: 4px;"
+                name="inputbox1" v-model="inputbox1" maxlength="150" placeholder="请输入内容" />
             </div>
             <div class="cooperation" v-if="isMskId!=2">
               <div class="cooperation-title">{{isMskId==1?'指派人':'协作人(选填)'}}：</div>

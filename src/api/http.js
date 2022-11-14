@@ -54,6 +54,9 @@ axios.interceptors.response.use(result => {
 	if (result.status === 200) {
 		store.state.isLoading = false;
 		switch (result.data.code) {
+      case 0:
+        Toast(result.data.msg);
+				break;
 			case 401:
 				localStorage.removeItem('token');
 				localStorage.removeItem('userInfoLocal');
