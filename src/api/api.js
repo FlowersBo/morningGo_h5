@@ -142,4 +142,7 @@
   WorkDetail(data) { //工单详情
     return http.get("/workOrder/detail", data)
   },
+  Ensure(data) { //接单
+    return http.get("/workOrder/ensure", data)
+  },
  }

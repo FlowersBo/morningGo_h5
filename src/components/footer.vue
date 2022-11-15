@@ -3,10 +3,15 @@
     <van-tabbar v-model="tabbarTempValue" :placeholder="true" active-color="#F15A24" inactive-color="hotpink"
       @change="onChange">
 
-      <van-tabbar-item :badge="badgeNumber?badgeNumber:assBadgeNumber" class="tabbar">
+      <!-- <van-tabbar-item :badge="badgeNumber?badgeNumber:assBadgeNumber" class="tabbar">
         <van-icon class="iconfont" class-prefix='icon' slot="icon" slot-scope="props"
           :name="props.active ? 'alarm':'alarm'"></van-icon>
         <span>告警</span>
+      </van-tabbar-item> -->
+      <van-tabbar-item :badge="badgeNumber?badgeNumber:assBadgeNumber" class="tabbar">
+        <van-icon class="iconfont" class-prefix='icon' slot="icon" slot-scope="props"
+          :name="props.active ? 'gongdanguanli':'gongdanguanli'"></van-icon>
+        <span>工单</span>
       </van-tabbar-item>
 
       <van-tabbar-item badge="" class="tabbar">
@@ -41,14 +46,14 @@
       active: Number,
       badgeNumber: Number
     },
-    data() {
+    data () {
       return {
         tabbarTempValue: this.active,
         assBadgeNumber: null
       }
     },
     methods: {
-      onChange(index) {
+      onChange (index) {
         const routerArray = [
           "/",
           "/Repertory",
@@ -57,31 +62,31 @@
           "/Mine"
         ];
         if (index == 4) {
-          console.log('window.location.href跳转',index)
+          console.log('window.location.href跳转', index)
           window.location.href = '/Mine'
         } else {
           this.$router.push(routerArray[index]);
         }
       },
-      updateBadgeNumber() {
+      updateBadgeNumber () {
         // setTimeout(() => {
         this.assBadgeNumber = JSON.parse(sessionStorage.getItem('badgeNumber'))
         // }, 500)
       }
     },
-    mounted() {
+    mounted () {
       this.$nextTick(() => {
         this.updateBadgeNumber()
       });
     },
     watch: {
-      badgeNumber(val, newval) {
+      badgeNumber (val, newval) {
         console.log(val)
         console.log(newval)
       }
     },
     //生命周期-更新之后
-    updated() {
+    updated () {
 
     },
   }

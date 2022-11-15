@@ -7,8 +7,8 @@
     </div>
     <div class="detail-item">处理人：{{orderInfo.workName}}</div>
     <div class="detail-item">创建时间：{{orderInfo.createTime}}</div>
-    <div class="detail-item">完结时间：{{orderInfo.finishTime}}</div>
-    <div class="detail-item">完结状态：{{orderInfo.solvePlan}}</div>
+    <div class="detail-item" v-if="orderInfo.finishTime">完结时间：{{orderInfo.finishTime}}</div>
+    <div class="detail-item" v-if="orderInfo.solvePlan">完结状态：{{orderInfo.solvePlan}}</div>
     <div class="detail-item">协作人：{{orderInfo.cooperationName?orderInfo.cooperationName:'无'}}</div>
     <div class="detail-item">报警概况：</div>
     <div class="box">{{orderInfo.alarmDetail}}</div>

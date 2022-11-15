@@ -18,11 +18,19 @@ const routes = [{
   {
     path: '/',
     name: 'Home',
-    component: () => import('../views/Home.vue'),
+    component: () => import('../views/WorkOrder.vue'),
     meta:{
       requireAuth: false
     }
   },
+  // {
+  //   path: '/',
+  //   name: 'Home',
+  //   component: () => import('../views/Home.vue'),
+  //   meta:{
+  //     requireAuth: false
+  //   }
+  // },
   {
     path: '/Repertory',
     name: 'Repertory',
