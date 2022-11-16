@@ -40,108 +40,46 @@
 
     <van-list v-model="loading" :error.sync="error" error-text="请求失败，点击重新加载" :finished="finished" finished-text="没有更多了"
       :immediate-check="false" @load="onLoadDetail">
-      <van-cell v-for="item in orderList" :key="item.alarmId" @click="gotoDetail(item.id)">
-        <div class="order">
-          <div class="order-title">
+      <van-cell v-for="item in deviceListDetail" :key="item.alarmId">
+        <div class="item">
+          <div class="item-title">
             <div class="title-left">
-              <div class="title-state" style="display: flex; align-items: center">
-                <van-icon class="iconfont icon" style=" margin-right: 5px;font-size: 22px;" color="#555"
-                  class-prefix="icon" name="gongdanguanli" />
-                单号：{{ item.orderNo }}
-                <van-icon class="iconfont icon" color="#C4D0FF" class-prefix="icon" name="gaoqingshexiang"
-                  @click.stop="gotoVideo(item.id)" />
-              </div>
+              <div class="title-state">{{ item.alarmconent }}</div>
+              <van-icon class="iconfont iten-icon" color="#F15A24" class-prefix="icon" name="weixiu" />
+              <!-- <van-icon v-else class="iconfont icon" color="#F15A24" class-prefix='icon' name='gouwuchetianjia' /> -->
             </div>
             <div class="title-right">
-              {{ item.statusStr }}
-
+              <van-icon class="iconfont iten-icon" color="#C4D0FF" class-prefix="icon" name="gaoqingshexiang"
+                @click="gotoVideo(item.alarmId, item.factoryno)" />
+              <div class="titleBtn" @click="clickCancelFn(item.alarmId)">
+                消除
+              </div>
             </div>
           </div>
-          <div class="order-content">
-            <div class="orderContent-item">
-              <div>点位：{{ item.pointName }}</div>
-              <div v-if="item.status == 1">
-                剩余：{{ item.differenceTime }}
-              </div>
+          <div class="item-content">
+            <div class="content-item">
+              <div class="itemKey">告警时间：</div>
+              <div class="itemValue">{{ item.alarmtime }}</div>
             </div>
-            <div class="orderContent-item">
-              <div>报警内容：</div>
-              <div class="itemValue">{{ item.alarmDetail }}</div>
+            <div class="content-item">
+              <div class="itemKey">告警级别：</div>
+              <div class="itemValue">{{ item.alarmlevel }}</div>
             </div>
-            <div class="orderContent-item">
-              <div>时间：</div>
-              <div class="itemValue">{{ item.createTime }}</div>
+            <div class="content-item">
+              <div class="itemKey">点位名称：</div>
+              <div class="itemValue">{{ item.pointname }}</div>
             </div>
-            <template v-if="item.status == 4">
-              <div class="orderContent-item">
-                <div>处理结果：</div>
-                <div class="itemValue">{{ item.solvePlan }}</div>
-              </div>
-              <div class="orderContent-item">
-                <div>完结时间：</div>
-                <div class="itemValue">{{ item.finishTime }}</div>
-              </div>
-            </template>
           </div>
-          <div class="orderBtnWrap">
-            <template v-if="item.status == 3">
-              <div @click.stop="changeOrder(item.status,item.id,isMsk = true,isMskId='1')">重新指派</div>
-              <div @click.stop="changeOrder(item.status,item.id,isMsk = true,isMskId='2')">挂起</div>
-            </template>
-            <div v-if="item.status == 1 || item.status == 3"
-              @click.stop="changeOrder(item.status,item.id,isMsk = true,isMskId='3')">
-              完结
+          <div class="item-detail" @click="gotoAlarmFn(item.alarmcode)">
+            <div class="detailText">
+              <div class="itemKey">告警内容：</div>
+              <div>{{ item.codeDetail }}</div>
             </div>
+            <img class="detailImg" src="../../img/right-arrows.png" alt="" />
           </div>
         </div>
       </van-cell>
     </van-list>
-
-    <van-popup v-model="isMsk">
-      <div class="maskWrap">
-        <div class="title">{{isMskId==1?'重新指派':(isMskId==2?'挂起':'完结')}}</div>
-        <van-form @submit="onSubmit">
-          <van-cell-group inset>
-            <div class="content" v-if="isMskId!=1">
-              <span class="content-title">{{isMskId==2?'挂起原因':'处理结果'}}：</span>
-              <van-field style="width: 100%;height: 100px;border: 1px solid #aaa;box-sizing: border-box;padding: 4px;"
-                name="inputbox1" v-model="inputbox1" maxlength="150" placeholder="请输入内容" />
-            </div>
-            <div class="cooperation" v-if="isMskId!=2">
-              <div class="cooperation-title">{{isMskId==1?'指派人':'协作人(选填)'}}：</div>
-              <van-field v-model="resultValue" is-link readonly name="picker" placeholder="请选择"
-                @click="showPicker = true" style="
-                  border: 1px solid #aaa;
-                  box-sizing: border-box;
-                  padding: 0 10px;
-                " />
-            </div>
-            <div class="content">
-              <span class="content-title">{{isMskId==2?'后续处理计划':'备注'}}：</span>
-              <van-field style="
-                  width: 100%;
-                  height: 100px;
-                  border: 1px solid #aaa;
-                  box-sizing: border-box;
-                  padding: 4px;
-                " name="inputbox2" v-model="inputbox2" maxlength="150" placeholder="请输入内容" />
-            </div>
-          </van-cell-group>
-          <van-button style="
-              width: 100px;
-              height: 40px;
-              margin-left: auto;
-              margin-top: 10px;
-              border-radius: 6px;
-            " block color="#F15A24" native-type="submit">
-            {{isMskId==1?'重新指派':(isMskId==2?'挂起':'完结')}}
-          </van-button>
-        </van-form>
-      </div>
-    </van-popup>
-    <van-popup v-model="showPicker" position="bottom">
-      <van-picker show-toolbar :columns="columns" value-key="name" @confirm="onConfirm" @cancel="showPicker = false" />
-    </van-popup>
   </div>
 </template>
 
@@ -174,24 +112,15 @@
           "重启下位机",
           "机械臂归位",
           "初始化设备",
-          "预订开关",
+          "预定开关",
         ],
+        deviceListDetail: [],
         pageindex: 1,
         pagesize: 30,
         loading: false,
         finished: false, //是否已加载完成，加载完成后不再触发load事件
         error: false, //是否加载失败，加载失败后点击错误提示可以重新触发load事件
         isShow: true,
-        // 新修改
-        orderList: [],
-        isMsk: false,
-        isMskId: 0,
-        inputbox1: "",
-        inputbox2: "",
-        columns: [],
-        showPicker: false,
-        resultValue: "",
-
       };
     },
     //计算属性 类似于data概念
@@ -200,68 +129,90 @@
     watch: {},
     //方法集合
     methods: {
-      orderListFn () {
+      DevicelistFn () {
         let data = {
+          pageindex: this.pageindex,
+          pagesize: this.pagesize,
           deviceid: this.device.deviceid,
-          status: "",
-          pageNum: this.pageindex,
-          pageSize: this.pagesize,
         };
         this.$api
-          .WorkOrderList(data)
+          .Getalarmlist(data)
           .then((res) => {
-            console.log("返回", res);
+            console.log("单个设备报警返回", res);
             this.isShow = false;
             if (this.refreshing) {
               this.refreshing = false; //刷新成功
             }
             // 加载状态结束
             this.loading = false;
-            let list = res.data.data.list;
-            list.map((item) => {
-              if (item.status == 1) {
-                let day = this.$moment(item.expireTime).diff(
-                  this.$moment(item.createTime),
-                  "days"
-                );
-                let date = this.$moment(item.expireTime).diff(
-                  this.$moment(item.createTime),
-                  "minutes"
-                );
-                let h = Math.floor(date / 60);
-                let d = h % 24;
-                item.differenceTime = day + "天" + d.toFixed(0) + "小时";
-              }
-            });
-            this.orderList.push(...list);
             this.total = res.data.data.total;
+            this.deviceListDetail.push(...res.data.data.alarmlist);
           })
           .catch((err) => {
             console.log(err);
           });
       },
+
       onLoadDetail () {
         // 数据全部加载完成
-        if (this.isShow || this.orderList.length >= this.total) {
+        if (this.isShow || this.deviceListDetail.length >= this.total) {
           console.log("加载完成");
           this.finished = true;
           return true;
         } else {
           console.log("加载未完成");
           this.pageindex++;
-          this.orderListFn();
+          this.DevicelistFn();
         }
       },
-      gotoVideo (alarmId) {
+      gotoVideo (alarmId, factoryno) {
         //跳转视频
         this.$router.push({
           path: "/Player",
           query: {
             alarmId,
+            factoryno,
             url: "Getvideo",
           },
         });
       },
+      clickCancelFn (alarmId) {
+        //清除报警
+        Dialog.confirm({
+          title: "提示",
+          message: "确认要消除此告警",
+        })
+          .then(() => {
+            let data = {
+              alarmId,
+            };
+            this.$api
+              .CancelAlarm(data)
+              .then((res) => {
+                this.$toast("清除告警成功");
+                this.finished = false;
+                this.pageindex = 1;
+                this.deviceListDetail = [];
+                this.DevicelistFn();
+              })
+              .catch((err) => {
+                console.log(err);
+                this.$toast("清除告警失败");
+              });
+          })
+          .catch(() => { });
+      },
+
+      gotoAlarmFn (alarmcode) {
+        //跳转富文本
+        this.$router.push({
+          path: "/Alarm",
+          query: {
+            alarmcode,
+          },
+        });
+      },
+
       bindBtn (index) {
         if (index == 0) {
           this.$router.push({
@@ -408,8 +359,8 @@
                     if (command === "clearWarning") {
                       this.finished = false;
                       this.pageindex = 1;
-                      this.orderList = [];
-                      this.orderListFn();
+                      this.deviceListDetail = [];
+                      this.DevicelistFn();
                     }
                   } else {
                     this.$toast(res.data.message);
@@ -420,89 +371,12 @@
             .catch((err) => { });
         }
       },
-      changeOrder (isStatus, orderId) {
-        this.isStatus = isStatus;
-        this.orderId = orderId;
-        this.$api.GetWorker({ orderId })
-          .then(res => {
-            console.log('协作人列表', res)
-            this.columns = res.data.data
-          })
-      },
-      onConfirm (value) {
-        console.log("选取", value);
-        this.resultValue = value.name;
-        this.workId = value.id;
-        this.showPicker = false;
-      },
-      onSubmit (event) {
-        console.log("提交", event);
-        let isMskId = this.isMskId;
-        let data = {}, url = '';
-        if (isMskId == 1) {
-          if (!event.picker) {
-            this.$toast("请选择指派人");
-            return
-          }
-          data = {
-            orderId: this.orderId,
-            workId: this.workId,
-            memo: event.inputbox2
-          }
-          url = this.$api.Assign
-        } else if (isMskId == 2) {
-          if (!event.inputbox1) {
-            this.$toast("请填写挂起原因");
-            return
-          } else if (!event.inputbox2) {
-            this.$toast("请填写后续处理计划");
-            return
-          }
-          data = {
-            orderId: this.orderId,
-            reason: event.inputbox1,
-            plan: event.inputbox2
-          }
-          url = this.$api.Suspend
-        } else {
-          if (!event.inputbox1) {
-            this.$toast("请填写处理结果");
-            return
-          }
-          data = {
-            orderId: this.orderId,
-            solvePlan: event.inputbox1,
-            cooperationId: "",
-            operateMemo: event.inputbox2
-          }
-          url = this.$api.Finish
-        }
-        url(data)
-          .then(res => {
-            console.log('成功', res)
-            this.isMsk = false;
-            this.resultValue = '';
-            this.finished = false;
-            this.pageindex = 1;
-            this.orderList = [];
-            this.isShow = true;
-            this.orderListFn();
-          })
-      },
-      gotoDetail (orderId) {
-        this.$router.push({
-          path: "/WorkOrderDetail",
-          query: {
-            orderId
-          },
-        })
-      }
     },
     //生命周期 - 创建完成（可以访问当前this实例）
     created () {
-      this.orderList = [];
+      this.deviceListDetail = [];
       this.device = JSON.parse(this.$route.query.equipmentData);
-      this.orderListFn();
+      this.DevicelistFn();
     },
     //生命周期 - 挂载完成（可以访问DOM元素）
     mounted () { },
@@ -611,7 +485,7 @@
     padding: 0;
   }
 
-  .order {
+  .item {
     width: 100%;
     background-color: #eee;
     margin-top: 10px;
@@ -620,7 +494,7 @@
     padding: 0 10px;
   }
 
-  .order-title {
+  .item-title {
     display: flex;
     height: 35px;
     justify-content: space-between;
@@ -638,6 +512,15 @@
     text-align: right;
   }
 
+  .iten-icon {
+    width: 40px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-size: 22px;
+  }
+
   .titleBtn {
     width: 40px;
     height: 25px;
@@ -649,80 +532,31 @@
     font-size: 12px;
   }
 
-  .order-content {
+  .item-content {
     width: 100%;
     border-bottom: 1px solid #fff;
   }
 
-  .orderContent-item {
+  .content-item {
     width: 100%;
     display: flex;
     margin: 10px 0;
   }
 
-  .order-content .orderContent-item:first-child {
+  .item-detail {
+    min-height: 30px;
+    display: flex;
     justify-content: space-between;
-  }
-
-  .order-content .orderContent-item:last-child {
+    align-items: center;
     color: #ff9a03;
   }
 
-  .orderBtnWrap {
-    width: 100%;
+  .detailText {
     display: flex;
-    justify-content: flex-end;
-    padding: 6px 0;
   }
 
-  .orderBtnWrap div {
-    margin-left: 10px;
-    box-sizing: border-box;
-    padding: 0 16px;
-    border: 1px solid #333;
-    border-radius: 4px;
-  }
-
-  .van-popup {
-    background: none;
-  }
-
-  .maskWrap {
-    width: 350px;
-    margin: 0 auto;
-    box-sizing: border-box;
-    padding: 20px;
-    background: #fff;
-    border-radius: 20px;
-  }
-
-  .title {
-    font-size: 16px;
-    border-bottom: 1px solid #999;
-    padding-bottom: 10px;
-  }
-
-  .cooperation {
-    display: flex;
-    align-items: center;
-    margin: 20px 0;
-  }
-
-  .cooperation-title {
-    width: 300px;
-  }
-
-  .van-cell .van-cell--clickable .van-field {
-    border: 1px solid #555 !important;
-  }
-
-  .content-title {
-    display: inline-block;
-    margin: 10px 0;
-  }
-
-  .van-cell-group--inset {
-    margin: 0;
-    padding-bottom: 10px;
+  .detailImg {
+    width: 16px;
+    height: 16px;
   }
 </style>

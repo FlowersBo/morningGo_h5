@@ -17,7 +17,7 @@
      return http.get("/command/cancelAlarm", data)
    },
    Getvideo(data) { //告警视频
-     return http.get("/command/getvideo", data)
+     return http.get("/workOrder/getVideo", data)
    },
    GetSuggest(data) { //告警内容
      return http.get("/deviceinfo/getSuggest", data)

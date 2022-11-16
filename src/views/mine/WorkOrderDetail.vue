@@ -13,18 +13,18 @@
     <div class="detail-item">报警概况：</div>
     <div class="box">{{orderInfo.alarmDetail}}</div>
     <div class="detail-item">操作记录：</div>
-    <van-steps direction="vertical" :active="4" inactive-icon="more" active-color="#ddd">
+    <van-steps direction="vertical" :active="5" inactive-icon="more" active-color="#ddd">
       <van-step style="font-size:16px;" v-for="(item,index) in orderLog" :key="item.id">
         <p>{{item.createTime}}</p>
         <h3>{{item.orderStatus}} {{index==1?'处理人为：'+item.operateUser:item.memo}}</h3>
       </van-step>
     </van-steps>
     <div class="btnWrap">
-      <template v-if="status == 4">
+      <template v-if="status == 3">
         <div @click="changeOrder(isMsk = true,isMskId='1')">重新指派</div>
         <div @click="changeOrder(isMsk = true,isMskId='2')">挂起</div>
       </template>
-      <div v-if="status == 1 || status == 4" @click="changeOrder(isMsk = true,isMskId='3')">完结</div>
+      <div v-if="status == 1 || status == 3" @click="changeOrder(isMsk = true,isMskId='3')">完结</div>
     </div>
 
     <van-popup v-model="isMsk">

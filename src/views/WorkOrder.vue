@@ -13,6 +13,11 @@
                     <div class="title-state" style="display: flex; align-items: center">
                       <van-icon class="iconfont icon" color="#555" class-prefix="icon" name="gongdanguanli" />
                       单号：{{ item.orderNo }}
+                      <van-icon class="iconfont iten-icon" style="margin-left: 10px;width: 24px; font-size: 18px;text-align: center;
+                      display: flex;
+                      flex-direction: column;
+                      justify-content: center;" color="#C4D0FF" class-prefix="icon" name="gaoqingshexiang"
+                        @click.stop="gotoVideo(item.id)" />
                     </div>
                   </div>
                   <div class="title-right">
@@ -192,8 +197,8 @@
         this.$router.push({
           path: "/Player",
           query: {
-            orderId,
-            url: "GetOrderVideo",
+            alarmId: orderId,
+            url: "Getvideo",
           },
         });
       },
@@ -276,6 +281,7 @@
     height: 35px;
     justify-content: space-between;
     border-bottom: 1px solid #fff;
+    align-items: center;
   }
 
   .title-left,
@@ -351,7 +357,7 @@
   }
 
   .van-cell {
-    width: 360px;
+    width: 100% !important;
     padding: 0;
   }
 

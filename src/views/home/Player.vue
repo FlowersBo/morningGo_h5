@@ -12,7 +12,7 @@
 <script>
   import HeaderTitle from '/src/components/HeaderTitle.vue';
   export default {
-    data() {
+    data () {
       return {
         playerOptions: {
           playbackRates: [0.5, 1.0, 1.5, 2.0], //播放速度
@@ -46,19 +46,20 @@
         timer: null
       }
     },
-    created() {
+    created () {
       this.url = this.$route.query.url;
-      this.titleDec = `${this.url === 'GetOrderVideo'?'订单视频':'告警视频'}`;
+      this.titleDec = `${this.url === 'GetOrderVideo' ? '订单视频' : '告警视频'}`;
       if (this.$route.query.url === 'GetOrderVideo') {
         this.orderId = this.$route.query.orderId;
         this.getVideo(this.$route.query.url, this.$route.query.orderId);
       } else {
         this.alarmId = this.$route.query.alarmId;
-        this.factoryno = this.$route.query.factoryno;
-        this.getVideo(this.$route.query.url, this.$route.query.alarmId, this.$route.query.factoryno);
+        // this.factoryno = this.$route.query.factoryno;
+        // this.getVideo(this.$route.query.url, this.$route.query.alarmId, this.$route.query.factoryno);
+        this.getVideo(this.$route.query.url, this.$route.query.alarmId);
       }
     },
-    mounted() {
+    mounted () {
       // 通过 $once 来监听定时器，在 beforeDestroy 钩子可以被清除。
       this.$once('hook:beforeDestroy', () => {
         clearInterval(this.timer);
@@ -72,7 +73,7 @@
     watch: {},
     //方法集合
     methods: {
-      getVideo(url, alarmId, factoryno) {
+      getVideo (url, alarmId, factoryno) {
         let api = '',
           data = {};
         if (url === 'GetOrderVideo') {
@@ -82,29 +83,29 @@
           api = this.$api.GetOrderVideo;
         } else {
           data = {
-            alarmId,
-            factoryno
+            orderId: alarmId,
+            // factoryno
           }
           api = this.$api.Getvideo;
         }
         api(data).then(res => {
-            console.log(res)
-            if (res.data.code === 1001) {
-              this.timer = setTimeout(() => {
-                if (url === 'GetOrderVideo') {
-                  this.getVideo(this.url, this.orderId);
-                } else {
-                  this.getVideo(this.url, this.alarmId, this.factoryno);
-                }
-              }, 3000);
-            } else if (res.data.code == 200) {
-              console.log('视频', res)
-              this.playerOptions.sources[0].src = res.data.data.video;
-              // this.playerOptions.sources[0].src = 'https://media.w3.org/2010/05/sintel/trailer.mp4'
-            } else {
-              this.$toast('加载失败');
-            }
-          })
+          console.log(res)
+          if (res.data.code === 1001) {
+            this.timer = setTimeout(() => {
+              if (url === 'GetOrderVideo') {
+                this.getVideo(this.url, this.orderId);
+              } else {
+                this.getVideo(this.url, this.alarmId);
+              }
+            }, 3000);
+          } else if (res.data.code == 200) {
+            console.log('视频', res)
+            this.playerOptions.sources[0].src = res.data.data.video;
+            // this.playerOptions.sources[0].src = 'https://media.w3.org/2010/05/sintel/trailer.mp4'
+          } else {
+            this.$toast('加载失败');
+          }
+        })
           .catch(err => {
             console.log(err)
           })
@@ -114,7 +115,7 @@
       },
     },
 
-    beforeDestroy() {
+    beforeDestroy () {
       clearTimeout(this.timer);
       this.timer = null;
     }

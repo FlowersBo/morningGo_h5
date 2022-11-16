@@ -44,7 +44,7 @@
                     <div class="itemKey">时间：</div>
                     <div class="itemValue">{{ item.createTime }}</div>
                   </div>
-                  <div v-if="item.status == 4">
+                  <template v-if="item.status == 4">
                     <div class="content-item">
                       <div class="itemKey">处理结果：</div>
                       <div class="itemValue">{{ item.solvePlan }}</div>
@@ -53,14 +53,14 @@
                       <div class="itemKey">完结时间：</div>
                       <div class="itemValue">{{ item.finishTime }}</div>
                     </div>
-                  </div>
+                  </template>
                 </div>
                 <div class="btnWrap">
-                  <template v-if="item.status == 4">
+                  <template v-if="item.status == 3">
                     <div @click.stop="changeOrder(item.status,item.id,isMsk = true,isMskId='1')">重新指派</div>
                     <div @click.stop="changeOrder(item.status,item.id,isMsk = true,isMskId='2')">挂起</div>
                   </template>
-                  <div v-if="item.status == 1 || item.status == 4"
+                  <div v-if="item.status == 1 || item.status == 3"
                     @click.stop="changeOrder(item.status,item.id,isMsk = true,isMskId='3')">
                     完结
                   </div>

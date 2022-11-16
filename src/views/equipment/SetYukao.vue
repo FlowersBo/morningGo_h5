@@ -40,9 +40,9 @@
       HeaderTitle
     },
     props: {},
-    data() {
+    data () {
       return {
-        titleDec: "预定开关",
+        titleDec: "预订开关",
         textDec: "",
         imgUrl: require('@/img/back.png'),
         deviceinfo: '',
@@ -56,10 +56,10 @@
     watch: {},
     //方法集合
     methods: {
-      getYukaoFn(deviceId) {
+      getYukaoFn (deviceId) {
         this.$api.GetReserveEnable({
-            deviceId
-          })
+          deviceId
+        })
           .then(res => {
             console.log('预订开关信息', res);
             if (res.data.code == 200) {
@@ -73,7 +73,7 @@
 
           })
       },
-      onUpdateValue(work, workday, holiday) {
+      onUpdateValue (work, workday, holiday) {
         Dialog.confirm({
           title: '提醒',
           message: '是否切换开关？',
@@ -85,10 +85,10 @@
           }
           console.log(this.workday, this.holiday);
           this.$api.SaveReserveEnable({
-              deviceId: this.deviceid,
-              workday: this.workday,
-              holiday: this.holiday,
-            })
+            deviceId: this.deviceid,
+            workday: this.workday,
+            holiday: this.holiday,
+          })
             .then(res => {
               console.log('预订开关设置', res);
               if (res.data.code == 200) {
@@ -104,7 +104,7 @@
       },
     },
     //生命周期 - 创建完成（可以访问当前this实例）
-    created() {
+    created () {
       this.factoryno = this.$route.query.factoryno;
       this.pointname = this.$route.query.pointname;
       this.deviceno = this.$route.query.deviceno;
@@ -114,23 +114,23 @@
       this.getYukaoFn(this.$route.query.deviceid);
     },
     //生命周期 - 挂载完成（可以访问DOM元素）
-    mounted() {
+    mounted () {
 
     },
     //生命周期-创建之前
-    beforeCreated() {},
+    beforeCreated () { },
     //生命周期-挂载之前
-    beforeMount() {},
+    beforeMount () { },
     //生命周期-更新之前
-    beforUpdate() {},
+    beforUpdate () { },
     //生命周期-更新之后
-    updated() {},
+    updated () { },
     //生命周期-销毁之前
-    beforeDestory() {},
+    beforeDestory () { },
     //生命周期-销毁完成
-    destoryed() {},
+    destoryed () { },
     //如果页面有keep-alive缓存功能，这个函数会触发
-    activated() {}
+    activated () { }
   }
 </script>
 <style scoped>
