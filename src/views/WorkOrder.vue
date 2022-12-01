@@ -250,6 +250,7 @@ export default {
         .RefreshToken({})
         .then((res) => {
           console.log("token是否过期", res);
+          console.log(res.data.code)
           if (res.data.code == 200) {
             this.orderListFn();
           }
@@ -263,6 +264,7 @@ export default {
   },
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted () {
+    // localStorage.removeItem("assessToken");
     // console.log(this.$route.params.phoneNumber);//获取上一页路由传参
   },
   //生命周期-创建之前

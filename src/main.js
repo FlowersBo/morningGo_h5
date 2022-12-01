@@ -67,7 +67,7 @@ router.beforeEach((to, from, next) => {
         next();
       } else {
         next({
-          path: '/', //无登录状态,先跳转到登录页面
+          path: '/Login', //无登录状态,先跳转到登录页面
           query: {
             redirect: to.fullPath
           } // 登录成功后跳转回到该路由

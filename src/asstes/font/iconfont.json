@@ -6,6 +6,13 @@
   "description": "h5运维段",
   "glyphs": [
     {
+      "icon_id": "19526975",
+      "name": "工单管理",
+      "font_class": "gongdanguanli1",
+      "unicode": "e626",
+      "unicode_decimal": 58918
+    },
+    {
       "icon_id": "27253661",
       "name": "工单管理",
       "font_class": "gongdanguanli",

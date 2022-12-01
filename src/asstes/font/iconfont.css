@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 2957029 */
-  src: url('iconfont.woff2?t=1667899902791') format('woff2'),
-       url('iconfont.woff?t=1667899902791') format('woff'),
-       url('iconfont.ttf?t=1667899902791') format('truetype');
+  src: url('iconfont.woff2?t=1669863311182') format('woff2'),
+       url('iconfont.woff?t=1669863311182') format('woff'),
+       url('iconfont.ttf?t=1669863311182') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,10 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-gongdanguanli1:before {
+  content: "\e626";
 }
 
 .icon-gongdanguanli:before {
