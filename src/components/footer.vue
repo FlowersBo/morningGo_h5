@@ -20,34 +20,35 @@
                   :name="props.active ? 'gongdanguanli':'gongdanguanli'"></van-icon>
         <span>工单</span>
       </van-tabbar-item>
+      <template v-if="isTabBat">
+        <van-tabbar-item badge=""
+                         class="tabbar">
+          <van-icon class="iconfont"
+                    class-prefix='icon'
+                    slot="icon"
+                    slot-scope="props"
+                    :name="props.active ? 'kucunpandian':'kucunpandian'"></van-icon>
+          <span>库存</span>
+        </van-tabbar-item>
 
-      <van-tabbar-item badge=""
-                       class="tabbar">
-        <van-icon class="iconfont"
-                  class-prefix='icon'
-                  slot="icon"
-                  slot-scope="props"
-                  :name="props.active ? 'kucunpandian':'kucunpandian'"></van-icon>
-        <span>库存</span>
-      </van-tabbar-item>
-
-      <van-tabbar-item class="tabbar">
-        <van-icon class="iconfont"
-                  class-prefix='icon'
-                  slot="icon"
-                  slot-scope="props"
-                  :name="props.active ? 'yuyuedingdan':'yuyuedingdan'"></van-icon>
-        <span>预烤</span>
-      </van-tabbar-item>
-      <van-tabbar-item badge=""
-                       class="tabbar">
-        <van-icon class="iconfont"
-                  class-prefix='icon'
-                  slot="icon"
-                  slot-scope="props"
-                  :name="props.active ? 'shebeiguanli':'shebeiguanli'"></van-icon>
-        <span>设备</span>
-      </van-tabbar-item>
+        <van-tabbar-item class="tabbar">
+          <van-icon class="iconfont"
+                    class-prefix='icon'
+                    slot="icon"
+                    slot-scope="props"
+                    :name="props.active ? 'yuyuedingdan':'yuyuedingdan'"></van-icon>
+          <span>预烤</span>
+        </van-tabbar-item>
+        <van-tabbar-item badge=""
+                         class="tabbar">
+          <van-icon class="iconfont"
+                    class-prefix='icon'
+                    slot="icon"
+                    slot-scope="props"
+                    :name="props.active ? 'shebeiguanli':'shebeiguanli'"></van-icon>
+          <span>设备</span>
+        </van-tabbar-item>
+      </template>
       <van-tabbar-item class="tabbar">
         <van-icon class="iconfont"
                   class-prefix='icon'
@@ -70,7 +71,8 @@ export default {
   data () {
     return {
       tabbarTempValue: this.active,
-      assBadgeNumber: null
+      assBadgeNumber: null,
+      isTabBat: true
     }
   },
   methods: {
@@ -82,7 +84,7 @@ export default {
         "/Equipment",
         "/Mine"
       ];
-      if (index == 4) {
+      if (this.isTabBat && index == 4 || !this.isTabBat && index == 1) {
         console.log('window.location.href跳转', index)
         window.location.href = '/Mine'
       } else {
@@ -96,6 +98,11 @@ export default {
     }
   },
   mounted () {
+    if (JSON.parse(localStorage.getItem('userInfoLocal')).deviceTypeIds == '1432247982589214720') {
+      this.isTabBat = false
+    } else {
+      this.isTabBat = true
+    }
     this.$nextTick(() => {
       this.updateBadgeNumber()
     });

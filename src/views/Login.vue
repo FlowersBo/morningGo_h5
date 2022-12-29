@@ -133,7 +133,7 @@ export default {
       console.log(this.phoneNumber, this.inputPassword, this.logintype);
       this.$api.Login({
         username: this.phoneNumber,
-        password: this.inputPassword,
+        password: this.logintype == 1 ? this.inputPassword : this.verificationCode,
         type: this.logintype,
         code: JSON.parse(localStorage.getItem('code'))
       }).then(res => {
