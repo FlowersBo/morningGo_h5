@@ -124,6 +124,20 @@
                   padding: 0 10px;
                 " />
             </div>
+            <div class="cooperation"
+                 v-if="isMskId!=2">
+              <div class="cooperation-title">报警原因(选填)：</div>
+              <van-field v-model="alarmReason"
+                         is-link
+                         readonly
+                         name="reason"
+                         placeholder="请选择"
+                         @click="showPicker1 = true"
+                         style="border: 1px solid #aaa;
+                  box-sizing: border-box;
+                  padding: 0 10px;
+                " />
+            </div>
             <div class="content">
               <span class="content-title">{{isMskId==2?'后续处理计划':'备注'}}：</span>
               <van-field style="
@@ -162,6 +176,14 @@
                   @confirm="onConfirm"
                   @cancel="showPicker = false" />
     </van-popup>
+    <van-popup v-model="showPicker1"
+               position="bottom">
+      <van-picker show-toolbar
+                  :columns="reasonList"
+                  value-key="content"
+                  @confirm="onConfirm1"
+                  @cancel="showPicker1 = false" />
+    </van-popup>
   </div>
 </template>
 
@@ -177,8 +199,11 @@ export default {
       inputbox1: "",
       inputbox2: "",
       columns: [],
+      reasonList: [],
       showPicker: false,
+      showPicker1: false,
       resultValue: "",
+      alarmReason: '',
       pageindex: 1,
       pagesize: 30,
       searchType: "",
@@ -343,12 +368,22 @@ export default {
           console.log('协作人列表', res)
           this.columns = res.data.data
         })
+      this.$api.AlarmReason({ orderId })
+        .then(res => {
+          console.log('报警原因列表', res)
+          this.reasonList = res.data.data
+        })
     },
     onConfirm (value) {
       console.log("选取", value);
       this.resultValue = value.name;
       this.workId = value.id;
       this.showPicker = false;
+    },
+    onConfirm1 (value) {
+      console.log("选取报警", value);
+      this.alarmReason = value.content;
+      this.showPicker1 = false;
     },
     onSubmit (event) {
       console.log("提交", event);
@@ -388,7 +423,8 @@ export default {
           orderId: this.orderId,
           solvePlan: event.inputbox1,
           cooperationId: "",
-          operateMemo: event.inputbox2
+          operateMemo: event.inputbox2,
+          alarmReason: event.reason
         }
         url = this.$api.Finish
       }
@@ -397,6 +433,7 @@ export default {
           console.log('成功', res)
           this.isMsk = false;
           this.resultValue = '';
+          this.alarmReason = '';
           this.finished = false;
           this.pageindex = 1;
           this.orderList = [];

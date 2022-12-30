@@ -145,4 +145,7 @@
   Ensure(data) { //接单
     return http.get("/workOrder/ensure", data)
   },
+  AlarmReason(data) { //报警原因
+    return http.get("/workOrder/alarmReason", data)
+  },
  }
