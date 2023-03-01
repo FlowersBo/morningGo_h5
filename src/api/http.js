@@ -26,7 +26,7 @@ import {
 // }
 
 // let root = baseUrl;
-let root = '/api';
+let root = '/apis';
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 //  REQUEST 请求异常拦截
 axios.interceptors.request.use(config => {

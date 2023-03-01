@@ -18,6 +18,10 @@
          v-if="orderInfo.alarmReason">报警原因：{{orderInfo.alarmReason}}</div>
     <div class="detail-item">报警概况：</div>
     <div class="box">{{orderInfo.alarmDetail}}</div>
+    <div class="detail-item">报警详情：</div>
+    <div></div>
+    <div class="detail-item">解决方案：</div>
+
     <div class="detail-item">操作记录：</div>
     <van-steps direction="vertical"
                :active="5"

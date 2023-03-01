@@ -60,17 +60,17 @@ module.exports = {
       //   }
       // },
       proxy: {
-        '/api': {
+        '/apis': {
           /* 目标代理服务器地址 */
           // target: 'http://w3.waneyes.com',
-          target: 'http://devops.morninggo.cn/',
+          target: 'http://devops.morninggo.cn/api',
           // target: 'http://192.168.110.97:8080/app-http/',
           /* 允许跨域 */
           changeOrigin: true,
           ws: true, //如果要代理 websockets，配置这个参数
-          secure: true, //如果是https接口，需要配置这个参数
+          secure: false, //如果是https接口，需要配置这个参数
           pathRewrite: {
-            '^/api': '' //注意名字
+            '^/apis': '' //注意名字
           },
         },
       },

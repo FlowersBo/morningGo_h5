@@ -62,6 +62,10 @@
                     </div>
                   </div>
                   <div class="content-item">
+                    <div class="itemKey">设备编号：</div>
+                    <div class="itemValue">{{ item.factoryNo }}</div>
+                  </div>
+                  <div class="content-item">
                     <div class="itemKey">报警内容：</div>
                     <div class="itemValue">{{ item.alarmDetail }}</div>
                   </div>
