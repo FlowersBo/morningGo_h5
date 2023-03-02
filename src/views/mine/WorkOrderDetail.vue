@@ -18,10 +18,17 @@
          v-if="orderInfo.alarmReason">报警原因：{{orderInfo.alarmReason}}</div>
     <div class="detail-item">报警概况：</div>
     <div class="box">{{orderInfo.alarmDetail}}</div>
-    <div class="detail-item">报警详情：</div>
-    <div></div>
-    <div class="detail-item">解决方案：</div>
-
+    <van-collapse class="detail-item" :border="false" style="padding: 0;" v-model="activeNames" accordion>
+      <van-collapse-item title="报警详情：" name="1" value="详情">
+        <div v-html="orderInfo.alarmLog"></div>
+      </van-collapse-item>
+      <van-collapse-item class="detail-item" title="解决方案：" name="2" value="方案">
+        <div v-html="codeSuggest"></div>
+      </van-collapse-item>
+    </van-collapse>
+   
+    <!-- <div class="detail-item">解决方案：</div>
+    <div v-html="codeSuggest"></div> -->
     <div class="detail-item">操作记录：</div>
     <van-steps direction="vertical"
                :active="5"
@@ -67,13 +74,17 @@
                          name="picker"
                          placeholder="请选择"
                          @click="showPicker = true"
-                         style="
-                  border: 1px solid #aaa;
-                  box-sizing: border-box;
-                  padding: 0 10px;
-                " />
+                         style="border: 1px solid #aaa;box-sizing: border-box;padding: 0 10px;" />
             </div>
             <div class="cooperation"
+                 v-if="isMskId==3">
+              <div class="cooperation-title">是否需要配件：</div>
+              <van-radio-group v-model="radio" direction="horizontal" @change="radioFn">
+                <van-radio name="1">是</van-radio>
+                <van-radio name="2">否</van-radio>
+              </van-radio-group>
+            </div>
+            <!-- <div class="cooperation"
                  v-if="isMskId!=2">
               <div class="cooperation-title">报警原因(选填)：</div>
               <van-field v-model="alarmReason"
@@ -86,7 +97,7 @@
                   box-sizing: border-box;
                   padding: 0 10px;
                 " />
-            </div>
+            </div> -->
             <div class="content">
               <span class="content-title">{{isMskId==2?'后续处理计划':'备注'}}：</span>
               <van-field style="width: 100%;height: 100px;border: 1px solid #aaa;box-sizing: border-box;padding: 4px;"
@@ -147,6 +158,9 @@ export default {
       showPicker1: false,
       resultValue: "",
       alarmReason: '',
+      activeNames: ['1'], //折叠显示
+      codeSuggest:'', //解决方案
+      radio: '',//单选
     };
   },
   components: {
@@ -162,15 +176,26 @@ export default {
         .WorkDetail({ orderId: this.orderId })
         .then((res) => {
           console.log("返回", res);
+          res.data.data.orderInfo.alarmLog =res.data.data.deviceInfo + res.data.data.orderInfo.alarmLog.replace(/\n/g, '<br>')
           this.orderInfo = res.data.data.orderInfo;
           this.orderLog = res.data.data.orderLog;
           this.status = res.data.data.orderInfo.status;
+          this.$api.GetSuggest({ alarmCode: res.data.data.orderInfo.alarmCode })
+          .then((res) => {
+            console.log('解决方案',res)
+            this.codeSuggest = res.data.data;
+          })
+          .catch((err) => {
+            console.log(err);
+          });
         })
         .catch((err) => {
           console.log(err);
         });
     },
-
+    radioFn(event){
+      console.log('单选',event)
+    },
     changeOrder () {
       this.$api.GetWorker({ orderId: this.orderId })
         .then(res => {
@@ -337,12 +362,14 @@ export default {
 .cooperation {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   margin: 20px 0;
 }
 
 .cooperation-title {
-  width: 300px;
+  width: 150px;
 }
+
 
 .van-cell .van-cell--clickable .van-field {
   border: 1px solid #555 !important;
@@ -361,5 +388,8 @@ export default {
 <style>
 .van-step--vertical .van-step__circle-container {
   font-size: 20px !important;
+}
+.van-cell{
+  padding: 0;
 }
 </style>
