@@ -151,4 +151,7 @@
   GetSuggest(data) { //解决方案
     return http.get("/workOrder/getSuggest", data)
   },
+  Spare(data) { //配件列表
+    return http.get("/workOrder/spare", data)
+  },
  }
