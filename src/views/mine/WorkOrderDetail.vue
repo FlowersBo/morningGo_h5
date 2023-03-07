@@ -20,10 +20,10 @@
     <div class="box">{{orderInfo.alarmDetail}}</div>
     <van-collapse class="detail-item" :border="false" style="padding: 0;" v-model="activeNames" accordion>
       <van-collapse-item title="报警详情：" name="1" value="详情">
-        <div v-html="orderInfo.alarmLog=='null'?'暂无数据':orderInfo.alarmLog"></div>
+        <div v-html="!orderInfo.alarmLog?'暂无数据':orderInfo.alarmLog"></div>
       </van-collapse-item>
       <van-collapse-item class="detail-item" title="解决方案：" name="2" value="方案">
-        <div v-html="codeSuggest=='null'?'暂无数据':codeSuggest"></div>
+        <div v-html="!codeSuggest?'暂无数据':codeSuggest"></div>
       </van-collapse-item>
     </van-collapse>
    
@@ -60,10 +60,12 @@
                  v-if="isMskId!=1">
               <span class="content-title">{{isMskId==2?'挂起原因':'处理结果'}}：</span>
               <van-field style="width: 100%;height: 100px;border: 1px solid #aaa;box-sizing: border-box;padding: 4px;"
-                         name="inputbox1"
-                         v-model="inputbox1"
-                         maxlength="150"
-                         placeholder="请输入内容" />
+                        name="inputbox1"
+                        v-model="inputbox1"
+                        maxlength="150"
+                        autosize
+                        type="textarea"
+                        placeholder="请输入内容" />
             </div>
             <div class="cooperation"
                  v-if="isMskId!=2">
@@ -76,8 +78,7 @@
                          @click="showPicker = true"
                          style="border: 1px solid #aaa;box-sizing: border-box;padding: 0 10px;" />
             </div>
-            <div class="cooperation"
-                 v-if="isMskId==3">
+            <div class="cooperation" v-if="isMskId==3">
               <div class="cooperation-title" style="width: 150px;">是否需要配件：</div>
               <van-radio-group v-model="radio" direction="horizontal" @change="radioFn">
                 <van-radio name="1">是</van-radio>
@@ -92,10 +93,12 @@
             <div class="content">
               <span class="content-title">{{isMskId==2?'后续处理计划':'备注'}}：</span>
               <van-field style="width: 100%;height: 100px;border: 1px solid #aaa;box-sizing: border-box;padding: 4px;"
-                         name="inputbox2"
-                         v-model="inputbox2"
-                         maxlength="150"
-                         placeholder="请输入内容" />
+                        name="inputbox2"
+                        v-model="inputbox2"
+                        maxlength="150"
+                        autosize
+                        type="textarea"
+                        placeholder="请输入内容" />
             </div>
           </van-cell-group>
           <van-button style="width: 100px;height: 40px;margin-left: auto;margin-top: 10px;border-radius: 6px;"
@@ -115,13 +118,8 @@
                   @confirm="onConfirm"
                   @cancel="showPicker = false" />
     </van-popup>
-    <van-popup v-model="showPicker1"
-               position="bottom">
-      <van-picker show-toolbar
-                  :columns="spareList"
-                  value-key="partsName"
-                  @confirm="onConfirm1"
-                  @cancel="showPicker1 = false" />
+    <van-popup v-model="showPicker1" position="bottom">
+      <van-picker show-toolbar :columns="spareList" value-key="partsName" @confirm="onConfirm1" @cancel="showPicker1 = false" />
     </van-popup>
   </div>
 </template>
@@ -170,7 +168,8 @@ export default {
         .WorkDetail({ orderId: this.orderId })
         .then((res) => {
           console.log("返回", res);
-          res.data.data.orderInfo.alarmLog =res.data.data.deviceInfo + res.data.data.orderInfo.alarmLog.replace(/\n/g, '<br>')
+          // res.data.data.deviceInfo + 
+          res.data.data.orderInfo.alarmLog =`上位机版本：${res.data.data.deviceInfo.appVersion}</br>下位机版本：${res.data.data.deviceInfo.hexVersion}</br>`+ res.data.data.orderInfo.alarmLog.replace(/\n/g, '<br>')
           this.orderInfo = res.data.data.orderInfo;
           this.orderLog = res.data.data.orderLog;
           this.status = res.data.data.orderInfo.status;
@@ -253,7 +252,7 @@ export default {
         if (!event.inputbox1) {
           this.$toast("请填写处理结果");
           return
-        }else if(this.radioIndex=='1'||!this.spareId){
+        }else if(this.radioIndex=='1'&&!this.spareId){
           this.$toast("请选择配件");
           return
         }

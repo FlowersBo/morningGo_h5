@@ -264,10 +264,10 @@ export default {
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created () {
-    localStorage.setItem('token', JSON.stringify("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NzkyMDYzODgxOTAsInBheWxvYWQiOiJ7XCJkZXZpY2VUeXBlSWRzXCI6XCIxMzAzOTc2MzM0MTAzNDEyNzM2LDEzMDM5NzU5ODE2ODU0MDc3NDQsMTQzMjI0Nzk4MjU4OTIxNDcyMFwiLFwid29ya3JvbGVcIjpcIjFcIixcIm9wZW5pZFwiOlwib1o0TlA2YzZyLVdxZVp4U2MzclNteWYybkR1QVwiLFwibmFtZVwiOlwi5byg5paw6LaFXCIsXCJpZFwiOjQ0LFwiZ3JvdXBuYW1lXCI6XCLmuKnmpobmsrPng6TogqDov5Dnu7Qs5piG5rOw6Ieq6JCl6L-Q57u0LOaZqOi0reaAu-mDqCznmb7lt53lrrblsYUs5aWl5qOu5YWs5ZutLOS4nOmjjmthc28s5Liw56eR5LiH6L6-5bm_5Zy6LOWMl-S6rOa1t-a0i-mmhlwiLFwidXNlcm5hbWVcIjpcIjE1MDAxMDgxNzE3XCJ9In0.5if6sy8VP9AoxFWZDC_DbopryJdxd5R_dwBifoHtA6o"));
-    this.orderListFn();
+    // localStorage.setItem('token', JSON.stringify("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NzkyMDYzODgxOTAsInBheWxvYWQiOiJ7XCJkZXZpY2VUeXBlSWRzXCI6XCIxMzAzOTc2MzM0MTAzNDEyNzM2LDEzMDM5NzU5ODE2ODU0MDc3NDQsMTQzMjI0Nzk4MjU4OTIxNDcyMFwiLFwid29ya3JvbGVcIjpcIjFcIixcIm9wZW5pZFwiOlwib1o0TlA2YzZyLVdxZVp4U2MzclNteWYybkR1QVwiLFwibmFtZVwiOlwi5byg5paw6LaFXCIsXCJpZFwiOjQ0LFwiZ3JvdXBuYW1lXCI6XCLmuKnmpobmsrPng6TogqDov5Dnu7Qs5piG5rOw6Ieq6JCl6L-Q57u0LOaZqOi0reaAu-mDqCznmb7lt53lrrblsYUs5aWl5qOu5YWs5ZutLOS4nOmjjmthc28s5Liw56eR5LiH6L6-5bm_5Zy6LOWMl-S6rOa1t-a0i-mmhlwiLFwidXNlcm5hbWVcIjpcIjE1MDAxMDgxNzE3XCJ9In0.5if6sy8VP9AoxFWZDC_DbopryJdxd5R_dwBifoHtA6o"));
+    // this.orderListFn();
     
-    // this.refreshToken();
+    this.refreshToken();
   },
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted () {

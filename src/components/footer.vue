@@ -98,11 +98,11 @@ export default {
     }
   },
   mounted () {
-    // if (JSON.parse(localStorage.getItem('userInfoLocal')).deviceTypeIds == '1432247982589214720') {
-    //   this.isTabBat = false
-    // } else {
-    //   this.isTabBat = true
-    // }
+    if (JSON.parse(localStorage.getItem('userInfoLocal')).deviceTypeIds == '1432247982589214720') {
+      this.isTabBat = false
+    } else {
+      this.isTabBat = true
+    }
     this.$nextTick(() => {
       this.updateBadgeNumber()
     });

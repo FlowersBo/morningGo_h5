@@ -155,10 +155,12 @@
                  v-if="isMskId!=1">
               <span class="content-title">{{isMskId==2?'挂起原因':'处理结果'}}：</span>
               <van-field style="width: 100%;height: 100px;border: 1px solid #aaa;box-sizing: border-box;padding: 4px;"
-                         name="inputbox1"
-                         v-model="inputbox1"
-                         maxlength="150"
-                         placeholder="请输入内容" />
+                        name="inputbox1"
+                        v-model="inputbox1"
+                        maxlength="150"
+                        autosize
+                        type="textarea"
+                        placeholder="请输入内容" />
             </div>
             <div class="cooperation"
                  v-if="isMskId!=2">
@@ -171,33 +173,26 @@
                          @click="showPicker = true"
                          style="border: 1px solid #aaa; box-sizing: border-box;padding: 0 10px;" />
             </div>
-            <div class="cooperation"
-                 v-if="isMskId!=2">
-              <div class="cooperation-title">报警原因(选填)：</div>
-              <van-field v-model="alarmReason"
-                         is-link
-                         readonly
-                         name="reason"
-                         placeholder="请选择"
-                         @click="showPicker1 = true"
-                         style="border: 1px solid #aaa;
-                  box-sizing: border-box;
-                  padding: 0 10px;
-                " />
+            <div class="cooperation" v-if="isMskId==3">
+              <div class="cooperation-title" style="width: 150px;">是否需要配件：</div>
+              <van-radio-group v-model="radio" direction="horizontal" @change="radioFn">
+                <van-radio name="1">是</van-radio>
+                <van-radio name="2">否</van-radio>
+              </van-radio-group>
+            </div>
+            <div class="cooperation" v-if="isMskId==3&&radioIndex=='1'">
+              <div class="cooperation-title">配件选择：</div>
+              <van-field v-model="alarmReason" is-link readonly name="reason" placeholder="请选择" @click="showPicker1 = true" style="border: 1px solid #aaa;box-sizing: border-box;padding: 0 10px;" />
             </div>
             <div class="content">
               <span class="content-title">{{isMskId==2?'后续处理计划':'备注'}}：</span>
-              <van-field style="
-                  width: 100%;
-                  height: 100px;
-                  border: 1px solid #aaa;
-                  box-sizing: border-box;
-                  padding: 4px;
-                "
-                         name="inputbox2"
-                         v-model="inputbox2"
-                         maxlength="150"
-                         placeholder="请输入内容" />
+              <van-field style="width: 100%;height: 100px;border: 1px solid #aaa;box-sizing: border-box;padding: 4px;"
+                        name="inputbox2"
+                        v-model="inputbox2"
+                        maxlength="150"
+                        autosize
+                        type="textarea"
+                        placeholder="请输入内容" />
             </div>
           </van-cell-group>
           <van-button style="
@@ -223,13 +218,8 @@
                   @confirm="onConfirm"
                   @cancel="showPicker = false" />
     </van-popup>
-    <van-popup v-model="showPicker1"
-               position="bottom">
-      <van-picker show-toolbar
-                  :columns="reasonList"
-                  value-key="content"
-                  @confirm="onConfirm1"
-                  @cancel="showPicker1 = false" />
+    <van-popup v-model="showPicker1" position="bottom">
+      <van-picker show-toolbar :columns="spareList" value-key="partsName" @confirm="onConfirm1" @cancel="showPicker1 = false" />
     </van-popup>
   </div>
 </template>
@@ -283,6 +273,12 @@ export default {
       showPicker1: false,
       resultValue: "",
       alarmReason: '',
+      activeNames: ['1'], //折叠显示
+      codeSuggest:'', //解决方案
+      radio: '',//单选
+      radioIndex: '', //单选项
+      spareList: [], //配件列表
+      spareId:'' //配件ID
     };
   },
   //计算属性 类似于data概念
@@ -516,6 +512,10 @@ export default {
           .catch((err) => { });
       }
     },
+    radioFn(event){
+      console.log('单选',event)
+      this.radioIndex = event
+    },
     changeOrder (isStatus, orderId) {
       this.isStatus = isStatus;
       this.orderId = orderId;
@@ -524,11 +524,11 @@ export default {
           console.log('协作人列表', res)
           this.columns = res.data.data
         })
-      this.$api.AlarmReason({ orderId })
+      this.$api.Spare({  })
         .then(res => {
-          console.log('报警原因列表', res)
-          this.reasonList = res.data.data
-        })
+          console.log('配件列表', res)
+          this.spareList = res.data.data
+        })  
     },
     onConfirm (value) {
       console.log("选取", value);
@@ -537,8 +537,9 @@ export default {
       this.showPicker = false;
     },
     onConfirm1 (value) {
-      console.log("选取报警", value);
-      this.alarmReason = value.content;
+      console.log("选取配件", value);
+      this.alarmReason = value.partsName;
+      this.spareId = value.id;
       this.showPicker1 = false;
     },
     onSubmit (event) {
@@ -574,13 +575,18 @@ export default {
         if (!event.inputbox1) {
           this.$toast("请填写处理结果");
           return
+        }else if(this.radioIndex=='1'&&!this.spareId){
+          console.log(this.spareId)
+          this.$toast("请选择配件");
+          return
         }
         data = {
           orderId: this.orderId,
           solvePlan: event.inputbox1,
           cooperationId: "",
           operateMemo: event.inputbox2,
-          alarmReason: event.reason
+          alarmReason: event.reason,
+          partIds: this.spareId
         }
         url = this.$api.Finish
       }
