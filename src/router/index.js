@@ -39,14 +39,14 @@ const routes = [{
       requireAuth: true
     }
   },
-  {
-    path: '/Prebake',
-    name: 'Prebake',
-    component: () => import('../views/Prebake.vue'),
-    meta:{
-      requireAuth: true
-    }
-  },
+  // {
+  //   path: '/Prebake',
+  //   name: 'Prebake',
+  //   component: () => import('../views/Prebake.vue'),
+  //   meta:{
+  //     requireAuth: true
+  //   }
+  // },
   {
     path: '/Equipment',
     name: 'Equipment',

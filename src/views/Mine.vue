@@ -89,7 +89,7 @@ export default {
       imgUrl: '',
       titleDec: "我的",
       textDec: "",
-      active: 4,
+      active: 3,
       isShow: false,
     }
   },
@@ -242,7 +242,7 @@ export default {
         this.active = 1
     } else {
       this.isTabBat = true,
-        this.active = 4
+        this.active = 3
     }
     this.wechatLogin();
   },

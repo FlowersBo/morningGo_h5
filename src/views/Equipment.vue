@@ -75,7 +75,7 @@
         imgUrl: '',
         titleDec: "设备",
         textDec: "",
-        footerActive: 3,
+        footerActive: 2,
         active: 0,
         total: 0,
         navTab: [{

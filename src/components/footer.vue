@@ -31,14 +31,14 @@
           <span>库存</span>
         </van-tabbar-item>
 
-        <van-tabbar-item class="tabbar">
+        <!-- <van-tabbar-item class="tabbar">
           <van-icon class="iconfont"
                     class-prefix='icon'
                     slot="icon"
                     slot-scope="props"
                     :name="props.active ? 'yuyuedingdan':'yuyuedingdan'"></van-icon>
           <span>预烤</span>
-        </van-tabbar-item>
+        </van-tabbar-item> -->
         <van-tabbar-item badge=""
                          class="tabbar">
           <van-icon class="iconfont"
@@ -80,11 +80,11 @@ export default {
       const routerArray = [
         "/",
         "/Repertory",
-        "/Prebake",
+        // "/Prebake",
         "/Equipment",
         "/Mine"
       ];
-      if (this.isTabBat && index == 4 || !this.isTabBat && index == 1) {
+      if (this.isTabBat && index == 3 || !this.isTabBat && index == 1) {
         console.log('window.location.href跳转', index)
         window.location.href = '/Mine'
       } else {
