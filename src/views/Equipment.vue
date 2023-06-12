@@ -1,6 +1,10 @@
 <template>
   <div class="home">
     <HeaderTitle :imgSrc="imgUrl" :title="titleDec" :text="textDec"></HeaderTitle>
+    <div class="inputWrap">
+      <van-field placeholder="请输入设备编号" style="width: 100%;height: 40px;background: #f5f5f5;border-radius: 20px;box-sizing: border-box;padding: 0 20px;line-height: 40px;" v-model="factoryNo" />
+      <div class="inpSearch" @click="bindSearch">搜索</div>
+    </div>
     <van-tabs v-model="active" sticky offset-top="45" title-active-color="#F15A24" @click="onClickNav">
       <van-tab v-for="index in navTab" :key="index.index" :title="index.nav" :badge="index.totalCount">
         <van-pull-refresh class="alarmWrap" v-model="refreshing" @refresh="onRefresh">
@@ -93,7 +97,8 @@
         finished: false, //是否已加载完成，加载完成后不再触发load事件
         refreshing: false, //刷新成功为false
         error: false, //是否加载失败，加载失败后点击错误提示可以重新触发load事件
-        isShow: false //切换nav禁止加载
+        isShow: false, //切换nav禁止加载
+        factoryNo: ''
       }
     },
     components: {
@@ -109,7 +114,8 @@
         let data = {
           searchType: this.searchType,
           pageindex: this.pageindex,
-          pagesize: this.pagesize
+          pagesize: this.pagesize,
+          factoryNo: this.factoryNo
         }
         this.$api.DeviceList(data).then(res => {
           console.log('返回', res);
@@ -180,6 +186,16 @@
         this.isShow = true;
         this.DevicelistFn();
       },
+
+      bindSearch(){
+        this.finished = false;
+        this.pageindex = 1;
+        this.deviceList = [];
+        this.isShow = true;
+        this.DevicelistFn();
+        this.factoryNo = '';
+      },
+
       gotoEquipmentDetail(equipmentData) {
         this.$router.push({
           path: '/EquipmentDetail',
@@ -279,6 +295,27 @@
     flex-direction: column;
     justify-content: center;
     margin: 0 2px;
+  }
+  .inputWrap{
+    width: 100%;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    padding: 0 20px;
+    position: relative;
+  }
+  .inpSearch{
+    position: absolute;
+    right: 20px;
+    width: 80px;
+    height: 40px;
+    background: #F15A24;
+    color: #fff;
+    text-align: center;
+    line-height: 40px;
+    border-radius: 0 20px 20px 0;
   }
 </style>
 <style lang="less">
