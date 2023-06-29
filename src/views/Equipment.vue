@@ -2,7 +2,7 @@
   <div class="home">
     <HeaderTitle :imgSrc="imgUrl" :title="titleDec" :text="textDec"></HeaderTitle>
     <div class="inputWrap">
-      <van-field placeholder="请输入点位名称" style="width: 100%;height: 40px;background: #f5f5f5;border-radius: 20px;box-sizing: border-box;padding: 0 20px;line-height: 40px;" v-model="factoryNo" />
+      <van-field placeholder="请输入点位名称" style="width: 100%;height: 40px;background: #f5f5f5;border-radius: 20px;box-sizing: border-box;padding: 0 20px;line-height: 40px;" v-model="pointName" />
       <div class="inpSearch" @click="bindSearch">搜索</div>
     </div>
     <van-tabs v-model="active" sticky offset-top="45" title-active-color="#F15A24" @click="onClickNav">
@@ -98,7 +98,7 @@
         refreshing: false, //刷新成功为false
         error: false, //是否加载失败，加载失败后点击错误提示可以重新触发load事件
         isShow: false, //切换nav禁止加载
-        factoryNo: ''
+        pointName: ''
       }
     },
     components: {
@@ -115,7 +115,7 @@
           searchType: this.searchType,
           pageindex: this.pageindex,
           pagesize: this.pagesize,
-          factoryNo: this.factoryNo
+          pointName: this.pointName
         }
         this.$api.DeviceList(data).then(res => {
           console.log('返回', res);
@@ -193,7 +193,7 @@
         this.deviceList = [];
         this.isShow = true;
         this.DevicelistFn();
-        this.factoryNo = '';
+        this.pointName = '';
       },
 
       gotoEquipmentDetail(equipmentData) {
