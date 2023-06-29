@@ -2,7 +2,7 @@
   <div class="home">
     <HeaderTitle :imgSrc="imgUrl" :title="titleDec" :text="textDec"></HeaderTitle>
     <div class="inputWrap">
-      <van-field placeholder="请输入设备编号" style="width: 100%;height: 40px;background: #f5f5f5;border-radius: 20px;box-sizing: border-box;padding: 0 20px;line-height: 40px;" v-model="factoryNo" />
+      <van-field placeholder="请输入设备名称" style="width: 100%;height: 40px;background: #f5f5f5;border-radius: 20px;box-sizing: border-box;padding: 0 20px;line-height: 40px;" v-model="factoryNo" />
       <div class="inpSearch" @click="bindSearch">搜索</div>
     </div>
     <van-tabs v-model="active" sticky offset-top="45" title-active-color="#F15A24" @click="onClickNav">
