@@ -5,7 +5,9 @@
                  :text="textDec"></HeaderTitle>
     <div class="loginWrap">
       <div class="img">
-        <img src="../img/logo.png"
+        <!-- <img src="../img/logo.png"
+             alt=""> -->
+             <img src="../img/logo1.png"
              alt="">
       </div>
       <div class="inpWrap">

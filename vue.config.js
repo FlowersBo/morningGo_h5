@@ -63,7 +63,8 @@ module.exports = {
         '/apis': {
           /* 目标代理服务器地址 */
           // target: 'http://w3.waneyes.com',
-          target: 'http://devops.morninggo.cn/',
+          // target: 'http://devops.morninggo.cn/',
+          target: 'https://dgjops.morninggo.cn/',
           // target: 'http://192.168.110.97:8080/app-http/',
           /* 允许跨域 */
           changeOrigin: true,
