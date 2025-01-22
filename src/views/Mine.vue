@@ -9,7 +9,7 @@
           <van-image class="img"
                      width="90"
                      height="46"
-                     :src="require('@/img/logo.png')" />
+                     :src="require('@/img/logo1.png')" />
         </div>
         <div class="infoPhone">登录账号：{{userInfoLocal.username}}</div>
       </div>
