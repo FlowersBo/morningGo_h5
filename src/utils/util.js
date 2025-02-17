@@ -3,6 +3,7 @@ let WeixinCode = () => {
     let local = location.href.split('#')[0],
       // let local = 'https://api.morninggo.cn',
       //公众号的appid
+      // appid = 'wxc1f1418da5ca4ff6';
       appid = 'wxc1f1418da5ca4ff6';
     // local = encodeURIComponent(local);
     console.log('根目录', local);
