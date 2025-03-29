@@ -4,7 +4,7 @@ let WeixinCode = () => {
       // let local = 'https://api.morninggo.cn',
       //公众号的appid
       // appid = 'wxc1f1418da5ca4ff6';
-      appid = 'wxc1f1418da5ca4ff6';
+      appid = 'wx4d659f765361a718';
     // local = encodeURIComponent(local);
     console.log('根目录', local);
     //转义，防止参数过多，微信截掉
